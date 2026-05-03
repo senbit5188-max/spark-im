@@ -103,7 +103,7 @@ public class DiscoveryFragment extends Fragment {
         if (!Config.IM_SERVER_HOST.equals("wildfirechat.net")) {
             WfcWebViewActivity.loadUrl(getContext(), getString(R.string.wfc_doc_title), getString(R.string.wfc_doc_url));
         } else {
-            Toast.makeText(getContext(), "野火IM 开发文档对第三方应用不适用", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "星火 开发文档对第三方应用不适用", Toast.LENGTH_SHORT).show();
         }
     }
 

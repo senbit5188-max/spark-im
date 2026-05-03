@@ -14,7 +14,7 @@
         android:layout_marginTop="100dp"
         android:textColor="#ffffff"
         android:textSize="18sp"
-        tools:text="野火IM 申请获取相机权限" />
+        tools:text="星火 申请获取相机权限" />
 
     <TextView
         android:id="@+id/descTextView"
