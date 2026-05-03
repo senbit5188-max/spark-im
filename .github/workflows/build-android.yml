@@ -48,18 +48,25 @@ jobs:
 
       - name: Build Debug APK
         working-directory: android-chat
-        run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -100
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Verify APK output
+      - name: Find and verify APK
+        id: find_apk
         working-directory: android-chat
         run: |
-          echo "Android build completed"
-          find . -name "*.apk" -type f | head -10
+          echo "Searching for APK files..."
+          APK_PATH=$(find . -name "*.apk" -type f | head -1)
+          if [ -z "$APK_PATH" ]; then
+            echo "ERROR: No APK found"
+            exit 1
+          fi
+          echo "Found APK: $APK_PATH"
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          ls -lh "$APK_PATH"
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
-        if: success()
         with:
           name: spark-im-debug-apk
-          path: android-chat/chat/build/outputs/apk/debug/*.apk
-          retention-days: 7
+          path: android-chat/${{ steps.find_apk.outputs.apk_path }}
+          retention-days: 30
