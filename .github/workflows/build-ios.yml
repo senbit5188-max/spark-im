@@ -38,14 +38,14 @@ jobs:
         run: xcodebuild -version
 
       - name: List schemes
-        working-directory: ios-chat/wfchat
-        run: xcodebuild -project WildFireChat.xcodeproj -list
+        working-directory: ios-chat
+        run: xcodebuild -workspace ios-chat.xcworkspace -list
 
       - name: Archive iOS App (No Code Sign)
-        working-directory: ios-chat/wfchat
+        working-directory: ios-chat
         run: |
           xcodebuild archive \
-            -project WildFireChat.xcodeproj \
+            -workspace ios-chat.xcworkspace \
             -scheme WildFireChat \
             -destination 'generic/platform=iOS' \
             -archivePath ${{ github.workspace }}/build/SparkIM.xcarchive \
@@ -54,7 +54,7 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             ONLY_ACTIVE_ARCH=NO \
-            | tail -80
+            2>&1 | tee /tmp/xcodebuild.log | tail -100
 
       - name: Create unsigned IPA
         run: |
