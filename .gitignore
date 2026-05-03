@@ -3,6 +3,10 @@
 **/build/
 **/*.class
 **/*.jar
+!android-chat/push/libs/*.jar
+!android-chat/uikit/libs/*.jar
+!android-chat/mars-core-release/libs/*.jar
+!android-chat/gradle/wrapper/*.jar
 **/*.war
 **/*.deb
 
