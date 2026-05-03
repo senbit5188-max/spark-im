@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星火IM - 管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85D2C;
+            --secondary: #FF3366;
+            --sidebar-bg: #1a1d21;
+            --sidebar-hover: #2c3036;
+            --sidebar-active: #FF6B35;
+        }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f0f2f5; }
+        .sidebar {
+            width: 250px; min-height: 100vh; background: var(--sidebar-bg);
+            position: fixed; left: 0; top: 0; z-index: 100;
+            transition: all 0.3s;
+        }
+        .sidebar .brand {
+            padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar .brand img { width: 48px; height: 48px; border-radius: 12px; }
+        .sidebar .brand h5 { color: #fff; margin: 10px 0 0; font-weight: 600; }
+        .sidebar .brand small { color: rgba(255,255,255,0.5); }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7); padding: 12px 20px;
+            display: flex; align-items: center; gap: 12px;
+            transition: all 0.2s; border-left: 3px solid transparent;
+        }
+        .sidebar .nav-link:hover { color: #fff; background: var(--sidebar-hover); }
+        .sidebar .nav-link.active {
+            color: #fff; background: rgba(255,107,53,0.15);
+            border-left-color: var(--sidebar-active);
+        }
+        .sidebar .nav-link i { font-size: 1.1rem; width: 24px; }
+        .main-content { margin-left: 250px; padding: 20px; }
+        .top-bar {
+            background: #fff; padding: 15px 20px; border-radius: 12px;
+            margin-bottom: 20px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .stat-card {
+            background: #fff; border-radius: 12px; padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card .icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+        }
+        .stat-card .icon.users { background: rgba(255,107,53,0.1); color: var(--primary); }
+        .stat-card .icon.messages { background: rgba(51,133,255,0.1); color: #3385ff; }
+        .stat-card .icon.groups { background: rgba(40,199,111,0.1); color: #28c76f; }
+        .stat-card .icon.online { background: rgba(255,51,102,0.1); color: var(--secondary); }
+        .stat-card h3 { font-weight: 700; margin: 0; }
+        .stat-card p { color: #6c757d; margin: 0; font-size: 0.9rem; }
+        .card-custom {
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: none;
+        }
+        .card-custom .card-header {
+            background: #fff; border-bottom: 1px solid #f0f2f5;
+            padding: 16px 20px; border-radius: 12px 12px 0 0;
+            font-weight: 600;
+        }
+        .table thead th {
+            background: #f8f9fa; font-weight: 600; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.5px; color: #6c757d;
+        }
+        .badge-online { background: #28c76f; }
+        .badge-offline { background: #6c757d; }
+        .btn-primary { background: var(--primary); border-color: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+        .section { display: none; }
+        .section.active { display: block; }
+        .nav-section-title {
+            color: rgba(255,255,255,0.3); font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 15px 20px 5px; font-weight: 600;
+        }
+        .server-status { display: flex; align-items: center; gap: 8px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .status-dot.online { background: #28c76f; }
+        .status-dot.offline { background: #ea5455; }
+        .config-form .form-label { font-weight: 500; }
+        .log-viewer {
+            background: #1a1d21; color: #00ff88; padding: 15px;
+            border-radius: 8px; font-family: 'Fira Code', monospace;
+            font-size: 0.85rem; max-height: 400px; overflow-y: auto;
+        }
+        .log-viewer .log-time { color: #6c757d; }
+        .log-viewer .log-info { color: #3385ff; }
+        .log-viewer .log-warn { color: #ff9f43; }
+        .log-viewer .log-error { color: #ea5455; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="brand">
+            <img src="../branding/app_icon.png" alt="星火" onerror="this.style.background='linear-gradient(135deg,#FF6B35,#FF3366)';this.style.display='inline-block'">
+            <h5>星火IM</h5>
+            <small>管理后台 v1.0</small>
+        </div>
+        <nav class="mt-3">
+            <div class="nav-section-title">概览</div>
+            <a class="nav-link active" href="#" data-section="dashboard">
+                <i class="bi bi-grid-1x2"></i> 仪表盘
+            </a>
+            <div class="nav-section-title">用户管理</div>
+            <a class="nav-link" href="#" data-section="users">
+                <i class="bi bi-people"></i> 用户列表
+            </a>
+            <a class="nav-link" href="#" data-section="groups">
+                <i class="bi bi-chat-dots"></i> 群组管理
+            </a>
+            <div class="nav-section-title">系统管理</div>
+            <a class="nav-link" href="#" data-section="messages">
+                <i class="bi bi-envelope"></i> 消息管理
+            </a>
+            <a class="nav-link" href="#" data-section="sensitive">
+                <i class="bi bi-shield-check"></i> 敏感词管理
+            </a>
+            <a class="nav-link" href="#" data-section="channels">
+                <i class="bi bi-megaphone"></i> 频道管理
+            </a>
+            <div class="nav-section-title">运维</div>
+            <a class="nav-link" href="#" data-section="server">
+                <i class="bi bi-hdd-rack"></i> 服务器状态
+            </a>
+            <a class="nav-link" href="#" data-section="config">
+                <i class="bi bi-gear"></i> 系统配置
+            </a>
+            <a class="nav-link" href="#" data-section="logs">
+                <i class="bi bi-file-text"></i> 系统日志
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div>
+                <h5 class="mb-0" id="page-title">仪表盘</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="server-status">
+                    <span class="status-dot" id="server-dot"></span>
+                    <small id="server-status-text">检测中...</small>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> 管理员
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> 设置</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> 退出</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="section active" id="section-dashboard">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p>总用户数</p>
+                                <h3 id="total-users">0</h3>
+                            </div>
+                            <div class="icon users"><i class="bi bi-people"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p>今日消息</p>
+                                <h3 id="today-messages">0</h3>
+                            </div>
+                            <div class="icon messages"><i class="bi bi-chat-square-text"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p>群组数量</p>
+                                <h3 id="total-groups">0</h3>
+                            </div>
+                            <div class="icon groups"><i class="bi bi-chat-dots"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p>在线用户</p>
+                                <h3 id="online-users">0</h3>
+                            </div>
+                            <div class="icon online"><i class="bi bi-lightning"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="card-custom card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>最近注册用户</span>
+                            <a href="#" class="text-decoration-none" style="color:var(--primary)" data-section="users">查看全部</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr><th>用户ID</th><th>昵称</th><th>注册时间</th><th>状态</th></tr>
+                                </thead>
+                                <tbody id="recent-users">
+                                    <tr><td colspan="4" class="text-center text-muted py-4">请配置服务器地址后查看数据</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom card">
+                        <div class="card-header">快捷操作</div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" onclick="showSection('users')">
+                                    <i class="bi bi-person-plus"></i> 用户管理
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="showSection('messages')">
+                                    <i class="bi bi-broadcast"></i> 发送公告
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="showSection('sensitive')">
+                                    <i class="bi bi-shield-plus"></i> 添加敏感词
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="showSection('server')">
+                                    <i class="bi bi-arrow-clockwise"></i> 刷新状态
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div class="section" id="section-users">
+            <div class="card-custom card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>用户管理</span>
+                    <div class="d-flex gap-2">
+                        <input type="text" class="form-control form-control-sm" placeholder="搜索用户ID或昵称..." id="user-search" style="width:250px">
+                        <button class="btn btn-primary btn-sm" onclick="searchUser()">
+                            <i class="bi bi-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>用户ID</th><th>昵称</th><th>手机号</th><th>注册时间</th><th>状态</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="user-list">
+                            <tr><td colspan="6" class="text-center text-muted py-4">
+                                请先在「系统配置」中配置IM服务器地址和密钥
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Groups Section -->
+        <div class="section" id="section-groups">
+            <div class="card-custom card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>群组管理</span>
+                    <input type="text" class="form-control form-control-sm" placeholder="搜索群组..." style="width:250px">
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>群组ID</th><th>群名称</th><th>群主</th><th>成员数</th><th>创建时间</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="group-list">
+                            <tr><td colspan="6" class="text-center text-muted py-4">
+                                请先在「系统配置」中配置IM服务器地址和密钥
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div class="section" id="section-messages">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card-custom card">
+                        <div class="card-header">发送系统公告</div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">目标用户（留空为全部用户）</label>
+                                <input type="text" class="form-control" placeholder="用户ID，多个用逗号分隔">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">公告内容</label>
+                                <textarea class="form-control" rows="4" placeholder="请输入公告内容..."></textarea>
+                            </div>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-send"></i> 发送公告
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-custom card">
+                        <div class="card-header">消息统计</div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>今日消息总数</span><strong id="stat-today-msg">0</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>今日活跃用户</span><strong id="stat-active-users">0</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>今日新建群组</span><strong id="stat-new-groups">0</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span>今日新注册用户</span><strong id="stat-new-users">0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sensitive Words Section -->
+        <div class="section" id="section-sensitive">
+            <div class="card-custom card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>敏感词管理</span>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSensitiveModal">
+                        <i class="bi bi-plus-lg"></i> 添加敏感词
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="6" id="sensitive-words" placeholder="每行一个敏感词..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveSensitiveWords()">
+                        <i class="bi bi-save"></i> 保存
+                    </button>
+                    <small class="text-muted ms-2">敏感词将通过IM服务器API自动同步</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Channels Section -->
+        <div class="section" id="section-channels">
+            <div class="card-custom card">
+                <div class="card-header">频道管理</div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>频道ID</th><th>频道名称</th><th>订阅数</th><th>创建时间</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="channel-list">
+                            <tr><td colspan="5" class="text-center text-muted py-4">
+                                请先在「系统配置」中配置IM服务器地址和密钥
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Server Status Section -->
+        <div class="section" id="section-server">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card-custom card">
+                        <div class="card-header">IM服务器状态</div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>服务器地址</span><strong id="im-server-addr">未配置</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>服务状态</span>
+                                <span id="im-status"><span class="badge bg-secondary">未知</span></span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>版本号</span><strong id="im-version">-</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span>运行时间</span><strong id="im-uptime">-</strong>
+                            </div>
+                            <button class="btn btn-primary mt-3" onclick="checkServerStatus()">
+                                <i class="bi bi-arrow-clockwise"></i> 刷新状态
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-custom card">
+                        <div class="card-header">应用服务器状态</div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>服务器地址</span><strong id="app-server-addr">未配置</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span>服务状态</span>
+                                <span id="app-status"><span class="badge bg-secondary">未知</span></span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span>端口</span><strong>8888</strong>
+                            </div>
+                            <button class="btn btn-primary mt-3" onclick="checkAppServerStatus()">
+                                <i class="bi bi-arrow-clockwise"></i> 刷新状态
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Config Section -->
+        <div class="section" id="section-config">
+            <div class="card-custom card">
+                <div class="card-header">系统配置</div>
+                <div class="card-body config-form">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">IM服务器地址</label>
+                            <input type="text" class="form-control" id="config-im-host" placeholder="例如: http://192.168.1.100">
+                            <small class="text-muted">IM服务器默认使用80端口</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">应用服务器地址</label>
+                            <input type="text" class="form-control" id="config-app-host" placeholder="例如: http://192.168.1.100:8888">
+                            <small class="text-muted">应用服务器默认使用8888端口</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">IM服务密钥 (Secret)</label>
+                            <input type="password" class="form-control" id="config-secret" placeholder="在wildfirechat.conf中配置的密钥">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">管理员密码</label>
+                            <input type="password" class="form-control" id="config-admin-pwd" placeholder="设置管理后台登录密码">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" onclick="saveConfig()">
+                                <i class="bi bi-save"></i> 保存配置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Section -->
+        <div class="section" id="section-logs">
+            <div class="card-custom card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>系统日志</span>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" style="width:120px">
+                            <option>全部</option>
+                            <option>INFO</option>
+                            <option>WARN</option>
+                            <option>ERROR</option>
+                        </select>
+                        <button class="btn btn-outline-primary btn-sm" onclick="refreshLogs()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="log-viewer" id="log-viewer">
+<span class="log-time">[2026-05-03 15:00:00]</span> <span class="log-info">[INFO]</span> 星火IM管理后台已启动<br>
+<span class="log-time">[2026-05-03 15:00:01]</span> <span class="log-info">[INFO]</span> 等待配置服务器连接...<br>
+<span class="log-time">[2026-05-03 15:00:02]</span> <span class="log-warn">[WARN]</span> IM服务器地址未配置，请前往「系统配置」页面设置<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navigation
+        function showSection(name) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar .nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById('section-' + name).classList.add('active');
+            const link = document.querySelector(`[data-section="${name}"]`);
+            if (link) link.classList.add('active');
+            const titles = {
+                dashboard: '仪表盘', users: '用户管理', groups: '群组管理',
+                messages: '消息管理', sensitive: '敏感词管理', channels: '频道管理',
+                server: '服务器状态', config: '系统配置', logs: '系统日志'
+            };
+            document.getElementById('page-title').textContent = titles[name] || '';
+        }
+
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection(this.dataset.section);
+            });
+        });
+
+        // Config management
+        function getConfig() {
+            return JSON.parse(localStorage.getItem('sparkIMConfig') || '{}');
+        }
+
+        function saveConfig() {
+            const config = {
+                imHost: document.getElementById('config-im-host').value,
+                appHost: document.getElementById('config-app-host').value,
+                secret: document.getElementById('config-secret').value,
+                adminPwd: document.getElementById('config-admin-pwd').value
+            };
+            localStorage.setItem('sparkIMConfig', JSON.stringify(config));
+            alert('配置已保存！');
+            loadConfig();
+            checkServerStatus();
+        }
+
+        function loadConfig() {
+            const config = getConfig();
+            document.getElementById('config-im-host').value = config.imHost || '';
+            document.getElementById('config-app-host').value = config.appHost || '';
+            document.getElementById('config-secret').value = config.secret || '';
+            document.getElementById('config-admin-pwd').value = config.adminPwd || '';
+            document.getElementById('im-server-addr').textContent = config.imHost || '未配置';
+            document.getElementById('app-server-addr').textContent = config.appHost || '未配置';
+        }
+
+        // Server status check
+        async function checkServerStatus() {
+            const config = getConfig();
+            const dot = document.getElementById('server-dot');
+            const statusText = document.getElementById('server-status-text');
+
+            if (!config.imHost) {
+                dot.className = 'status-dot offline';
+                statusText.textContent = '未配置';
+                return;
+            }
+
+            try {
+                const resp = await fetch(config.imHost + '/api/version', { mode: 'cors', signal: AbortSignal.timeout(5000) });
+                if (resp.ok) {
+                    const data = await resp.text();
+                    dot.className = 'status-dot online';
+                    statusText.textContent = '运行中';
+                    document.getElementById('im-status').innerHTML = '<span class="badge bg-success">运行中</span>';
+                    try {
+                        const json = JSON.parse(data);
+                        document.getElementById('im-version').textContent = json.version || data;
+                    } catch(e) {
+                        document.getElementById('im-version').textContent = data.substring(0, 50);
+                    }
+                }
+            } catch(e) {
+                dot.className = 'status-dot offline';
+                statusText.textContent = '离线';
+                document.getElementById('im-status').innerHTML = '<span class="badge bg-danger">离线</span>';
+            }
+        }
+
+        async function checkAppServerStatus() {
+            const config = getConfig();
+            if (!config.appHost) return;
+            try {
+                const resp = await fetch(config.appHost + '/', { mode: 'cors', signal: AbortSignal.timeout(5000) });
+                if (resp.ok) {
+                    document.getElementById('app-status').innerHTML = '<span class="badge bg-success">运行中</span>';
+                }
+            } catch(e) {
+                document.getElementById('app-status').innerHTML = '<span class="badge bg-danger">离线</span>';
+            }
+        }
+
+        // Initialize
+        loadConfig();
+        checkServerStatus();
+    </script>
+</body>
+</html>

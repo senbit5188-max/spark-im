@@ -1,0 +1,31 @@
+include ':chat'
+include ':client',
+    // 推送方案选择
+    // 直接对接厂商推送
+    ':push',
+    // 对接个推，需要在个推后台配置厂商通道相关信息，才能使用厂商推送进行推送
+//    ':push-getui',
+
+    // 对接极光，需要在极光后台配置厂商通道相关信息，才能使用厂商推送进行推送
+//    ':push-jpush',
+
+    ':uikit',
+    ':mars-core-release',
+    // 如果不能从网络下载webrtc时，请取消下面的注释
+    ':webrtc',
+    ':badgeview',
+    ":menu",
+    ":permission",
+    ':cameraview',
+    ':uvccamera',
+    ':uikit-aar-dep',
+    ':emojilibrary',
+    ':imagepicker',
+//    ':momentclient',
+    ':pttclient',
+//    ':pttclient',
+    ':avenginekit'
+
+//project(':avenginekit').projectDir = new File('../android-av/avenginekit')
+//project(':momentclient').projectDir = new File('../android-momentclient/momentclient')
+//project(':pttclient').projectDir = new File('../android-pttclient/pttclient')

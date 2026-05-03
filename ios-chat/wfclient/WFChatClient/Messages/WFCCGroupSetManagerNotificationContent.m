@@ -1,0 +1,124 @@
+//
+//  WFCCCreateGroupNotificationContent.m
+//  WFChatClient
+//
+//  Created by heavyrain on 2017/9/19.
+//  Copyright © 2017年 WildFireChat. All rights reserved.
+//
+
+#import "WFCCGroupSetManagerNotificationContent.h"
+#import "WFCCIMService.h"
+#import "WFCCNetworkService.h"
+#import "Common.h"
+#import "WFCCDictionary.h"
+
+@implementation WFCCGroupSetManagerNotificationContent
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [super encode];
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    if (self.operatorId) {
+        [dataDict setObject:self.operatorId forKey:@"o"];
+    }
+    if (self.type) {
+        [dataDict setObject:self.type forKey:@"n"];
+    }
+    
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
+    if (self.memberIds) {
+        [dataDict setObject:self.memberIds forKey:@"ms"];
+    }
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                                           options:kNilOptions
+                                                                             error:nil];
+    
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
+    NSError *__error = nil;
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    if (!__error) {
+        self.operatorId = dictionary[@"o"];
+        self.type = dictionary[@"n"];
+        self.groupId = dictionary[@"g"];
+        self.memberIds = dictionary[@"ms"];
+    }
+}
+
++ (int)getContentType {
+    return MESSAGE_CONTENT_TYPE_SET_MANAGER;
+}
+
++ (int)getContentFlags {
+    return WFCCPersistFlag_PERSIST;
+}
+
+
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
+}
+
+- (NSString *)formatNotification:(WFCCMessage *)message {
+    NSString *from;
+    NSString *targets = @"";
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+        from = WFCCString(@"You");
+    } else {
+        WFCCUserInfo *fromUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
+        if (fromUserInfo) {
+            from = fromUserInfo.readableName;
+        } else {
+            from = [NSString stringWithFormat:WFCCString(@"UnknownUser"), self.operatorId];
+        }
+    }
+
+    int count = 0;
+    if([self.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        targets = [targets stringByAppendingString:WFCCString(@"YouWithSpace")];
+        count++;
+    }
+
+    for (NSString *memberId in self.memberIds) {
+        NSString *target;
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:memberId]) {
+            continue;
+        } else {
+            WFCCUserInfo *memberUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId inGroup:self.groupId refresh:NO];
+            if (memberUserInfo) {
+                target = memberUserInfo.readableName;
+            } else {
+                target = [NSString stringWithFormat:WFCCString(@"UnknownUser"), memberId];
+            }
+        }
+        if (!targets) {
+            targets = target;
+        } else {
+            targets = [NSString stringWithFormat:@"%@,%@", targets, target];
+        }
+        count++;
+        if(count >= 4) {
+            break;
+        }
+    }
+
+    if(self.memberIds.count > count) {
+        targets = [targets stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.memberIds.count];
+    }
+
+    if ([self.type isEqualToString:@"1"]) {
+        return [NSString stringWithFormat:WFCCString(@"SetManager"), from, targets];
+    } else {
+        return [NSString stringWithFormat:WFCCString(@"UnsetManager"), from, targets];
+    }
+}
+@end

@@ -1,0 +1,109 @@
+//
+//  WFCCKickoffGroupMemberNotificationContent.m
+//  WFChatClient
+//
+//  Created by heavyrain on 2017/9/20.
+//  Copyright © 2017年 WildFireChat. All rights reserved.
+//
+
+#import "WFCCKickoffGroupMemberNotificationContent.h"
+#import "WFCCIMService.h"
+#import "WFCCNetworkService.h"
+#import "Common.h"
+#import "WFCCDictionary.h"
+
+@implementation WFCCKickoffGroupMemberNotificationContent
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [super encode];
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    if (self.operateUser) {
+        [dataDict setObject:self.operateUser forKey:@"o"];
+    }
+    if (self.kickedMembers) {
+        [dataDict setObject:self.kickedMembers forKey:@"ms"];
+    }
+    
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                            options:kNilOptions
+                                                              error:nil];
+    
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
+    NSError *__error = nil;
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    if (!__error) {
+        self.operateUser = dictionary[@"o"];
+        self.kickedMembers = dictionary[@"ms"];
+        self.groupId = dictionary[@"g"];
+    }
+}
+
++ (int)getContentType {
+    return MESSAGE_CONTENT_TYPE_KICKOF_GROUP_MEMBER;
+}
+
++ (int)getContentFlags {
+    return WFCCPersistFlag_PERSIST;
+}
+
+
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
+}
+
+- (NSString *)formatNotification:(WFCCMessage *)message {
+    NSString *formatMsg;
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
+        formatMsg = WFCCString(@"KickoffGroupMemberBySelf");
+    } else {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:WFCCString(@"KickoffGroupMember"), userInfo.readableName];
+        } else {
+            formatMsg = [NSString stringWithFormat:WFCCString(@"KickoffGroupMemberByUnknown"), self.operateUser];
+        }
+    }
+
+    int count = 0;
+    if([self.kickedMembers containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        formatMsg = [formatMsg stringByAppendingString:WFCCString(@"YouWithSpace")];
+        count++;
+    }
+    for (NSString *member in self.kickedMembers) {
+        if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            continue;
+        } else {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member inGroup:self.groupId refresh:NO];
+            if (userInfo) {
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.readableName];
+            } else {
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", member];
+            }
+            count++;
+            if(count >= 4) {
+                break;
+            }
+        }
+    }
+    if(self.kickedMembers.count > count) {
+        formatMsg = [formatMsg stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.kickedMembers.count];
+    }
+
+    formatMsg = [formatMsg stringByAppendingString:WFCCString(@"KickoffVisibleSuffix")];
+
+    return formatMsg;
+}
+@end
