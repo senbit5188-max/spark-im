@@ -1,5 +1,5 @@
 <template>
-    <section id="conversation-content" class="conversation-page">
+    <section id="conversation-content" class="conversation-page" :class="{'has-active-conversation': hasActiveConversation}">
         <ConversationListPanel class="conversation-list-panel"/>
         <ConversationView class="conversation-view"/>
     </section>
@@ -8,9 +8,20 @@
 <script>
 import ConversationView from "./conversation/ConversationView";
 import ConversationListPanel from "./ConversationListPanel.vue";
+import store from "../../store";
 
 export default {
     name: "ConversationPage",
+    data() {
+        return {
+            sharedConversationState: store.state.conversation,
+        };
+    },
+    computed: {
+        hasActiveConversation() {
+            return this.sharedConversationState.currentConversationInfo != null;
+        }
+    },
     unmounted() {
         console.log('conversation page destroyed')
     },
@@ -37,6 +48,25 @@ export default {
 
 .conversation-view {
     flex: 1;
+}
+
+@media (max-width: 768px) {
+    .conversation-list-panel {
+        width: 100%;
+    }
+
+    .conversation-view {
+        display: none;
+    }
+
+    .has-active-conversation .conversation-list-panel {
+        display: none;
+    }
+
+    .has-active-conversation .conversation-view {
+        display: block;
+        width: 100%;
+    }
 }
 
 </style>

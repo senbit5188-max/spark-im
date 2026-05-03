@@ -6,7 +6,8 @@
         <div v-else class="conversation-container">
             <header>
                 <div class="title-container">
-                    <div>
+                    <div style="display: flex; align-items: center;">
+                        <button class="mobile-back-btn" @click="goBackToList">&larr;</button>
                         <h1 class="single-line" @click.stop="toggleConversationInfo">{{ conversationTitle }}</h1>
                         <p class="single-line user-online-status" @click="clickConversationDesc">{{ targetUserOnlineStateDesc }}</p>
                         <p v-if="isExternalDomainSingleConversation" class="single-line domain-desc">{{ domainName }}</p>
@@ -391,6 +392,9 @@ export default {
         },
         toggleConversationInfo() {
             this.showConversationInfo = !this.showConversationInfo;
+        },
+        goBackToList() {
+            store.setCurrentConversation(null);
         },
 
         setWindowAlwaysTop() {
@@ -1432,6 +1436,32 @@ i:hover {
 
 i.active {
     color: var(--accent-color-active);
+}
+
+.mobile-back-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+        font-size: 18px;
+        border: none;
+        background: transparent;
+        color: var(--text-primary);
+        cursor: pointer;
+        flex-shrink: 0;
+        padding: 0;
+    }
+
+    .conversation-info-container {
+        width: 100%;
+    }
 }
 </style>
 

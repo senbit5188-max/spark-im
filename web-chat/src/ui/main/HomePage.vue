@@ -757,4 +757,98 @@ i.active {
     justify-content: center;
     z-index: 9999;
 }
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+    .home {
+        flex-direction: column-reverse;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    .menu-container {
+        width: 100%;
+        min-width: unset;
+        height: 56px;
+        flex-direction: row;
+        align-items: center;
+        border-radius: 0;
+        padding: 0 8px;
+        border-top: 1px solid var(--border-primary);
+        -webkit-app-region: no-drag;
+    }
+
+    .menu-container .avatar {
+        width: 28px;
+        height: 28px;
+        margin: 0 8px 0 4px;
+    }
+
+    .menu {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .menu ul {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        -webkit-app-region: no-drag;
+    }
+
+    .menu ul li {
+        margin: 0;
+        height: auto;
+        line-height: normal;
+        flex: 1;
+        text-align: center;
+    }
+
+    .menu ul li:last-of-type {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .menu ul li i {
+        font-size: 22px;
+    }
+
+    .menu .menu-item .badge {
+        right: -6px;
+        top: -4px;
+        font-size: 9px;
+        min-width: 14px;
+        height: 14px;
+        line-height: 14px;
+    }
+
+    .unconnected {
+        left: 0;
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    .drag-area {
+        display: none;
+    }
+
+    .voip-div-container,
+    .voip-div-container.single,
+    .voip-div-container.multi,
+    .voip-div-container.conference {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .voip-minimized-pip {
+        left: auto;
+        right: 16px;
+        bottom: 72px;
+    }
+}
 </style>

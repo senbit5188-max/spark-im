@@ -283,3 +283,19 @@ a {
 a:hover {
     color: var(--text-link-hover);
 }
+
+/* ===== Responsive / Mobile Adaptation ===== */
+@media (max-width: 768px) {
+    :root {
+        --main-margin-left: 0px;
+        --main-margin-right: 0px;
+        --main-margin-top: 0px;
+        --main-margin-bottom: 0px;
+        --main-border-radius: 0px;
+        --home-menu-padding-top: 0px;
+    }
+
+    .vue-notification-group {
+        margin: 0;
+    }
+}

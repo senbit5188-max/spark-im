@@ -887,4 +887,33 @@ input::-webkit-inner-spin-button {
 .diagnose-content button {
     margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+    .login-container {
+        width: 90vw;
+        max-width: 380px;
+        height: auto;
+        min-height: 420px;
+        padding: 20px;
+    }
+
+    .logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .qr-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .qr-container img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .login-form-container {
+        width: 100%;
+    }
+}
 </style>

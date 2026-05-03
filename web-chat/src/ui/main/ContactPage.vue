@@ -1,5 +1,5 @@
 <template>
-    <div class="contact-page">
+    <div class="contact-page" :class="{'has-active-contact': hasActiveContact}">
         <ContactListPanel class="contact-list-panel"/>
         <GroupDetailView
             v-if="sharedContactState.currentGroup"
@@ -53,6 +53,17 @@ export default {
             sharedContactState: store.state.contact,
         }
     },
+    computed: {
+        hasActiveContact() {
+            return !!(this.sharedContactState.currentGroup
+                || this.sharedContactState.currentChannel
+                || this.sharedContactState.currentOrganization
+                || this.sharedContactState.currentExternalDomain
+                || this.sharedContactState.currentChatroom
+                || this.sharedContactState.currentFriend
+                || this.sharedContactState.currentFriendRequest);
+        }
+    },
     components: {
         DomainInfoView,
         ChatroomDetailView,
@@ -104,6 +115,30 @@ ul {
 .contact-empty-container h1 {
     font-size: 17px;
     font-weight: normal;
+}
+
+@media (max-width: 768px) {
+    .contact-list-panel {
+        width: 100%;
+    }
+
+    .contact-detail-container,
+    .contact-empty-container {
+        display: none;
+    }
+
+    .has-active-contact .contact-list-panel {
+        display: none;
+    }
+
+    .has-active-contact .contact-detail-container {
+        display: flex;
+        width: 100%;
+    }
+
+    .has-active-contact .contact-empty-container {
+        display: none;
+    }
 }
 
 </style>

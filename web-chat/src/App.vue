@@ -305,5 +305,17 @@ export default {
     height: 300px;
 }
 
+@media (max-width: 768px) {
+    .blur-container {
+        display: none;
+    }
+
+    .main-content-container {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+    }
+}
 
 </style>
