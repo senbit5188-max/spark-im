@@ -1,0 +1,75 @@
+//
+//  WFCCImageMessageContent.m
+//  WFChatClient
+//
+//  Created by heavyrain on 2017/9/2.
+//  Copyright © 2017年 wildfire chat. All rights reserved.
+//
+
+#import "WFCCStickerMessageContent.h"
+#import "WFCCNetworkService.h"
+#import "WFCCIMService.h"
+#import "WFCCUtilities.h"
+#import "Common.h"
+#import "WFCCDictionary.h"
+
+@implementation WFCCStickerMessageContent
++ (instancetype)contentFrom:(NSString *)stickerPath {
+    WFCCStickerMessageContent *content = [[WFCCStickerMessageContent alloc] init];
+    content.localPath = stickerPath;
+    content.size = [UIImage imageWithContentsOfFile:stickerPath].size;
+    return content;
+}
+
+- (WFCCMessagePayload *)encode {
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
+    payload.searchableContent = WFCCString(@"StickerDigest");
+    payload.mediaType = Media_Type_STICKER;
+    payload.remoteMediaUrl = self.remoteUrl;
+    payload.localMediaPath = self.localPath;
+
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    [dataDict setObject:@(self.size.width) forKey:@"x"];
+    [dataDict setObject:@(self.size.height) forKey:@"y"];
+
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                            options:kNilOptions
+                                                              error:nil];
+
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
+    if ([payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
+        WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
+        self.remoteUrl = mediaPayload.remoteMediaUrl;
+        self.localPath = mediaPayload.localMediaPath;
+    }
+    
+    NSError *__error = nil;
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    if (!__error) {
+        self.size = CGSizeMake([dictionary[@"x"] floatValue], [dictionary[@"y"] floatValue]);
+    }
+}
+
++ (int)getContentType {
+    return MESSAGE_CONTENT_TYPE_STICKER;
+}
+
++ (int)getContentFlags {
+    return WFCCPersistFlag_PERSIST_AND_COUNT;
+}
+
+
+
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    return WFCCString(@"StickerDigest");
+}
+@end

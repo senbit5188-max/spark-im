@@ -1,0 +1,869 @@
+/*
+ * Copyright (c) 2020 WildFireChat. All rights reserved.
+ */
+
+package cn.wildfire.chat.app.main;
+
+import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.content.ClipData;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.WebStorage;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.king.zxing.Intents;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import cn.wildfire.chat.kit.Config;
+import cn.wildfire.chat.kit.IMConnectionStatusViewModel;
+import cn.wildfire.chat.kit.IMServiceStatusViewModel;
+import cn.wildfire.chat.kit.WfcBaseActivity;
+import cn.wildfire.chat.kit.WfcScheme;
+import cn.wildfire.chat.kit.WfcUIKit;
+import cn.wildfire.chat.kit.contact.ContactListActivity;
+import cn.wildfire.chat.kit.contact.ContactListFragment;
+import cn.wildfire.chat.kit.contact.ContactViewModel;
+import cn.wildfire.chat.kit.contact.newfriend.SearchUserActivity;
+import cn.wildfire.chat.kit.conversation.ConversationActivity;
+import cn.wildfire.chat.kit.conversation.ConversationViewModel;
+import cn.wildfire.chat.kit.conversation.CreateConversationActivity;
+import cn.wildfire.chat.kit.conversation.forward.ForwardActivity;
+import cn.wildfire.chat.kit.conversation.message.model.UiMessage;
+import cn.wildfire.chat.kit.conversationlist.ConversationListFragment;
+import cn.wildfire.chat.kit.conversationlist.ConversationListViewModel;
+import cn.wildfire.chat.kit.conversationlist.ConversationListViewModelFactory;
+import cn.wildfire.chat.kit.net.OKHttpHelper;
+import cn.wildfire.chat.kit.qrcode.ScanQRCodeActivity;
+import cn.wildfire.chat.kit.search.SearchPortalActivity;
+import cn.wildfire.chat.kit.user.ChangeMyNameActivity;
+import cn.wildfire.chat.kit.user.UserViewModel;
+import cn.wildfire.chat.kit.utils.FileUtils;
+import cn.wildfire.chat.kit.viewmodel.MessageViewModel;
+import cn.wildfire.chat.kit.workspace.WebViewFragment;
+import cn.wildfirechat.chat.R;
+import cn.wildfirechat.client.ConnectionStatus;
+import cn.wildfirechat.message.FileMessageContent;
+import cn.wildfirechat.message.ImageMessageContent;
+import cn.wildfirechat.message.LinkMessageContent;
+import cn.wildfirechat.message.Message;
+import cn.wildfirechat.message.MessageContent;
+import cn.wildfirechat.message.TextMessageContent;
+import cn.wildfirechat.message.VideoMessageContent;
+import cn.wildfirechat.message.core.MessageContentType;
+import cn.wildfirechat.message.core.MessageStatus;
+import cn.wildfirechat.model.Conversation;
+import cn.wildfirechat.model.UserInfo;
+import cn.wildfirechat.remote.ChatManager;
+import cn.wildfirechat.uikit.menu.PopupMenu;
+import cn.wildfirechat.uikit.permission.PermissionKit;
+import q.rorbin.badgeview.QBadgeView;
+
+public class MainActivity extends WfcBaseActivity {
+
+    private List<Fragment> mFragmentList = new ArrayList<>(4);
+
+    BottomNavigationView bottomNavigationView;
+    ViewPager2 contentViewPager;
+    TextView startingTextView;
+    LinearLayout contentLinearLayout;
+
+    private QBadgeView unreadMessageUnreadBadgeView;
+    private QBadgeView unreadFriendRequestBadgeView;
+    private QBadgeView discoveryBadgeView;
+
+    private static final int REQUEST_CODE_SCAN_QR_CODE = 100;
+    private static final int REQUEST_CODE_PICK_CONTACT = 101;
+
+    private boolean isInitialized = false;
+
+    private ContactListFragment contactListFragment;
+    private ConversationListFragment conversationListFragment;
+
+    private ContactViewModel contactViewModel;
+    private ConversationListViewModel conversationListViewModel;
+    private long lastSelectConversatonListItemTimestamp = 0;
+    private MenuItem secretChatMenuItem;
+    private int appBarHeight = 0;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+
+    protected void bindViews() {
+        super.bindViews();
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        contentViewPager = findViewById(R.id.contentViewPager);
+        startingTextView = findViewById(R.id.startingTextView);
+        contentLinearLayout = findViewById(R.id.contentLinearLayout);
+    }
+
+    @Override
+    protected int contentLayout() {
+        return R.layout.main_activity;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (contactViewModel != null) {
+            contactViewModel.reloadFriendRequestStatus();
+            conversationListViewModel.reloadConversationUnreadStatus();
+        }
+        updateMomentBadgeView();
+    }
+
+    @Override
+    protected void afterViews() {
+        if (!showWorkSpace()) {
+            bottomNavigationView.getMenu().removeItem(R.id.workspace);
+        }
+
+        IMServiceStatusViewModel imServiceStatusViewModel = new ViewModelProvider(this).get(IMServiceStatusViewModel.class);
+        imServiceStatusViewModel.imServiceStatusLiveData().observe(this, (status) -> {
+            if (status && !isInitialized) {
+                handleShareIntent();
+                init();
+                isInitialized = true;
+
+            }
+        });
+
+        IMConnectionStatusViewModel connectionStatusViewModel = new ViewModelProvider(this).get(IMConnectionStatusViewModel.class);
+        connectionStatusViewModel.connectionStatusLiveData().observe(this, status -> {
+            if (status == ConnectionStatus.ConnectionStatusTokenIncorrect
+                || status == ConnectionStatus.ConnectionStatusSecretKeyMismatch
+                || status == ConnectionStatus.ConnectionStatusRejected
+                || status == ConnectionStatus.ConnectionStatusLogout
+                || status == ConnectionStatus.ConnectionStatusKickedoff) {
+                SharedPreferences sp = getSharedPreferences(Config.SP_CONFIG_FILE_NAME, Context.MODE_PRIVATE);
+                sp.edit()
+                    .clear()
+                    .putBoolean("hasReadUserAgreement", true)
+                    .apply();
+                sp = getSharedPreferences("moment", Context.MODE_PRIVATE);
+                sp.edit().clear().apply();
+                OKHttpHelper.clearCookies();
+
+                WebStorage.getInstance().deleteAllData();
+                CookieManager.getInstance().removeAllCookies(null);
+                CookieManager.getInstance().flush();
+
+                if (status == ConnectionStatus.ConnectionStatusLogout) {
+                    reLogin(false);
+                } else {
+                    ChatManager.Instance().disconnect(true, false);
+                    if (status == ConnectionStatus.ConnectionStatusKickedoff) {
+                        reLogin(true);
+                    }
+                }
+            } else if (status == ConnectionStatus.ConnectionStatusNotLicensed) {
+                Toast.makeText(MainActivity.this, "专业版IM服务没有授权或者授权过期！！！", Toast.LENGTH_LONG).show();
+            } else if (status == ConnectionStatus.ConnectionStatusTimeInconsistent) {
+                Toast.makeText(MainActivity.this, "服务器和客户端时间相差太大！！！", Toast.LENGTH_LONG).show();
+            } else if (status == ConnectionStatus.ConnectionStatusConnected) {
+                if (secretChatMenuItem != null) {
+                    boolean isEnableSecretChat = ChatManager.Instance().isEnableSecretChat();
+                    secretChatMenuItem.setEnabled(isEnableSecretChat);
+                }
+            }
+        });
+        MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+        messageViewModel.messageLiveData().observe(this, uiMessages -> {
+            for (UiMessage uiMessage : uiMessages) {
+                if (uiMessage.message.messageId > 0 && (uiMessage.message.content.getMessageContentType() == MessageContentType.MESSAGE_CONTENT_TYPE_FEED
+                    || uiMessage.message.content.getMessageContentType() == MessageContentType.MESSAGE_CONTENT_TYPE_FEED_COMMENT)) {
+                    updateMomentBadgeView();
+                }
+            }
+        });
+
+        requestMandatoryPermissions();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action)) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            } else {
+                Uri fileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                handleSendFile(fileUri);
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            handleSendMultiple(intent); // Handle multiple items being sent
+        }
+    }
+
+    @Override
+    protected void afterMenus(Menu menu) {
+        super.afterMenus(menu);
+        boolean isEnableSecretChat = ChatManager.Instance().isEnableSecretChat();
+        if (!isEnableSecretChat) {
+//            secretChatMenuItem = menu.findItem(R.id.secretChat);
+//            secretChatMenuItem.setEnabled(false);
+        }
+    }
+
+    private void handleShareIntent() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action)) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            } else {
+                Uri fileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                handleSendFile(fileUri);
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            handleSendMultiple(intent);
+        }
+    }
+
+
+    private void reLogin(boolean isKickedOff) {
+        if (isFinishing()) {
+            return;
+        }
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra("isKickedOff", isKickedOff);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void init() {
+        initView();
+
+        conversationListViewModel = new ViewModelProvider(this, new ConversationListViewModelFactory(Arrays.asList(Conversation.ConversationType.Single, Conversation.ConversationType.Group, Conversation.ConversationType.Channel, Conversation.ConversationType.SecretChat), Arrays.asList(0)))
+            .get(ConversationListViewModel.class);
+        conversationListViewModel.unreadCountLiveData().observe(this, unreadCount -> {
+
+            if (unreadCount != null && unreadCount.unread > 0) {
+                showUnreadMessageBadgeView(unreadCount.unread);
+            } else {
+                hideUnreadMessageBadgeView();
+            }
+        });
+
+        contactViewModel = WfcUIKit.getAppScopeViewModel(ContactViewModel.class);
+        contactViewModel.friendRequestUpdatedLiveData().observe(this, count -> {
+            if (count == null || count == 0) {
+                hideUnreadFriendRequestBadgeView();
+            } else {
+                showUnreadFriendRequestBadgeView(count);
+            }
+        });
+
+        checkDisplayName();
+    }
+
+    private void showUnreadMessageBadgeView(int count) {
+        if (unreadMessageUnreadBadgeView == null) {
+            BottomNavigationMenuView bottomNavigationMenuView = ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0));
+            View view = bottomNavigationMenuView.getChildAt(0);
+            unreadMessageUnreadBadgeView = new QBadgeView(MainActivity.this);
+            unreadMessageUnreadBadgeView.bindTarget(view);
+        }
+        unreadMessageUnreadBadgeView.setBadgeNumber(count);
+    }
+
+    private void hideUnreadMessageBadgeView() {
+        if (unreadMessageUnreadBadgeView != null) {
+            unreadMessageUnreadBadgeView.hide(true);
+            unreadMessageUnreadBadgeView = null;
+        }
+    }
+
+    private void updateMomentBadgeView() {
+        if (!WfcUIKit.getWfcUIKit().isSupportMoment()) {
+            return;
+        }
+        List<Message> messages = ChatManager.Instance().getMessagesEx2(Collections.singletonList(Conversation.ConversationType.Single), Collections.singletonList(1), Arrays.asList(MessageStatus.Unread), 0, true, 100, null);
+        int count = messages == null ? 0 : messages.size();
+        if (count > 0) {
+            if (discoveryBadgeView == null) {
+                BottomNavigationMenuView bottomNavigationMenuView = ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0));
+                int index = TextUtils.isEmpty(Config.WORKSPACE_URL) ? 2 : 3;
+                View view = bottomNavigationMenuView.getChildAt(index);
+                discoveryBadgeView = new QBadgeView(MainActivity.this);
+                discoveryBadgeView.bindTarget(view);
+            }
+            discoveryBadgeView.setBadgeNumber(count);
+        } else {
+            if (discoveryBadgeView != null) {
+                discoveryBadgeView.hide(true);
+                discoveryBadgeView = null;
+            }
+        }
+    }
+
+    private void showUnreadFriendRequestBadgeView(int count) {
+        if (unreadFriendRequestBadgeView == null) {
+            BottomNavigationMenuView bottomNavigationMenuView = ((BottomNavigationMenuView) bottomNavigationView.getChildAt(0));
+            View view = bottomNavigationMenuView.getChildAt(1);
+            unreadFriendRequestBadgeView = new QBadgeView(MainActivity.this);
+            unreadFriendRequestBadgeView.bindTarget(view);
+        }
+        unreadFriendRequestBadgeView.setBadgeNumber(count);
+    }
+
+    public void hideUnreadFriendRequestBadgeView() {
+        if (unreadFriendRequestBadgeView != null) {
+            unreadFriendRequestBadgeView.hide(true);
+            unreadFriendRequestBadgeView = null;
+        }
+    }
+
+    @Override
+    protected int menu() {
+        return R.menu.main;
+    }
+
+    @Override
+    protected boolean showHomeMenuItem() {
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+    private void initView() {
+        setTitle(getString(R.string.app_title_chat));
+
+        startingTextView.setVisibility(View.GONE);
+        contentLinearLayout.setVisibility(View.VISIBLE);
+
+        //设置ViewPager的最大缓存页面
+        contentViewPager.setOffscreenPageLimit(4);
+
+        DiscoveryFragment discoveryFragment = null;
+        MeFragment meFragment = null;
+        WebViewFragment workspaceFragment = null;
+
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment instanceof ConversationListFragment) {
+                    conversationListFragment = (ConversationListFragment) fragment;
+                } else if (fragment instanceof ContactListFragment) {
+                    contactListFragment = (ContactListFragment) fragment;
+                } else if (fragment instanceof DiscoveryFragment) {
+                    discoveryFragment = (DiscoveryFragment) fragment;
+                } else if (fragment instanceof MeFragment) {
+                    meFragment = (MeFragment) fragment;
+                } else if (fragment instanceof WebViewFragment) {
+                    workspaceFragment = (WebViewFragment) fragment;
+                }
+            }
+        }
+
+        if (conversationListFragment == null) {
+            conversationListFragment = new ConversationListFragment();
+        }
+        if (contactListFragment == null) {
+            contactListFragment = new ContactListFragment();
+        }
+        if (discoveryFragment == null) {
+            discoveryFragment = new DiscoveryFragment();
+        }
+        if (meFragment == null) {
+            meFragment = new MeFragment();
+        }
+
+        mFragmentList.clear();
+        mFragmentList.add(conversationListFragment);
+        mFragmentList.add(contactListFragment);
+        if (showWorkSpace()) {
+            if (workspaceFragment == null) {
+                workspaceFragment = WebViewFragment.loadUrl(Config.WORKSPACE_URL);
+            }
+            mFragmentList.add(workspaceFragment);
+        }
+        mFragmentList.add(discoveryFragment);
+        mFragmentList.add(meFragment);
+
+        contentViewPager.setAdapter(new HomeFragmentPagerAdapter(this, mFragmentList));
+        contentViewPager.registerOnPageChangeCallback(this.onPageChangeCallback);
+        this.onPageChangeCallback.onPageSelected(contentViewPager.getCurrentItem());
+
+
+        bottomNavigationView.setOnItemReselectedListener(item -> {
+            if (item.getItemId() == R.id.conversation_list) {
+                long now = System.currentTimeMillis();
+                if (now - lastSelectConversatonListItemTimestamp < 200) {
+                    conversationListFragment.scrollToNextUnreadConversation();
+                }
+                lastSelectConversatonListItemTimestamp = now;
+            }
+        });
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.conversation_list) {
+                setCurrentViewPagerItem(0, false);
+                setTitle(R.string.app_title_chat);
+                if (!isDarkTheme()) {
+                    setTitleBackgroundResource(R.color.gray5, false);
+                }
+            } else if (itemId == R.id.contact) {
+                setCurrentViewPagerItem(1, false);
+                setTitle(R.string.app_title_contact);
+                if (!isDarkTheme()) {
+                    setTitleBackgroundResource(R.color.gray5, false);
+                }
+            } else if (itemId == R.id.workspace) {
+                setCurrentViewPagerItem(2, false);
+                setTitle(R.string.app_title_workspace);
+                if (!isDarkTheme()) {
+                    setTitleBackgroundResource(R.color.gray5, false);
+                }
+            } else if (itemId == R.id.discovery) {
+                setCurrentViewPagerItem(showWorkSpace() ? 3 : 2, false);
+                setTitle(R.string.app_title_discover);
+                if (!isDarkTheme()) {
+                    setTitleBackgroundResource(R.color.gray5, false);
+                }
+            } else if (itemId == R.id.me) {
+                setCurrentViewPagerItem(showWorkSpace() ? 4 : 3, false);
+                setTitle(R.string.app_title_me);
+                if (!isDarkTheme()) {
+                    setTitleBackgroundResource(R.color.white, false);
+                }
+            }
+            return true;
+        });
+    }
+
+    private void showMoreActionMenu() {
+        List<Pair<Integer, String>> menuItems = new ArrayList<>();
+        menuItems.add(new Pair<>(R.mipmap.ic_start_chat, getString(R.string.start_group_chat)));
+        menuItems.add(new Pair<>(R.mipmap.ic_start_chat, getString(R.string.start_secret_chat)));
+        menuItems.add(new Pair<>(R.mipmap.ic_add_friend, getString(R.string.add_friend)));
+        menuItems.add(new Pair<>(R.mipmap.ic_qr_code, getString(R.string.scan_qrcode)));
+        PopupMenu moreActionsMenu = new PopupMenu(this, menuItems, position -> {
+            switch (position) {
+                case 0:
+                    createConversation();
+                    break;
+                case 1:
+                    boolean isEnableSecretChat = ChatManager.Instance().isEnableSecretChat();
+                    if (isEnableSecretChat) {
+                        pickContactToCreateSecretConversation();
+                    } else {
+                        Toast.makeText(this, R.string.e2e_not_enable, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case 2:
+                    searchUser();
+                    break;
+                case 3:
+                    String[] permissions = new String[]{Manifest.permission.CAMERA};
+                    PermissionKit.PermissionReqTuple[] tuples = PermissionKit.buildRequestPermissionTuples(this, permissions);
+                    PermissionKit.checkThenRequestPermission(this, getSupportFragmentManager(), tuples, o -> {
+                        startActivityForResult(new Intent(MainActivity.this, ScanQRCodeActivity.class), REQUEST_CODE_SCAN_QR_CODE);
+                    });
+                default:
+                    break;
+            }
+        });
+        View view = findViewById(R.id.more);
+        View toolbar = findViewById(R.id.toolbar);
+        int[] location = new int[2];
+        toolbar.getLocationOnScreen(location);
+        int y = location[1] + toolbar.getHeight();
+        view.getLocationOnScreen(location);
+        int yOffset = y - (location[1] + view.getHeight());
+
+        moreActionsMenu.showAsListMenu(view, 0, yOffset);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.more) {
+            showMoreActionMenu();
+            return true;
+        } else if (itemId == R.id.search) {
+            showSearchPortal();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showSearchPortal() {
+        Intent intent = new Intent(this, SearchPortalActivity.class);
+        startActivity(intent);
+    }
+
+    private void createConversation() {
+        Intent intent = new Intent(this, CreateConversationActivity.class);
+        startActivity(intent);
+    }
+
+    private void createSecretChat(String userId) {
+        ConversationViewModel conversationViewModel = new ViewModelProvider(this).get(ConversationViewModel.class);
+        conversationViewModel.createSecretChat(userId).observeForever(stringOperateResult -> {
+            if (stringOperateResult.isSuccess()) {
+                Conversation conversation = new Conversation(Conversation.ConversationType.SecretChat, stringOperateResult.getResult().first, stringOperateResult.getResult().second);
+                Intent intent = new Intent(this, ConversationActivity.class);
+                intent.putExtra("conversation", conversation);
+                startActivity(intent);
+            } else {
+                if (stringOperateResult.getErrorCode() == 86) {
+                    //自己关闭了密聊功能
+                } else if (stringOperateResult.getErrorCode() == 87) {
+                    //对方关闭了密聊功能
+                } else {
+                    //提示网络错误
+                }
+            }
+        });
+    }
+
+    private void pickContactToCreateSecretConversation() {
+        Intent intent = new Intent(this, ContactListActivity.class);
+        intent.putExtra("showChannel", false);
+        startActivityForResult(intent, REQUEST_CODE_PICK_CONTACT);
+    }
+
+    private void searchUser() {
+        Intent intent = new Intent(this, SearchUserActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != RESULT_OK) {
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_CODE_SCAN_QR_CODE:
+                String result = data.getStringExtra(Intents.Scan.RESULT);
+                onScanPcQrCode(result);
+                break;
+            case REQUEST_CODE_PICK_CONTACT:
+                UserInfo userInfo = data.getParcelableExtra("userInfo");
+                if (userInfo != null) {
+                    createSecretChat(userInfo.uid);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+    private void onScanPcQrCode(String qrcode) {
+        WfcScheme.handleQRCodeResult(this, qrcode);
+    }
+
+    private boolean checkDisplayName() {
+        UserViewModel userViewModel = WfcUIKit.getAppScopeViewModel(UserViewModel.class);
+        SharedPreferences sp = getSharedPreferences("wfc_config", Context.MODE_PRIVATE);
+        UserInfo userInfo = userViewModel.getUserInfo(userViewModel.getUserId(), false);
+        if (userInfo != null && TextUtils.equals(userInfo.displayName, userInfo.mobile)) {
+            if (!sp.getBoolean("updatedDisplayName", false)) {
+                sp.edit().putBoolean("updatedDisplayName", true).apply();
+                updateDisplayName();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateDisplayName() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+            .content("修改个人昵称？")
+            .positiveText("修改")
+            .negativeText("取消")
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    Intent intent = new Intent(MainActivity.this, ChangeMyNameActivity.class);
+                    startActivity(intent);
+                }
+            }).build();
+        dialog.show();
+    }
+
+    // 分享
+    private void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (!TextUtils.isEmpty(sharedText)) {
+            MessageContent content = new TextMessageContent(sharedText);
+            shareMessage(content);
+        } else {
+            ClipData clipData = intent.getClipData();
+            if (clipData != null) {
+                int count = clipData.getItemCount();
+                if (count == 1) {
+                    ClipData.Item item = clipData.getItemAt(0);
+                    sharedText = (String) item.getText();
+
+                    if (isMiShare(sharedText)) {
+                        LinkMessageContent content = parseMiShare(sharedText);
+                        shareMessage(content);
+                    } else {
+                        MessageContent content = new TextMessageContent(sharedText);
+                        shareMessage(content);
+                    }
+                }
+            }
+        }
+    }
+
+    private void handleSendMultiple(Intent intent) {
+        // TODO 暂不支持一次分享多个文件，分享页面不支持，没有相关 UI
+//        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+//        if (imageUris != null) {
+//            for (Uri uri : imageUris) {
+//                handleSendFile(uri);
+//            }
+//        }
+    }
+
+    private void handleSendFile(Uri fileUri) {
+        if (fileUri == null) {
+            return;
+        }
+        String filePath = FileUtils.getPath(this, fileUri);
+        if (TextUtils.isEmpty(filePath)) {
+            Toast.makeText(this, "Error selecting file", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String suffix = filePath.substring(filePath.lastIndexOf("."));
+        MessageContent content;
+        switch (suffix) {
+            case ".png":
+            case ".jpg":
+            case ".jpeg":
+            case ".gif":
+                content = new ImageMessageContent(filePath);
+                break;
+            case ".3gp":
+            case ".mpg":
+            case ".mpeg":
+            case ".mpe":
+            case ".mp4":
+            case ".avi":
+                try {
+                    content = new VideoMessageContent(filePath);
+                } catch (Exception e) {
+                    content = new FileMessageContent(filePath);
+                }
+                break;
+            default:
+                content = new FileMessageContent(filePath);
+                break;
+        }
+        shareMessage(content);
+    }
+
+    private void shareMessage(MessageContent content) {
+        ArrayList<Message> msgs = new ArrayList<>();
+        Message message = new Message();
+        message.content = content;
+        msgs.add(message);
+        Intent intent = new Intent(this, ForwardActivity.class);
+        intent.putExtra("messages", msgs);
+        startActivity(intent);
+    }
+
+    // 小米浏览器 我分享了【xxxx】, 快来看吧！@小米浏览器 | https://xxx
+    private boolean isMiShare(String text) {
+        if (TextUtils.isEmpty(text)) {
+            return false;
+        }
+
+        if (text.startsWith("我分享了【")
+            && text.indexOf("】, 快来看吧！@小米浏览器 | http") > 1) {
+            return true;
+        }
+        return false;
+    }
+
+    private LinkMessageContent parseMiShare(String text) {
+        LinkMessageContent content = new LinkMessageContent();
+        String title = text.substring(text.indexOf("【") + 1, text.indexOf("】"));
+        content.setTitle(title);
+        String desc = text.substring(0, text.indexOf("@小米浏览器"));
+        content.setContentDigest(desc);
+        String url = text.substring(text.indexOf("http"));
+        content.setUrl(url);
+        return content;
+    }
+
+    private void requestMandatoryPermissions() {
+        boolean resumed = false;
+//        if (Build.VERSION.SDK_INT >= 33) {
+//            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//            if (!alarmManager.canScheduleExactAlarms()) {
+//                Toast.makeText(this, "需要精确闹钟权限，否则不能正常使用 IM 功能", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + getPackageName()));
+//                startActivity(intent);
+//                resumed = true;
+//            }
+//        }
+
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (!Settings.canDrawOverlays(this)) {
+//                Toast.makeText(this, "需要后台弹出界面和显示悬浮窗权限，否则后台运行时，无法弹出音视频界面", Toast.LENGTH_LONG).show();
+//                if (!resumed) {
+//                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+//                    startActivity(intent);
+//                }
+//            }
+//        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            String[] permissions = new String[]{Manifest.permission.POST_NOTIFICATIONS};
+            PermissionKit.PermissionReqTuple[] tuples = PermissionKit.buildRequestPermissionTuples(this, permissions);
+            PermissionKit.checkThenRequestPermission(this, getSupportFragmentManager(), tuples, o -> {
+                // do nothing
+            });
+        }
+    }
+
+    private void setCurrentViewPagerItem(int item, boolean smoothScroll) {
+        if (contentViewPager.getCurrentItem() != item) {
+            contentViewPager.setCurrentItem(item, smoothScroll);
+        }
+    }
+
+    private ViewPager2.OnPageChangeCallback onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            updateToolbar(position, positionOffset);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            updateToolbar(position, 0);
+            if (!showWorkSpace()) {
+                if (position > 1) {
+                    position++;
+                }
+            }
+            switch (position) {
+                case 0:
+                    bottomNavigationView.setSelectedItemId(R.id.conversation_list);
+                    break;
+                case 1:
+                    bottomNavigationView.setSelectedItemId(R.id.contact);
+                    break;
+                case 2:
+                    bottomNavigationView.setSelectedItemId(R.id.workspace);
+                    break;
+                case 3:
+                    bottomNavigationView.setSelectedItemId(R.id.discovery);
+                    break;
+                case 4:
+                    bottomNavigationView.setSelectedItemId(R.id.me);
+                    break;
+                default:
+                    break;
+            }
+            contactListFragment.showQuickIndexBar(position == 1);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state != ViewPager.SCROLL_STATE_IDLE) {
+                //滚动过程中隐藏快速导航条
+                contactListFragment.showQuickIndexBar(false);
+            } else {
+                int contactIndex = 1;
+                contactListFragment.showQuickIndexBar(contentViewPager.getCurrentItem() == contactIndex);
+            }
+        }
+    };
+
+    private void updateToolbar(int position, float positionOffset) {
+        if (getAppBarLayout() == null) {
+            return;
+        }
+        if (appBarHeight == 0) {
+            appBarHeight = getAppBarLayout().getHeight();
+        }
+        if (appBarHeight == 0) {
+            return;
+        }
+
+        int meIndex = showWorkSpace() ? 4 : 3;
+        int discoveryIndex = showWorkSpace() ? 3 : 2;
+
+        int toolbarColor = ContextCompat.getColor(this, isDarkTheme() ? R.color.colorPrimary : R.color.gray5);
+        int mePageColor = Color.WHITE;
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) getAppBarLayout().getLayoutParams();
+        if (position == discoveryIndex) {
+            params.topMargin = (int) (-appBarHeight * positionOffset);
+            getAppBarLayout().setAlpha(1.0f - positionOffset);
+
+            int statusBarColor = (int) argbEvaluator.evaluate(positionOffset, toolbarColor, mePageColor);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(statusBarColor);
+            }
+            // 切换状态栏图标颜色，当背景足够亮时切换为深色图标
+            if (positionOffset > 0.45f) {
+                setStatusBarTheme(this, false);
+            } else {
+                setStatusBarTheme(this, isDarkTheme());
+            }
+        } else if (position >= meIndex) {
+            params.topMargin = -appBarHeight;
+            getAppBarLayout().setAlpha(0.0f);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(mePageColor);
+            }
+            setStatusBarTheme(this, false);
+        } else {
+            params.topMargin = 0;
+            getAppBarLayout().setAlpha(1.0f);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(toolbarColor);
+            }
+            setStatusBarTheme(this, isDarkTheme());
+        }
+        getAppBarLayout().setLayoutParams(params);
+    }
+
+    private boolean showWorkSpace() {
+        return !TextUtils.isEmpty(Config.WORKSPACE_URL)
+            && (Config.IM_SERVER_HOST.contains("wildfirechat.net") && Config.WORKSPACE_URL.contains("wildfirechat.cn")
+            || (!Config.IM_SERVER_HOST.contains("wildfirechat.net") && !Config.WORKSPACE_URL.contains("wildfirechat.cn")));
+    }
+}

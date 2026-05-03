@@ -1,0 +1,374 @@
+<resources>
+    <string name="app_name">星火</string>
+
+    <!--我-->
+    <string name="my_chat_account">账号:%1$s</string>
+
+    <!--设置-->
+    <string name="new_message_remind">新消息提醒</string>
+    <string name="exit">退出登录</string>
+
+    <!--关于-->
+    <string name="app_name_in_about">星火即时通讯</string>
+    <string name="function_introduction">功能介绍</string>
+    <string name="complaint">投诉</string>
+    <string name="check_update">检查更新</string>
+    <string name="terms_of_use_and_privacy_policy">使用条款和隐私政策</string>
+    <string name="name">星火</string>
+    <string name="slogan">沟通如此简单</string>
+    <string name="about_intro_title">星火功能介绍</string>
+    <string name="about_intro_url">https://docs.wildfirechat.cn/</string>
+    <string name="about_agreement_title">星火用户协议</string>
+    <string name="about_agreement_url">https://www.wildfirechat.net/wildfirechat_user_agreement.html</string>
+    <string name="about_privacy_title">星火个人信息保护政策</string>
+    <string name="about_privacy_url">https://www.wildfirechat.net/wildfirechat_user_privacy.html</string>
+
+    <!--Login-->
+    <string name="mobile_number">手机号</string>
+    <string name="mobile_number_hint">请输入手机号</string>
+    <string name="mobile_number_error_mobile_empty">手机号不能为空</string>
+    <string name="mobile_number_error_format">手机号格式不正确</string>
+    <string name="verify_code">验证码</string>
+    <string name="verify_code_hint">请输入验证码</string>
+    <string name="get_verify_code">获取验证码</string>
+    <string name="login_button">登录</string>
+    <string name="login_use_password">使用密码登录</string>
+    <string name="login_success">登录成功</string>
+    <string name="sms_send_success">验证码发送成功</string>
+    <string name="password">密码</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="kicked_off_title">提示</string>
+    <string name="kicked_off_message">你的账号已在其他手机登录</string>
+    <string name="kicked_off_confirm">知道了</string>
+    <string name="register_tip_title">提示</string>
+    <string name="register_tip_message">使用短信验证码登录，将会为您创建账户，请使用短信验证码登录</string>
+    <string name="login_progress">登录中...</string>
+    <string name="login_error_hint">网络出问题了:%1$d %2$s</string>
+    <string name="requesting_auth_code">请求验证码...</string>
+    <string name="auth_code_request_success">发送验证码成功</string>
+    <string name="auth_code_request_failure">发送验证码失败: %1$d %2$s</string>
+    <string name="sms_login_failure">登录失败：%1$d %2$s</string>
+    <string name="sms_login_title">验证码登录</string>
+
+    <!-- Login Activity Password Strings -->
+    <string name="login_password_title">密码登录</string>
+    <string name="login_phone_label">手机号</string>
+    <string name="login_phone_hint">请输入手机号(仅支持中国大陆手机号)</string>
+    <string name="login_password_label">密码</string>
+    <string name="login_password_hint">请输入密码</string>
+    <string name="login_use_auth_code">使用验证码登录</string>
+    <string name="login_register">注册</string>
+    <string name="login_button_text">登录</string>
+
+    <!--Main-->
+    <string name="chat">聊天</string>
+    <string name="discover">发现</string>
+    <string name="me">我</string>
+
+    <!--Main Activity-->
+    <string name="update_display_name_title">修改个人昵称？</string>
+    <string name="update_display_name_positive">修改</string>
+    <string name="notification_permission_needed">需要通知权限，否则无法正常接收消息通知</string>
+    <string name="alarm_permission_needed">需要精确闹钟权限，否则不能正常使用 IM 功能</string>
+    <string name="overlay_permission_needed">需要后台弹出界面和显示悬浮窗权限，否则后台运行时，无法弹出音视频界面</string>
+    <string name="no_license">专业版IM服务没有授权或者授权过期！！！</string>
+    <string name="time_inconsistent">服务器和客户端时间相差太大！！！</string>
+    <string name="address_book">通讯录</string>
+    <string name="workspace">工作台</string>
+    <string name="error_selecting_file">Error selecting file</string>
+
+    <!--Main Navigation-->
+    <string name="app_title_chat">星火</string>
+    <string name="app_title_contact">通讯录</string>
+    <string name="app_title_workspace">工作台</string>
+    <string name="app_title_discover">发现</string>
+    <string name="app_title_me">我的</string>
+
+    <!--Common-->
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="loading">加载中...</string>
+    <string name="error_network">网络错误，请检查网络连接</string>
+    <string name="error_server">服务器错误，请稍后重试</string>
+
+    <!--System-->
+    <string name="av_init_failed">音视频引擎初始化失败</string>
+    <string name="permission_background_overlay_denied">缺少后台弹出界面权限和显示悬浮窗权限</string>
+    <string name="voip_notification_silenced">用户设置禁止通话通知，忽略来电提醒</string>
+    <string name="init_success">初始化完成</string>
+
+    <!-- Commercial -->
+    <string name="commercial_not_support">商业版不支持此功能</string>
+    <string name="commercial_multicall_not_support">当前版本不支持多人通话</string>
+
+    <!-- Errors -->
+    <string name="delete_message_error">删除消息失败: %1$d</string>
+    <string name="message_recall_failed">撤回消息失败: %1$d</string>
+    <string name="send_audio_file_error">发送语音文件失败</string>
+
+    <!-- Chat Input Panel -->
+    <string name="channel_no_menu">频道暂未配置菜单</string>
+    <string name="max_emoji_limit">最多允许输入%1$d个表情符号</string>
+    <string name="audio_record_permission">需要录音权限</string>
+
+    <!-- Common -->
+    <string name="add">添加</string>
+    <string name="setting">设置</string>
+    <string name="resend_message">重新发送?</string>
+    <string name="message_content">消息内容</string>
+
+    <!-- Error -->
+    <string name="decode_secret_error">解密数据错误 %1$d</string>
+    <string name="audio_not_exist">音频文件不存在</string>
+
+    <!--Discovery-->
+    <string name="wfc_doc_title">星火开发文档</string>
+    <string name="wfc_doc_url">https://docs.wildfirechat.cn</string>
+
+    <!--Me Fragment-->
+    <string name="account_label">账号: %1$s</string>
+
+    <!--PC Login-->
+    <string name="pc_login_allow">允许 %1$s 登录</string>
+    <string name="pc_login_processing">处理中</string>
+    <string name="pc_login_success">登录成功</string>
+    <string name="pc_login_status">状态: %1$d</string>
+
+    <!-- Change Password -->
+    <string name="password_not_match">两次输入的密码不一致</string>
+    <string name="password_changing">正在修改密码...</string>
+    <string name="password_change_success">修改密码成功</string>
+    <string name="password_change_failed">修改密码失败:%1$d %2$s</string>
+
+    <!-- Reset Password -->
+    <string name="requesting_reset_code">请求验证码...</string>
+    <string name="reset_code_send_success">发送验证码成功</string>
+    <string name="reset_code_send_failure">发送验证码失败: %1$d %2$s</string>
+    <string name="reset_password_progress">正在修改密码...</string>
+    <string name="reset_password_success">重置密码成功</string>
+    <string name="reset_password_failure">重置密码失败: %1$d %2$s</string>
+
+    <!-- Setting -->
+    <string name="upload_log_success">上传日志 %1$s 成功</string>
+    <string name="upload_log_failed">上传日志失败 %1$d %2$s</string>
+    <string name="battery_optimize_allowed">已忽略电池优化，允许星火后台运行，更能保证消息的实时性</string>
+    <string name="battery_optimize_tip">允许星火后台运行，更能保证消息的实时性</string>
+    <string name="system_version_not_support">系统不支持</string>
+
+    <!-- Diagnose -->
+    <string name="diagnose_start">开始进行网络诊断，请稍后</string>
+    <string name="diagnose_current_time">当前时间：%1$s</string>
+    <string name="diagnose_app_server">APP-Server: %1$s</string>
+    <string name="diagnose_route_host">Route-Host: %1$s</string>
+    <string name="diagnose_route_port">Route-Port: %1$d</string>
+    <string name="diagnose_longlink_host">Long-Link-Host: %1$s</string>
+    <string name="diagnose_longlink_port">Long-Link-Port: %1$d</string>
+    <string name="diagnose_av_sdk">音视频 SDK: %1$s</string>
+    <string name="diagnose_av_sdk_pro">高级版</string>
+    <string name="diagnose_av_sdk_basic">多人版</string>
+    <string name="diagnose_turnserver">Turn-Server: %1$s</string>
+    <string name="diagnose_proto_version">协议栈版本：%1$s</string>
+    <string name="diagnose_app_server_ok">APP-Server 正常</string>
+    <string name="diagnose_app_server_error">APP-Server 异常: %1$s</string>
+    <string name="diagnose_im_server_ok">IM-Server api/version 正常\n</string>
+    <string name="diagnose_remote_origin">remoteOriginUrl: %1$s</string>
+    <string name="diagnose_commit_message">commitMessageShort: %1$s</string>
+    <string name="diagnose_commit_time">commitTime: %1$s</string>
+    <string name="diagnose_im_server_error">IM-Server api/version 异常: %1$d %2$s</string>
+    <string name="diagnose_longlink_empty">长连接地址为空，route 请求可能已异常</string>
+    <string name="diagnose_tcp_ping_ok">IM-Server 长连接 tcp ping 正常</string>
+    <string name="diagnose_tcp_ping_error">IM-Server 长连接 tcp ping 异常: %1$s</string>
+
+    <!-- Main Menu -->
+    <string name="more">更多</string>
+    <string name="start_group_chat">发起群聊</string>
+    <string name="start_secret_chat">发起密聊</string>
+    <string name="moment">朋友圈</string>
+    <string name="chatroom">聊天室</string>
+    <string name="robot">机器人</string>
+    <string name="channel">频道</string>
+    <string name="dev_guide">开发手册</string>
+    <string name="conference">会议</string>
+    <string name="chat_background">聊天背景</string>
+    <string name="favorites">收藏</string>
+    <string name="account_security">账号与安全</string>
+    <string name="theme">主题</string>
+    <string name="about">关于</string>
+    <string name="diagnose">诊断</string>
+    <string name="upload_log">上传日志</string>
+    <string name="battery_optimization">电池优化</string>
+    <string name="change_password">修改密码</string>
+    <string name="set_new_password">设置新密码</string>
+    <string name="account_and_security">账号与密码</string>
+    <string name="language">语言</string>
+    <string name="language_follow_system">跟随系统</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_english">English</string>
+    <string name="language_change_tip">语言设置将在重启应用后生效</string>
+    <string name="confirm">确认</string>
+    <string name="retry_after_seconds">%1$d秒后重试</string>
+    <string name="e2e_not_enable">密聊功能未启用</string>
+    <string name="privacy_agreement_tip"> 登录即代表同意 </string>
+    <string name="privacy_agreement">星火隐私政策</string>
+    <string name="user_agreement">星火用户协议</string>
+    <string name="and">和</string>
+    <string name="privacy_agreement_tip_and_links"><![CDATA[登录即代表同意 <a href="privacy://">星火隐私政策</a> 和 <a href="user://">星火用户协议</a>]]></string>
+    <string name="check_agreement_tip">请同意用户协议及隐私政策</string>
+
+    <!-- Agreement Activity -->
+    <string name="agreement_welcome">欢迎使用星火</string>
+    <string name="agreement_demo_notice">星火是一款即时通讯应用。</string>
+    <string name="agreement_description">星火为即时通讯类应用，其基本功能为收发文本、图片、视频、位置等消息，以及进行音视频通话。为实现其基本功能，需要使用自启动、通知、麦克风、相机等权限，但在您同意之前，我们不会获取任何权限。在使用之前，请仔细阅读下面的隐私政策和用户协议。</string>
+    <string name="agreement_agree">同意并继续</string>
+    <string name="agreement_disagree">不同意</string>
+    <string name="no_privacy_agreement_url_tip">请配置隐私政策</string>
+    <string name="no_user_agreement_url_tip">请配置用户协议</string>
+
+    <!-- Backup and Restore -->
+    <string name="backup_and_restore">备份与恢复</string>
+    <string name="backup_options">备份选项</string>
+    <string name="backup_progress">备份进度</string>
+    <string name="select_backup_location">选择备份位置</string>
+    <string name="backup_request">备份请求</string>
+    <string name="select_restore_source">选择恢复源</string>
+    <string name="backup_list">备份列表</string>
+    <string name="restore_options">恢复选项</string>
+    <string name="pc_backup_list">PC备份列表</string>
+    <string name="restoring_from_pc">从PC恢复中</string>
+    <string name="share_to_wildfire">分享到星火</string>
+    <string name="pc_login">PC登录</string>
+    <string name="backup_desc">备份您的消息以便稍后恢复</string>
+    <string name="create_backup">创建备份</string>
+    <string name="restore_backup">恢复备份</string>
+    <string name="recent_backups">最近备份</string>
+    <string name="backup_feature_not_implemented">备份功能 - 请在子类中实现</string>
+    <string name="restore_feature_not_implemented">恢复功能 - 请在子类中实现</string>
+    <string name="conversations_unit">%d 个会话</string>
+    <string name="messages_unit">%d 条消息</string>
+    <string name="backup_to_local">本地备份</string>
+    <string name="backup_to_pc">备份到电脑</string>
+    <string name="backup_to_pc_desc">传输备份到在线电脑</string>
+    <string name="backup_to_pc_offline">备份到电脑（离线）</string>
+    <string name="pc_client_not_online">电脑客户端未在线</string>
+    <string name="pc_is_not_online">电脑未在线</string>
+    <string name="restore_from_local">本地恢复</string>
+    <string name="restore_from_local_desc">从本地存储恢复</string>
+    <string name="restore_from_pc">从电脑恢复</string>
+    <string name="restore_from_pc_desc">从电脑下载并恢复</string>
+    <string name="restore_from_pc_offline">从电脑恢复（离线）</string>
+    <string name="delete_backup">删除备份</string>
+    <string name="delete_backup_confirm">确定要删除此备份吗？</string>
+    <string name="delete">删除</string>
+    <string name="backup_deleted">备份已删除</string>
+    <string name="delete_backup_failed">删除备份失败</string>
+    <string name="device">设备</string>
+    <string name="select_backup">选择备份</string>
+    <string name="preparing_backup">正在准备备份…</string>
+    <string name="preparing_restore">正在准备恢复…</string>
+    <string name="backup_completed">备份完成</string>
+    <string name="backup_failed">备份失败</string>
+    <string name="restore_completed">恢复完成</string>
+    <string name="restore_failed">恢复失败</string>
+    <string name="ok">确定</string>
+    <string name="backup_time">备份时间</string>
+    <string name="select_conversations">选择会话</string>
+    <string name="select_all">全选</string>
+    <string name="deselect_all">取消全选</string>
+    <string name="include_media_files">包含媒体文件</string>
+    <string name="set_password">设置密码</string>
+    <string name="backup_password_hint">密码提示（可选）</string>
+    <string name="encrypt_backup">加密备份</string>
+    <string name="start_backup">开始备份</string>
+    <string name="start_restore">开始恢复</string>
+    <string name="overwrite_existing_messages">覆盖已存在的消息</string>
+    <string name="confirm_restore">确认恢复</string>
+    <string name="confirm_restore_message">确定要从此备份恢复吗？这将导入 %d 条消息。</string>
+    <string name="backing_up">正在备份</string>
+    <string name="restoring">正在恢复</string>
+    <string name="cancel_backup">取消备份</string>
+    <string name="cancel_restore">取消恢复</string>
+    <string name="connecting_to_pc">正在连接电脑端…</string>
+    <string name="waiting_for_pc_confirmation">正在等待电脑端确认…</string>
+    <string name="uploading_to_pc">正在上传到电脑端…</string>
+    <string name="downloading_from_pc">正在从电脑端下载…</string>
+    <string name="importing_messages">正在导入消息</string>
+    <string name="syncing_files">正在同步文件</string>
+    <string name="backup_request_rejected">备份请求被拒绝</string>
+    <string name="pc_rejected_backup_request">电脑端拒绝了备份请求</string>
+    <string name="request_timeout">请求超时</string>
+    <string name="pc_not_respond">电脑端未在30秒内响应</string>
+    <string name="operation_failed">操作失败</string>
+    <string name="no_backup_found">未找到备份</string>
+    <string name="backup_list_empty">备份列表为空</string>
+    <string name="backup_path_required">需要备份路径</string>
+    <string name="backed_up_messages">已备份 %d 条消息%s</string>
+    <string name="restored_messages">已恢复 %d 条消息%s</string>
+    <string name="media_files_info">，%d 个媒体文件 (%.2f MB)</string>
+    <string name="media_files_count_only">，%d 个媒体文件</string>
+    <string name="conversations_progress">%d/%d 个会话</string>
+    <string name="backup_completed_successfully">备份完成成功</string>
+    <string name="restore_completed_successfully">恢复完成成功</string>
+    <string name="error_prefix">错误：</string>
+    <string name="select_at_least_one_conversation">请至少选择一个会话</string>
+    <string name="messages_count_suffix">%d 条消息</string>
+    <string name="unknown">未知</string>
+    <string name="backup_time_label">备份时间: %1$s</string>
+    <string name="device_label">设备: %1$s</string>
+    <string name="conversations_label">会话数量: %1$d</string>
+    <string name="messages_label">消息数量: %1$d</string>
+    <string name="media_files_label">媒体文件: %1$d</string>
+    <string name="unknown_device">未知设备</string>
+    <string name="no_conversations_to_backup">没有要备份的会话</string>
+    <string name="waiting_for_pc_response">正在等待电脑端确认…</string>
+    <string name="confirm_backup_on_pc">请在电脑端确认备份请求</string>
+    <string name="failed_to_prepare_backup">准备备份数据失败</string>
+    <string name="failed_to_send_request">发送备份请求失败，错误码: %1$d</string>
+    <string name="pc_approved_backup">电脑端已确认备份</string>
+    <string name="creating_backup_data">正在创建备份…\n服务器: %1$s:%2$d</string>
+    <string name="backup_request_rejected_title">备份请求被拒绝</string>
+    <string name="pc_rejected_request">电脑端拒绝了备份请求</string>
+    <string name="request_timeout_title">请求超时</string>
+    <string name="pc_not_respond_30s">电脑端未在30秒内响应</string>
+    <string name="failed_to_create_backup">创建备份失败，错误码: %1$d</string>
+    <string name="backing_up_progress">正在备份 %1$d%%</string>
+    <string name="completed_progress">已完成: %1$d/%2$d</string>
+    <string name="preparing_file_list">正在准备文件列表…</string>
+    <string name="no_backup_files">未找到备份文件</string>
+    <string name="files_waiting_upload">%1$d 个文件等待上传</string>
+    <string name="uploading_progress">正在上传 %1$d%%</string>
+    <string name="file_progress">文件 %1$d/%2$d</string>
+    <string name="failed_to_upload_file">上传文件失败</string>
+    <string name="notifying_pc">正在通知电脑端…</string>
+    <string name="failed_to_send_restore_request">发送恢复请求失败，错误码: %1$d</string>
+    <string name="pc_rejected_restore_request">电脑端拒绝了恢复请求</string>
+    <string name="fetching_backup_list">正在获取备份列表…</string>
+    <string name="failed_to_fetch_list_status">获取备份列表失败，状态码: %1$d</string>
+    <string name="failed_to_fetch_list">获取备份列表失败: %1$s</string>
+    <string name="unknown_backup">未知备份</string>
+    <string name="no_backups_on_pc">电脑端没有可用备份</string>
+    <string name="failed_to_parse_list">解析备份列表失败</string>
+    <string name="conversations_suffix">个会话</string>
+    <string name="messages_suffix_short">条消息</string>
+    <string name="media_files_suffix">个媒体文件</string>
+    <string name="files_suffix">个文件</string>
+    <string name="no_conversations_selected">未选择会话</string>
+    <string name="no_messages">无消息</string>
+    <string name="one_message">1 条消息</string>
+    <string name="messages_format">%1$d 条消息</string>
+    <string name="downloading_backup_info">正在下载备份信息</string>
+    <string name="connecting_to_pc_status">正在连接电脑端</string>
+    <string name="failed_to_download_metadata_status">下载元数据失败，状态码: %1$d</string>
+    <string name="failed_to_download_metadata">下载元数据失败: %1$s</string>
+    <string name="backup_info_format">%1$d 个会话，%2$d 条消息，%3$d 个媒体文件</string>
+    <string name="downloading_backup_files">正在下载备份文件…</string>
+    <string name="downloading_file_progress">正在下载第 %1$d/%2$d 个文件</string>
+    <string name="failed_to_download_file_status">下载文件失败: %1$s (HTTP %2$d)</string>
+    <string name="failed_to_download_file">下载文件失败: %1$s - %2$s</string>
+    <string name="restoring_messages">正在恢复消息</string>
+    <string name="please_wait">请稍候…</string>
+    <string name="restoring_progress">正在恢复 %1$d%%</string>
+    <string name="restore_completed_status">恢复完成！</string>
+    <string name="restored_messages_media">已恢复 %1$d 条消息，%2$d 个媒体文件</string>
+    <string name="restore_failed_prefix">恢复失败: %1$s</string>
+    <string name="restore_failed_status">恢复失败</string>
+</resources>

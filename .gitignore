@@ -1,0 +1,33 @@
+# Build outputs
+**/target/
+**/build/
+**/*.class
+**/*.jar
+**/*.war
+**/*.deb
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+**/node_modules/
+
+# Gradle
+.gradle/
+local.properties
+
+# Pods
+**/Pods/
+
+# Environment
+.env
+*.log

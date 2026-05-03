@@ -1,0 +1,79 @@
+//
+//  WFCCCreateGroupNotificationContent.m
+//  WFChatClient
+//
+//  Created by heavyrain on 2017/9/19.
+//  Copyright © 2017年 WildFireChat. All rights reserved.
+//
+
+#import "WFCCGroupPrivateChatNotificationContent.h"
+#import "WFCCIMService.h"
+#import "WFCCNetworkService.h"
+#import "Common.h"
+#import "WFCCDictionary.h"
+
+@implementation WFCCGroupPrivateChatNotificationContent
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [super encode];
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    if (self.operatorId) {
+        [dataDict setObject:self.operatorId forKey:@"o"];
+    }
+    if (self.type) {
+        [dataDict setObject:self.type forKey:@"n"];
+    }
+    
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                                           options:kNilOptions
+                                                                             error:nil];
+    
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
+    NSError *__error = nil;
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    if (!__error) {
+        self.operatorId = dictionary[@"o"];
+        self.type = dictionary[@"n"];
+        self.groupId = dictionary[@"g"];
+    }
+}
+
++ (int)getContentType {
+    return MESSAGE_CONTENT_TYPE_CHANGE_PRIVATECHAT;
+}
+
++ (int)getContentFlags {
+    return WFCCPersistFlag_PERSIST;
+}
+
+
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
+}
+
+- (NSString *)formatNotification:(WFCCMessage *)message {
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+        return [self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOnBySelf") : WFCCString(@"ChangeGroupPrivateChatOffBySelf");
+    } else {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
+        if (userInfo) {
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOn") : WFCCString(@"ChangeGroupPrivateChatOff"), userInfo.readableName];
+        } else {
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOnByUnknownUser") : WFCCString(@"ChangeGroupPrivateChatOffByUnknownUser"), self.operatorId];
+        }
+    }
+}
+@end

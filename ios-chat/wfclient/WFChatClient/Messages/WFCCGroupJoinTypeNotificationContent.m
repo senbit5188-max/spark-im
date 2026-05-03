@@ -1,0 +1,93 @@
+//
+//  WFCCCreateGroupNotificationContent.m
+//  WFChatClient
+//
+//  Created by heavyrain on 2017/9/19.
+//  Copyright © 2017年 WildFireChat. All rights reserved.
+//
+
+#import "WFCCGroupJoinTypeNotificationContent.h"
+#import "WFCCIMService.h"
+#import "WFCCNetworkService.h"
+#import "Common.h"
+#import "WFCCDictionary.h"
+
+@implementation WFCCGroupJoinTypeNotificationContent
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [super encode];
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    if (self.operatorId) {
+        [dataDict setObject:self.operatorId forKey:@"o"];
+    }
+    if (self.type) {
+        [dataDict setObject:self.type forKey:@"n"];
+    }
+    
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                                           options:kNilOptions
+                                                                             error:nil];
+    
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
+    NSError *__error = nil;
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    if (!__error) {
+        self.operatorId = dictionary[@"o"];
+        self.type = dictionary[@"n"];
+        self.groupId = dictionary[@"g"];
+    }
+}
+
++ (int)getContentType {
+    return MESSAGE_CONTENT_TYPE_CHANGE_JOINTYPE;
+}
+
++ (int)getContentFlags {
+    return WFCCPersistFlag_PERSIST;
+}
+
+
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
+}
+
+- (NSString *)formatNotification:(WFCCMessage *)message {
+    NSString *user;
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+        user = WFCCString(@"You");
+    } else {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
+        if (userInfo) {
+            user = userInfo.readableName;
+        } else {
+            user = [NSString stringWithFormat:WFCCString(@"Administrator"), self.operatorId];
+        }
+    }
+
+    if ([self.type isEqualToString:@"0"]) {
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeOpen"), user];
+    } else if ([self.type isEqualToString:@"1"]) {
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeMemberOnly"), user];
+    } else if ([self.type isEqualToString:@"2"]) {
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeAdminOnly"), user];
+    } else if ([self.type isEqualToString:@"3"]) {
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeNeedApproval"), user];
+    } else {
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeClose"), user];
+    }
+
+}
+@end
