@@ -1160,16 +1160,6 @@
 							};
 						};
 					};
-					2F56F6F2252C956700B829C4 = {
-						CreatedOnToolsVersion = 12.0.1;
-						ProvisioningStyle = Automatic;
-					};
-					B71F0ABF28F54759000A7C8A = {
-						CreatedOnToolsVersion = 14.0.1;
-					};
-					B71F0ACB28F54759000A7C8A = {
-						CreatedOnToolsVersion = 14.0.1;
-					};
 				};
 			};
 			buildConfigurationList = 2E1D1FF21FAF0AE600F4405D /* Build configuration list for PBXProject "WildFireChat" */;
