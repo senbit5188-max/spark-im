@@ -54,9 +54,9 @@
     <string name="sms_login_title">SMS Code Login</string>
 
     <!-- Login Activity Password Strings -->
-    <string name="login_password_title">Password Login</string>
-    <string name="login_phone_label">Phone</string>
-    <string name="login_phone_hint">Enter phone number(China mainland only)</string>
+    <string name="login_password_title">Account Login</string>
+    <string name="login_phone_label">Account</string>
+    <string name="login_phone_hint">Enter account</string>
     <string name="login_password_label">Password</string>
     <string name="login_password_hint">Enter password</string>
     <string name="login_use_auth_code">Login with verification code</string>

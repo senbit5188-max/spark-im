@@ -51,17 +51,14 @@
             <div v-else-if="loginType === 1" class="login-form-container">
                 <!--            密码登录-->
                 <img class="logo" :src="require(`@/assets/images/icon.png`)" alt="">
-                <p class="title">密码登录</p>
+                <p class="title">账号密码登录</p>
                 <div class="item">
-                    <input v-model.trim="mobile" class="text-input" type="number" placeholder="请输入手机号">
+                    <input v-model.trim="mobile" class="text-input" type="text" placeholder="请输入账号">
                 </div>
                 <div class="item">
                     <input v-model.trim="password" class="text-input" @keydown.enter="loginWithPassword" type="password" placeholder="请输入密码">
                 </div>
-                <div v-if="loginStatus === 0" style="display: flex; justify-content: space-between; width: 100%; ">
-                    <p class="tip" @click="switchLoginType(2)">使用验证码登录</p>
-                    <p class="tip" @click="register">注册</p>
-                </div>
+
                 <button class="login-button" :disabled="mobile === '' || !password || password === ''" ref="loginWithPasswordButton" @click="loginWithPassword">{{ loginStatus === 3 ? '数据同步中，可能需要数分钟...' : '登录' }}</button>
                 <ClipLoader v-if="loginStatus === 3" class="syncing" :color="'var(--accent-color)'" :height="'80px'" :width="'80px'"/>
             </div>
@@ -80,9 +77,7 @@
                 <button class="login-button" :disabled="mobile === '' || authCode === ''" ref="loginWithAuthCodeButton" @click="loginWithAuthCode">{{ loginStatus === 3 ? '数据同步中，可能需要数分钟...' : '登录' }}</button>
                 <ClipLoader v-if="loginStatus === 3" style="margin-top: 10px" class="syncing" :color="'4168e0'" :height="'80px'" :width="'80px'"/>
             </div>
-            <div v-if="loginStatus === 0" class="switch-login-type-container">
-                <p class="tip" @click="switchLoginType( loginType === 0 ? 1 : 0)">{{ loginType === 0 ? '使用密码/验证码登录' : '扫码登录' }}</p>
-            </div>
+
             <p class="diagnose" @click="diagnose">诊断</p>
         </div>
 
@@ -134,7 +129,7 @@ export default {
             qrCodeTimer: null,
             appToken: '',
             lastAppToken: '',
-            loginType: 0, // 0 扫码登录，1 密码登录，2 验证码登录
+            loginType: 1, // 0 扫码登录，1 密码登录，2 验证码登录
             enableAutoLogin: Config.ENABLE_AUTO_LOGIN,
             mobile: '',
             password: '',

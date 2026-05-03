@@ -64,7 +64,7 @@
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
     
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
-    [self.hintLabel setText:LocalizedString(@"PhoneLogin")];
+    [self.hintLabel setText:LocalizedString(@"PasswordLogin")];
     self.hintLabel.textAlignment = NSTextAlignmentLeft;
     self.hintLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
     
@@ -73,7 +73,7 @@
     UIView *userNameContainer = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - 2 * paddingEdge, inputHeight)];
     
     UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
-    userNameLabel.text = LocalizedString(@"PhoneNumber");
+    userNameLabel.text = LocalizedString(@"AccountLabel");
     userNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, userNameContainer.frame.size.width, 1.f)];
@@ -82,9 +82,9 @@
     
     self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, userNameContainer.frame.size.width - 87, inputHeight - 1)];
     self.userNameField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-    self.userNameField.placeholder = LocalizedString(@"PhoneNumberPlaceholder");
+    self.userNameField.placeholder = LocalizedString(@"AccountPlaceholder");
     self.userNameField.returnKeyType = UIReturnKeyNext;
-    self.userNameField.keyboardType = UIKeyboardTypePhonePad;
+    self.userNameField.keyboardType = UIKeyboardTypeDefault;
     self.userNameField.delegate = self;
     self.userNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.userNameField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -93,7 +93,7 @@
 
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
     self.passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
-    self.passwordLabel.text = LocalizedString(@"VerificationCode");
+    self.passwordLabel.text = LocalizedString(@"Password");
     self.passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     
@@ -101,44 +101,30 @@
     self.passwordLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
     
     
-    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
+    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87, inputHeight - 1)];
     self.passwordField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-    self.passwordField.placeholder = LocalizedString(@"VerificationCodePlaceholder");
+    self.passwordField.placeholder = LocalizedString(@"PasswordPlaceholder");
     self.passwordField.returnKeyType = UIReturnKeyDone;
-    self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
+    self.passwordField.keyboardType = UIKeyboardTypeASCIICapable;
+    self.passwordField.secureTextEntry = YES;
     self.passwordField.delegate = self;
     self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.passwordField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
-    [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
-    self.sendCodeBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
-    self.sendCodeBtn.layer.borderWidth = 1;
-    self.sendCodeBtn.layer.cornerRadius = 4;
-    self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
-    [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateNormal];
-    [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateSelected];
-    [self.sendCodeBtn addTarget:self action:@selector(onSendCode:) forControlEvents:UIControlEventTouchDown];
-    self.sendCodeBtn.enabled = NO;
+    // SMS code button hidden - password login only
+    self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.sendCodeBtn.hidden = YES;
     
     
     topPos += 40;
     
     topPos += 8;
     
-    self.switchButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, 150, 40)];
-    [self.switchButton setTitle:LocalizedString(@"UsePasswordLogin") forState:UIControlStateNormal];
-    self.switchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    self.switchButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
-    [self.switchButton addTarget:self action:@selector(onSwitchLoginType:) forControlEvents:UIControlEventTouchDown];
-    
-    self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - 100, topPos, 100, 40)];
-    [self.registerButton setTitle:LocalizedString(@"Register") forState:UIControlStateNormal];
-    self.registerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    self.registerButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [self.registerButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
-    [self.registerButton addTarget:self action:@selector(onRegister:) forControlEvents:UIControlEventTouchDown];
+    // Hide switch and register buttons - password login only
+    self.switchButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.switchButton.hidden = YES;
+    self.registerButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.registerButton.hidden = YES;
     
     topPos += 40;
     topPos += 31;
@@ -192,7 +178,7 @@
     }];
     
     [self.view addSubview:self.privacyLabel];
-    [self setIsPwdLogin:self.isPwdLogin];
+    self.isPwdLogin = YES;
 }
 
 - (void)setIsPwdLogin:(BOOL)isPwdLogin {
@@ -386,7 +372,7 @@
     if (!user.length || !password.length) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = LocalizedString(@"PleaseInputPhoneAndCode");
+        hud.label.text = LocalizedString(@"PleaseInputAccountAndPassword");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
         return;
@@ -469,13 +455,10 @@
     };
 
 
-    if (self.isPwdLogin) {
-        [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
-            successBlock(userId, token, newUser, resetCode);
-        } error:errorBlock];
-    } else {
-        [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
-    }
+    // Always use password login
+    [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+        successBlock(userId, token, newUser, resetCode);
+    } error:errorBlock];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -508,47 +491,17 @@
 }
 
 - (void)updateBtn {
-    // 验证码发送按钮：只依赖手机号是否有效
-    if ([self isValidNumber]) {
-        // 手机号有效，启用"获取验证码"按钮（如果没有倒计时）
-        if (!self.countdownTimer) {
-            self.sendCodeBtn.enabled = YES;
-            [self.sendCodeBtn setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
-            self.sendCodeBtn.layer.borderColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9].CGColor;
-        } else {
-            // 倒计时中，禁用按钮
-            self.sendCodeBtn.enabled = NO;
-            self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
-            [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateNormal];
-            [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateSelected];
-        }
-
-        // 登录按钮：依赖验证码是否有效（验证码登录模式）或密码是否有效（密码登录模式）
-        if ([self isValidCode]) {
-            [self.loginBtn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
-            self.loginBtn.enabled = YES;
-        } else {
-            [self.loginBtn setBackgroundColor:[UIColor grayColor]];
-            self.loginBtn.enabled = NO;
-        }
+    if (self.userNameField.text.length > 0 && self.passwordField.text.length > 0) {
+        [self.loginBtn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
+        self.loginBtn.enabled = YES;
     } else {
-        // 手机号无效，禁用所有按钮
-        self.sendCodeBtn.enabled = NO;
-        [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-
         [self.loginBtn setBackgroundColor:[UIColor grayColor]];
         self.loginBtn.enabled = NO;
     }
 }
 
 - (BOOL)isValidNumber {
-    NSString * MOBILE = @"^((1[23456789]))\\d{9}$";
-    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
-    if (self.userNameField.text.length == 11 && ([regextestmobile evaluateWithObject:self.userNameField.text] == YES)) {
-        return YES;
-    } else {
-        return NO;
-    }
+    return self.userNameField.text.length > 0;
 }
 
 - (BOOL)isValidCode {
