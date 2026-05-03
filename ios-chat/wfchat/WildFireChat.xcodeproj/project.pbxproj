@@ -35,9 +35,7 @@
 		2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B0DD221E1B38100139CB1 /* ring.caf */; };
 		2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */; };
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
-		2F44477A252D475C007A570E /* Shares.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F444779252D475C007A570E /* Shares.xcassets */; };
 		2F444859252D520B007A570E /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
-		2F44485D252D52AE007A570E /* ShareAppService.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F44485C252D52AE007A570E /* ShareAppService.m */; };
 		2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4B0EA9245BFCE7000A41C6 /* DeviceTableViewController.m */; };
 		2F4B0EAD245BFD22000A41C6 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4B0EAC245BFD22000A41C6 /* Device.m */; };
 		2F4B0EB0245C231D000A41C6 /* DeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4B0EAF245C231D000A41C6 /* DeviceInfoViewController.m */; };
@@ -48,7 +46,6 @@
 		2F5527C1252CB33E00B0CDCB /* SharedConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5527BF252CB33E00B0CDCB /* SharedConversation.m */; };
 		2F56F6F7252C956700B829C4 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6F6252C956700B829C4 /* ShareViewController.m */; };
 		2F56F6FA252C956700B829C4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56F6F8252C956700B829C4 /* MainInterface.storyboard */; };
-		2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2F56F6F3252C956700B829C4 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2F56F706252CA99A00B829C4 /* ConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F705252CA99A00B829C4 /* ConversationListViewController.m */; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */; };
@@ -94,9 +91,6 @@
 		B71F0AC628F54759000A7C8A /* SampleHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AC528F54759000A7C8A /* SampleHandler.mm */; };
 		B71F0ACD28F54759000A7C8A /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0AC128F54759000A7C8A /* ReplayKit.framework */; };
 		B71F0ACF28F54759000A7C8A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0ACE28F54759000A7C8A /* UIKit.framework */; };
-		B71F0AD328F5475A000A7C8A /* BroadcastSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */; };
-		B71F0AD728F5475A000A7C8A /* BroadcastSetupUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B71F0ADA28F5475A000A7C8A /* Broadcast.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B71F0AC028F54759000A7C8A /* Broadcast.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B71F0AFE28F547C2000A7C8A /* Documentation.html in Resources */ = {isa = PBXBuildFile; fileRef = B71F0AE428F547C2000A7C8A /* Documentation.html */; };
 		B71F0AFF28F547C2000A7C8A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AE528F547C2000A7C8A /* GCDAsyncUdpSocket.m */; };
 		B71F0B0028F547C2000A7C8A /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AE628F547C2000A7C8A /* GCDAsyncSocket.m */; };
@@ -169,27 +163,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2F56F6FC252C956700B829C4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E1D1FEF1FAF0AE600F4405D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2F56F6F2252C956700B829C4;
-			remoteInfo = ShareExtension;
-		};
-		B71F0AD528F5475A000A7C8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E1D1FEF1FAF0AE600F4405D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B71F0ACB28F54759000A7C8A;
-			remoteInfo = BroadcastSetupUI;
-		};
-		B71F0AD828F5475A000A7C8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E1D1FEF1FAF0AE600F4405D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B71F0ABF28F54759000A7C8A;
-			remoteInfo = Broadcast;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -199,9 +172,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				B71F0ADA28F5475A000A7C8A /* Broadcast.appex in Embed App Extensions */,
-				B71F0AD728F5475A000A7C8A /* BroadcastSetupUI.appex in Embed App Extensions */,
-				2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,11 +264,9 @@
 		2F1B0DD221E1B38100139CB1 /* ring.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ring.caf; sourceTree = "<group>"; };
 		2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		2F444779252D475C007A570E /* Shares.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Shares.xcassets; sourceTree = "<group>"; };
+
 		2F44477C252D4EFF007A570E /* SharePredefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharePredefine.h; sourceTree = "<group>"; };
 		2F44485A252D522F007A570E /* WFCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCConfig.h; sourceTree = "<group>"; };
-		2F44485B252D52AE007A570E /* ShareAppService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareAppService.h; sourceTree = "<group>"; };
-		2F44485C252D52AE007A570E /* ShareAppService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareAppService.m; sourceTree = "<group>"; };
 		2F4B0EA8245BFCE7000A41C6 /* DeviceTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceTableViewController.h; sourceTree = "<group>"; };
 		2F4B0EA9245BFCE7000A41C6 /* DeviceTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceTableViewController.m; sourceTree = "<group>"; };
 		2F4B0EAB245BFD22000A41C6 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
@@ -311,10 +279,8 @@
 		2F50BE83237970780049CD39 /* WFCDiagnoseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCDiagnoseViewController.m; sourceTree = "<group>"; };
 		2F518FF1235ED7DD00FA3D58 /* AppService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppService.h; sourceTree = "<group>"; };
 		2F518FF2235ED7DD00FA3D58 /* AppService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppService.m; sourceTree = "<group>"; };
-		2F5527BB252CADFA00B0CDCB /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		2F5527BE252CB33E00B0CDCB /* SharedConversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedConversation.h; sourceTree = "<group>"; };
 		2F5527BF252CB33E00B0CDCB /* SharedConversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedConversation.m; sourceTree = "<group>"; };
-		2F56F6F3252C956700B829C4 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F56F6F5252C956700B829C4 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		2F56F6F6252C956700B829C4 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		2F56F6F9252C956700B829C4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -392,15 +358,12 @@
 		B709CCEC28F7BCCC0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
 		B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
 		B709CCF028F8E8D00036EDFA /* WFCUBroadcastDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUBroadcastDefine.h; path = ../../wfuikit/WFChatUIKit/Voip/Conference/WFCUBroadcastDefine.h; sourceTree = "<group>"; };
-		B71F0AC028F54759000A7C8A /* Broadcast.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Broadcast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71F0AC128F54759000A7C8A /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		B71F0AC428F54759000A7C8A /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
 		B71F0AC528F54759000A7C8A /* SampleHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SampleHandler.mm; sourceTree = "<group>"; };
 		B71F0AC728F54759000A7C8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71F0ACE28F54759000A7C8A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		B71F0AD128F5475A000A7C8A /* BroadcastSetupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BroadcastSetupViewController.h; sourceTree = "<group>"; };
-		B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BroadcastSetupViewController.m; sourceTree = "<group>"; };
+
 		B71F0AD428F5475A000A7C8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B71F0AE428F547C2000A7C8A /* Documentation.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Documentation.html; sourceTree = "<group>"; };
 		B71F0AE528F547C2000A7C8A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
@@ -655,9 +618,6 @@
 			isa = PBXGroup;
 			children = (
 				2E1D1FF91FAF0AE600F4405D /* WildFireChat */,
-				2F56F6F4252C956700B829C4 /* ShareExtension */,
-				B71F0AC328F54759000A7C8A /* Broadcast */,
-				B71F0AD028F5475A000A7C8A /* BroadcastSetupUI */,
 				2EAC88E61FB0A0D6004B34D1 /* Frameworks */,
 				2E1D1FF81FAF0AE600F4405D /* Products */,
 			);
@@ -667,9 +627,6 @@
 			isa = PBXGroup;
 			children = (
 				2E1D1FF71FAF0AE600F4405D /* 星火.app */,
-				2F56F6F3252C956700B829C4 /* ShareExtension.appex */,
-				B71F0AC028F54759000A7C8A /* Broadcast.appex */,
-				B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -685,7 +642,6 @@
 				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
-				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
 				2F94FAAF24551D54007713CD /* Things */,
 				2BCBC82F23954AC4009321AD /* Moments */,
 				2F518FF0235ED77700FA3D58 /* AppService */,
@@ -781,40 +737,6 @@
 				2F518FF2235ED7DD00FA3D58 /* AppService.m */,
 			);
 			path = AppService;
-			sourceTree = "<group>";
-		};
-		2F5527BD252CB2F900B0CDCB /* ShareExtension */ = {
-			isa = PBXGroup;
-			children = (
-				2F5527BE252CB33E00B0CDCB /* SharedConversation.h */,
-				2F5527BF252CB33E00B0CDCB /* SharedConversation.m */,
-				2F44477C252D4EFF007A570E /* SharePredefine.h */,
-			);
-			path = ShareExtension;
-			sourceTree = "<group>";
-		};
-		2F56F6F4252C956700B829C4 /* ShareExtension */ = {
-			isa = PBXGroup;
-			children = (
-				2B4C0269252F4A570043FA41 /* Vendor */,
-				2F5527BB252CADFA00B0CDCB /* ShareExtension.entitlements */,
-				2F56F6F5252C956700B829C4 /* ShareViewController.h */,
-				2F56F6F6252C956700B829C4 /* ShareViewController.m */,
-				2F56F6F8252C956700B829C4 /* MainInterface.storyboard */,
-				2F56F6FB252C956700B829C4 /* Info.plist */,
-				2F56F704252CA99A00B829C4 /* ConversationListViewController.h */,
-				2F56F705252CA99A00B829C4 /* ConversationListViewController.m */,
-				2FB28E632538183C00DDD387 /* ConversationCell.h */,
-				2FB28E642538183C00DDD387 /* ConversationCell.m */,
-				2F444779252D475C007A570E /* Shares.xcassets */,
-				2F44485B252D52AE007A570E /* ShareAppService.h */,
-				2F44485C252D52AE007A570E /* ShareAppService.m */,
-				2F97CDC7252EC7D90095DDFD /* ShareUtility.h */,
-				2F97CDC8252EC7D90095DDFD /* ShareUtility.m */,
-				B7B2F8482F0A0862001CBF4C /* ShareLocalizationHelper.h */,
-				B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */,
-			);
-			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 		2F63891F254E5A500084EEA6 /* Favorite */ = {
@@ -985,28 +907,6 @@
 				909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */,
 			);
 			path = chatroom;
-			sourceTree = "<group>";
-		};
-		B71F0AC328F54759000A7C8A /* Broadcast */ = {
-			isa = PBXGroup;
-			children = (
-				B71F0AE128F547AC000A7C8A /* Vendor */,
-				B71F0AC428F54759000A7C8A /* SampleHandler.h */,
-				B71F0AC528F54759000A7C8A /* SampleHandler.mm */,
-				B709CCF028F8E8D00036EDFA /* WFCUBroadcastDefine.h */,
-				B71F0AC728F54759000A7C8A /* Info.plist */,
-			);
-			path = Broadcast;
-			sourceTree = "<group>";
-		};
-		B71F0AD028F5475A000A7C8A /* BroadcastSetupUI */ = {
-			isa = PBXGroup;
-			children = (
-				B71F0AD128F5475A000A7C8A /* BroadcastSetupViewController.h */,
-				B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */,
-				B71F0AD428F5475A000A7C8A /* Info.plist */,
-			);
-			path = BroadcastSetupUI;
 			sourceTree = "<group>";
 		};
 		B71F0AE128F547AC000A7C8A /* Vendor */ = {
@@ -1235,58 +1135,6 @@
 			productReference = 2E1D1FF71FAF0AE600F4405D /* 星火.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2F56F6F2252C956700B829C4 /* ShareExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2F56F702252C956700B829C4 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
-			buildPhases = (
-				2F56F6EF252C956700B829C4 /* Sources */,
-				2F56F6F0252C956700B829C4 /* Frameworks */,
-				2F56F6F1252C956700B829C4 /* Resources */,
-				B7B2F8472F0A0576001CBF4C /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ShareExtension;
-			productName = ShareExtension;
-			productReference = 2F56F6F3252C956700B829C4 /* ShareExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		B71F0ABF28F54759000A7C8A /* Broadcast */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B71F0AE028F5475A000A7C8A /* Build configuration list for PBXNativeTarget "Broadcast" */;
-			buildPhases = (
-				B71F0ABC28F54759000A7C8A /* Sources */,
-				B71F0ABD28F54759000A7C8A /* Frameworks */,
-				B71F0ABE28F54759000A7C8A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Broadcast;
-			productName = Broadcast;
-			productReference = B71F0AC028F54759000A7C8A /* Broadcast.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B71F0ADF28F5475A000A7C8A /* Build configuration list for PBXNativeTarget "BroadcastSetupUI" */;
-			buildPhases = (
-				B71F0AC828F54759000A7C8A /* Sources */,
-				B71F0AC928F54759000A7C8A /* Frameworks */,
-				B71F0ACA28F54759000A7C8A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BroadcastSetupUI;
-			productName = BroadcastSetupUI;
-			productReference = B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1340,9 +1188,6 @@
 			projectRoot = "";
 			targets = (
 				2E1D1FF61FAF0AE600F4405D /* WildFireChat */,
-				2F56F6F2252C956700B829C4 /* ShareExtension */,
-				B71F0ABF28F54759000A7C8A /* Broadcast */,
-				B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */,
 			);
 		};
 /* End PBXProject section */
@@ -1370,7 +1215,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F56F6FA252C956700B829C4 /* MainInterface.storyboard in Resources */,
-				2F44477A252D475C007A570E /* Shares.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1505,7 +1349,6 @@
 			files = (
 				2B4C027D252F4A570043FA41 /* AFURLSessionManager.m in Sources */,
 				2F97CDC9252EC7D90095DDFD /* ShareUtility.m in Sources */,
-				2F44485D252D52AE007A570E /* ShareAppService.m in Sources */,
 				2F56F706252CA99A00B829C4 /* ConversationListViewController.m in Sources */,
 				2B4C0280252F4A570043FA41 /* AFSecurityPolicy.m in Sources */,
 				2F5527C1252CB33E00B0CDCB /* SharedConversation.m in Sources */,
@@ -1546,7 +1389,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B71F0AD328F5475A000A7C8A /* BroadcastSetupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1554,18 +1396,18 @@
 
 /* Begin PBXTargetDependency section */
 		2F56F6FD252C956700B829C4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2F56F6F2252C956700B829C4 /* ShareExtension */;
-			targetProxy = 2F56F6FC252C956700B829C4 /* PBXContainerItemProxy */;
+			target =
+;
 		};
 		B71F0AD628F5475A000A7C8A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */;
+			target =
+;
 			targetProxy = B71F0AD528F5475A000A7C8A /* PBXContainerItemProxy */;
 		};
 		B71F0AD928F5475A000A7C8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B71F0ABF28F54759000A7C8A /* Broadcast */;
+			target =
+;
 			targetProxy = B71F0AD828F5475A000A7C8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1826,194 +1668,9 @@
 			};
 			name = Release;
 		};
-		2F56F700252C956700B829C4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
-				);
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		2F56F701252C956700B829C4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
-				);
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		B71F0ADB28F5475A000A7C8A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Broadcast/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "星火";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		B71F0ADC28F5475A000A7C8A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Broadcast/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "星火";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		B71F0ADD28F5475A000A7C8A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		B71F0ADE28F5475A000A7C8A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 122;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1.41;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
+
+
+
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2035,33 +1692,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2F56F702252C956700B829C4 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2F56F700252C956700B829C4 /* Debug */,
-				2F56F701252C956700B829C4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B71F0ADF28F5475A000A7C8A /* Build configuration list for PBXNativeTarget "BroadcastSetupUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B71F0ADD28F5475A000A7C8A /* Debug */,
-				B71F0ADE28F5475A000A7C8A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B71F0AE028F5475A000A7C8A /* Build configuration list for PBXNativeTarget "Broadcast" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B71F0ADB28F5475A000A7C8A /* Debug */,
-				B71F0ADC28F5475A000A7C8A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
+
 /* End XCConfigurationList section */
 	};
 	rootObject = 2E1D1FEF1FAF0AE600F4405D /* Project object */;

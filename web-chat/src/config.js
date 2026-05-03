@@ -23,10 +23,10 @@ export default class Config {
     // 如果需要支持音视频通话功能，必须全站使用https(包括app server和im server) + wss，
     // WebSockets over SSL/TLS，启用https时，一定要配置为true；不启用https，一定要为false
     // 置为true时，请确保 IM SERVER 支持https访问。IM SERVER本身不能处理https请求，一般是通过在IM SERVER前面加上nginx之类的负载均衡器来实现https支持
-    static USE_WSS = false;
+    static USE_WSS = true;
 
     // ROUTE请求端口，默认是80；配置https时，请修改为其他端口，如443等
-    static ROUTE_PORT = 8080;
+    static ROUTE_PORT = 443;
 
     // 是否关闭日志，web和小程序有效
     static DISABLE_LOG = false;
@@ -36,7 +36,7 @@ export default class Config {
 
     // APP SERVER的地址，启用https时，APP SERVER也需要支持https
     // 默认的app server使用端口是8888
-    static APP_SERVER = 'http://52.183.72.253:8888';
+    static APP_SERVER = 'https://chat.telvoro.top';
 
     // 接龙服务地址
     static COLLECTION_SERVER = 'https://jielong.wildfirechat.net';
