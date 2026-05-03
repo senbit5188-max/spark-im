@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星火IM - 安全高效的即时通讯</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header .logo-area img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+        }
+        .header .logo-area span {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .header nav a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin-left: 28px;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        .header nav a:hover { color: #fff; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #4facfe 0%, #fff 50%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto 50px;
+            line-height: 1.6;
+        }
+
+        /* Download Cards */
+        .download-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .download-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 36px; }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card .icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+        .card.ios .icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .card.android .icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .card.web .icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+        .card .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .card .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .card.ios .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+        .card.android .btn {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: #1a1a2e;
+        }
+        .card.web .btn {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #1a1a2e;
+        }
+        .card .btn:hover { opacity: 0.9; transform: scale(1.05); }
+
+        .card .version {
+            margin-top: 16px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+        }
+
+        /* Features */
+        .features {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+        .feature-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 28px;
+            text-align: center;
+        }
+        .feature-item .emoji { font-size: 32px; margin-bottom: 12px; }
+        .feature-item h4 { font-size: 16px; margin-bottom: 6px; }
+        .feature-item p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.35);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-area">
+        <img src="../branding/app_icon.png" alt="星火" onerror="this.style.display='none'">
+        <span>星火 IM</span>
+    </div>
+    <nav>
+        <a href="#download">下载</a>
+        <a href="#features">功能</a>
+        <a href="https://github.com/senbit5188-max/spark-im" target="_blank">GitHub</a>
+    </nav>
+</div>
+
+<div class="hero">
+    <h1>星火 IM</h1>
+    <p>安全、高效、多平台的即时通讯解决方案<br>支持私有化部署，完全掌控数据安全</p>
+</div>
+
+<div class="download-section" id="download">
+    <div class="download-grid">
+
+        <div class="card ios">
+            <div class="icon">🍎</div>
+            <h3>iOS 客户端</h3>
+            <p class="subtitle">iPhone / iPad</p>
+            <a class="btn" href="#" id="ios-download" onclick="alert('请从GitHub Actions下载最新IPA文件后签名安装')">下载 IPA</a>
+            <div class="version">需要自行签名安装</div>
+        </div>
+
+        <div class="card android">
+            <div class="icon">🤖</div>
+            <h3>Android 客户端</h3>
+            <p class="subtitle">Android 7.0+</p>
+            <a class="btn" href="#" id="android-download" onclick="alert('请从GitHub Actions下载最新APK文件')">下载 APK</a>
+            <div class="version">v1.4.0</div>
+        </div>
+
+        <div class="card web">
+            <div class="icon">🌐</div>
+            <h3>Web 网页版</h3>
+            <p class="subtitle">Chrome / Edge / Firefox</p>
+            <a class="btn" href="#" id="web-open">打开网页版</a>
+            <div class="version">基于 Vue 3</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="features" id="features">
+    <h2>核心功能</h2>
+    <div class="features-grid">
+        <div class="feature-item">
+            <div class="emoji">💬</div>
+            <h4>即时聊天</h4>
+            <p>单聊、群聊、聊天室，支持文字、语音、图片、视频、文件等</p>
+        </div>
+        <div class="feature-item">
+            <div class="emoji">📞</div>
+            <h4>音视频通话</h4>
+            <p>一对一及多人音视频通话，清晰流畅</p>
+        </div>
+        <div class="feature-item">
+            <div class="emoji">🔒</div>
+            <h4>私有部署</h4>
+            <p>数据完全自主可控，支持企业私有化部署</p>
+        </div>
+        <div class="feature-item">
+            <div class="emoji">📱</div>
+            <h4>多端同步</h4>
+            <p>iOS、Android、Web、PC 多平台无缝切换</p>
+        </div>
+        <div class="feature-item">
+            <div class="emoji">👥</div>
+            <h4>朋友圈</h4>
+            <p>类微信朋友圈功能，分享生活动态</p>
+        </div>
+        <div class="feature-item">
+            <div class="emoji">⚡</div>
+            <h4>高性能</h4>
+            <p>MQTT + Protobuf 协议，最低 128MB 内存即可运行</p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>© 2024 星火 IM · 基于野火IM开源项目二次开发</p>
+</div>
+
+</body>
+</html>
