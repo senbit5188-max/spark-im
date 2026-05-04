@@ -117,6 +117,9 @@ export default function createConfig(
       chunkFilename: '[id].[chunkhash].js',
       assetModuleFilename: '[name].[contenthash][ext]',
       path: path.resolve(__dirname, 'dist'),
+      // Honour PUBLIC_PATH for sub-path deploys (e.g. chat.telvoro.top/v2/).
+      // Falls back to '/' which matches the original telegram-tt root deploy.
+      publicPath: process.env.PUBLIC_PATH || '/',
       clean: true,
     },
 
