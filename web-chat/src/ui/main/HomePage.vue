@@ -500,14 +500,17 @@ export default {
     height: 36px;
     display: block;
     margin: 12px auto 22px;
-    border-radius: 4px;
+    border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    -webkit-app-region: no-drag;
 }
 
 .avatar:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
 .menu {

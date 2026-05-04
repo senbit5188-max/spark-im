@@ -74,12 +74,38 @@ export default {
 .text-message-container {
     margin: 0 12px;
     padding: 10px 12px;
-    background-color: var(--background-primary);
+    background-color: var(--background-message-in);
     position: relative;
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+/* incoming bubble tail (left side) */
+.text-message-container:not(.out)::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 8px 6px 0;
+    border-color: transparent var(--message-in-arrow) transparent transparent;
+}
+
+/* outgoing bubble tail (right side) */
+.text-message-container.out::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 0 6px 8px;
+    border-color: transparent transparent transparent var(--message-out-arrow);
 }
 
 .text-message-container >>> p {

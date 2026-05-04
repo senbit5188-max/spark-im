@@ -28,7 +28,7 @@
             :friend-request="sharedContactState.currentFriendRequest"
             class="contact-detail-container"/>
         <div v-else class="contact-empty-container">
-            <h1>^~^</h1>
+            <p>从左侧选择一位联系人查看资料</p>
         </div>
     </div>
 </template>
@@ -112,9 +112,10 @@ ul {
     border-bottom-right-radius: var(--main-border-radius);
 }
 
-.contact-empty-container h1 {
-    font-size: 17px;
-    font-weight: normal;
+.contact-empty-container p {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    font-weight: 400;
 }
 
 @media (max-width: 768px) {

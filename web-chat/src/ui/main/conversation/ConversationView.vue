@@ -1,7 +1,17 @@
 <template>
     <section>
         <div v-if="sharedConversationState.currentConversationInfo == null" class="conversation-empty-container">
-            <h1>^~^</h1>
+            <div class="empty-illustration">
+                <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="48" cy="48" r="46" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.35"/>
+                    <path d="M28 38a8 8 0 0 1 8-8h24a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H44l-8 7v-7h0a8 8 0 0 1-8-8V38z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" opacity="0.7"/>
+                    <circle cx="40" cy="46" r="2" fill="currentColor" opacity="0.7"/>
+                    <circle cx="48" cy="46" r="2" fill="currentColor" opacity="0.7"/>
+                    <circle cx="56" cy="46" r="2" fill="currentColor" opacity="0.7"/>
+                </svg>
+            </div>
+            <p class="empty-title">选择一位联系人开始聊天</p>
+            <p class="empty-subtitle">加密传输 · 保护你的每一条消息</p>
         </div>
         <div v-else class="conversation-container">
             <header>
@@ -1195,27 +1205,42 @@ export default {
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--background-primary);
+    gap: 14px;
+    background-color: var(--background-tertiary);
     border-top-right-radius: var(--main-border-radius);
     border-bottom-right-radius: var(--main-border-radius);
-    /*border-left: 1px solid var(--border-primary);*/
 }
 
-.conversation-empty-container h1 {
-    font-size: 17px;
-    font-weight: normal;
+.empty-illustration {
+    color: var(--accent-color);
+    opacity: 0.55;
+}
+
+.empty-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.empty-subtitle {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin: 0;
+    letter-spacing: 0.3px;
 }
 
 .title-container {
     width: 100%;
-    height: 60px;
+    height: 56px;
     display: flex;
-    padding: 0 0 0 20px;
+    padding: 0 8px 0 20px;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--border-subtle);
+    background-color: var(--background-primary);
     border-bottom: 1px solid var(--border-primary);
     border-top-right-radius: var(--main-border-radius);
     position: relative;
@@ -1223,11 +1248,12 @@ export default {
 
 
 .title-container h1 {
-    font-size: 16px;
+    font-size: 17px;
     word-wrap: break-word;
     max-width: 500px;
     text-overflow: ellipsis;
-    font-weight: normal;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
 .title-container a {
