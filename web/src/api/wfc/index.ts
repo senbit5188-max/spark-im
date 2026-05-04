@@ -15,7 +15,7 @@
 
 import type { ApiInitialArgs, OnApiUpdate } from '../types';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 
 export class NotImplementedError extends Error {
   constructor(method: string) {
@@ -32,11 +32,13 @@ export function initApi(_onUpdate: OnApiUpdate, _initialArgs: ApiInitialArgs) {
   return Promise.resolve();
 }
 
-export function callApi<T extends string>(method: T, ..._args: any[]): Promise<unknown> {
+// Phase 0.5 stub: typed as `any` to keep the UI compiling. Phase 1 will replace
+// this with proper Methods/Args/Return type tables (see methods/types.ts roadmap).
+export function callApi<T extends string>(method: T, ..._args: any[]): Promise<any> {
   return Promise.reject(new NotImplementedError(method));
 }
 
-export function callApiLocal<T extends string>(method: T, ..._args: any[]): unknown {
+export function callApiLocal<T extends string>(method: T, ..._args: any[]): any {
   throw new NotImplementedError(method);
 }
 
@@ -48,19 +50,19 @@ export function cancelApiProgressMaster(_progressCallback: unknown): void {
   // no-op
 }
 
-export function handleMethodCallback(): void {
+export function handleMethodCallback(_data: unknown): void {
   // no-op (was used by the worker bridge in MTProto layer; not relevant for wfc)
 }
 
-export function handleMethodResponse(): void {
+export function handleMethodResponse(_data: unknown): void {
   // no-op
 }
 
-export function updateLocalDb(): void {
+export function updateLocalDb(_name?: string, _prop?: string, _value?: unknown): void {
   // wfc has its own indexedDb cache; no parallel localDb
 }
 
-export function updateFullLocalDb(): void {
+export function updateFullLocalDb(_localDb?: unknown): void {
   // wfc has its own indexedDb cache; no parallel localDb
 }
 
