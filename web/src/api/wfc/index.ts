@@ -6,14 +6,24 @@
  * are replacing it with a thin adapter on top of the WildFireChat JS SDK
  * (vendored under /wfc-sdk/sdk/).
  *
- * Phase 1 status: STUB. Most methods throw `NotImplementedError` so the
- * tree compiles. As we wire each capability, replace stubs with real
- * implementations under /web/src/api/wfc/methods/.
+ * Phase 1 status: PARTIAL. Auth methods (provideAuthPhoneNumber /
+ * provideAuthPassword) are wired to the spark-im backend so the user
+ * can actually log in. Conversation / message methods still throw
+ * NotImplementedError — Phase 2+ will fill those in.
  *
  * See ARCHITECTURE.md at repo root for the migration roadmap.
  */
 
 import type { ApiInitialArgs, OnApiUpdate } from '../types';
+
+import {
+  emitInitialAuthState,
+  provideAuthCode,
+  provideAuthPassword,
+  provideAuthPhoneNumber,
+  restartAuth,
+  setAuthOnUpdate,
+} from './methods/auth';
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 
@@ -26,19 +36,44 @@ export class NotImplementedError extends Error {
 
 let onUpdate: OnApiUpdate | undefined;
 
+// Methods that the UI may invoke via callApi('xxx', ...). Anything not
+// listed here falls through to a NotImplementedError so we surface gaps
+// loudly during Phase 1+ development.
+const methods: Record<string, (...args: any[]) => any> = {
+  provideAuthPhoneNumber: (phoneNumber: string) => provideAuthPhoneNumber(phoneNumber),
+  provideAuthCode: (code: string) => provideAuthCode(code),
+  provideAuthPassword: (password: string) => provideAuthPassword(password),
+  restartAuth: () => restartAuth(),
+};
+
 export function initApi(_onUpdate: OnApiUpdate, _initialArgs: ApiInitialArgs) {
   onUpdate = _onUpdate;
-  // Phase 1 will wire wfc.attach() + wfc.connect() + wfc event subscriptions here.
+  setAuthOnUpdate(_onUpdate);
+
+  // Kick the UI out of its loading-spinner default and into the
+  // account-entry page immediately on boot.
+  emitInitialAuthState();
+
   return Promise.resolve();
 }
 
-// Phase 0.5 stub: typed as `any` to keep the UI compiling. Phase 1 will replace
-// this with proper Methods/Args/Return type tables (see methods/types.ts roadmap).
-export function callApi<T extends string>(method: T, ..._args: any[]): Promise<any> {
+export function callApi<T extends string>(method: T, ...args: any[]): Promise<any> {
+  const fn = methods[method];
+  if (fn) {
+    try {
+      return Promise.resolve(fn(...args));
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
   return Promise.reject(new NotImplementedError(method));
 }
 
-export function callApiLocal<T extends string>(method: T, ..._args: any[]): any {
+export function callApiLocal<T extends string>(method: T, ...args: any[]): any {
+  const fn = methods[method];
+  if (fn) {
+    return fn(...args);
+  }
   throw new NotImplementedError(method);
 }
 
