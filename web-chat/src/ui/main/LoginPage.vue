@@ -694,7 +694,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(145deg, #f8faff 0%, #eef2ff 30%, #f0f7ff 60%, #f8fafc 100%);
+    background: linear-gradient(145deg, #e8f7ee 0%, #f3faf6 30%, #ffffff 60%, #ecf8f1 100%);
     overflow: hidden;
 }
 
@@ -717,7 +717,7 @@ export default {
 .bg-orb-1 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(7, 193, 96, 0.14) 0%, transparent 70%);
     top: -150px;
     right: -100px;
     animation: float-orb 20s ease-in-out infinite;
@@ -726,7 +726,7 @@ export default {
 .bg-orb-2 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(7, 193, 96, 0.08) 0%, transparent 70%);
     bottom: -100px;
     left: -100px;
     animation: float-orb 25s ease-in-out infinite reverse;
@@ -735,7 +735,7 @@ export default {
 .bg-orb-3 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(26, 173, 25, 0.06) 0%, transparent 70%);
     top: 40%;
     left: 60%;
     animation: float-orb 18s ease-in-out infinite;
@@ -836,19 +836,19 @@ export default {
 
 .button-cancel:active,
 .button-cancel:hover {
-    color: #1a6dff;
+    color: #06ad56;
 }
 
 .button-confirm {
     width: 200px;
     height: 46px;
     color: #fff;
-    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, #07c160 0%, #1aad19 100%);
     border-radius: 12px;
 }
 
 .button-confirm:hover {
-    background: linear-gradient(135deg, #1558cc 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #06ad56 0%, #168a17 100%);
 }
 
 .drag-area {
@@ -864,7 +864,7 @@ export default {
 .switch-login-type-container {
     padding-top: 10px;
     font-size: 14px;
-    color: #1a6dff;
+    color: #06ad56;
 }
 
 .login-form-container {
@@ -926,9 +926,9 @@ export default {
 }
 
 .input-wrapper:focus-within {
-    border-color: #3b82f6;
+    border-color: #07c160;
     background: #fff;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+    box-shadow: 0 0 0 4px rgba(7, 193, 96, 0.08);
 }
 
 .input-icon {
@@ -940,7 +940,7 @@ export default {
 }
 
 .input-wrapper:focus-within .input-icon {
-    color: #3b82f6;
+    color: #07c160;
 }
 
 .toggle-password {
@@ -953,7 +953,7 @@ export default {
 }
 
 .toggle-password:hover {
-    color: #3b82f6;
+    color: #07c160;
 }
 
 .login-form-container .text-input {
@@ -998,7 +998,7 @@ input::-webkit-inner-spin-button {
 .remember-checkbox {
     width: 16px;
     height: 16px;
-    accent-color: #3b82f6;
+    accent-color: #07c160;
     cursor: pointer;
     border-radius: 4px;
 }
@@ -1009,7 +1009,7 @@ input::-webkit-inner-spin-button {
     margin-top: 16px;
     border: none;
     border-radius: 14px;
-    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 50%, #60a5fa 100%);
+    background: linear-gradient(135deg, #07c160 0%, #1aad19 50%, #34c984 100%);
     color: #fff;
     font-size: 16px;
     font-weight: 600;
@@ -1082,13 +1082,13 @@ input::-webkit-inner-spin-button {
 .login-form-container .syncing {
     position: absolute;
     bottom: 0;
-    color: #3b82f6;
+    color: #07c160;
 }
 
 .tip {
     align-self: flex-start;
     font-size: 12px;
-    color: #3b82f6;
+    color: #07c160;
     margin-top: 10px;
     cursor: pointer;
 }
@@ -1102,7 +1102,7 @@ input::-webkit-inner-spin-button {
     height: 72px;
     margin-bottom: 16px;
     border-radius: 18px;
-    filter: drop-shadow(0 4px 12px rgba(26, 109, 255, 0.2));
+    filter: drop-shadow(0 4px 12px rgba(7, 193, 96, 0.25));
 }
 
 .diagnose {
@@ -1154,7 +1154,7 @@ input::-webkit-inner-spin-button {
     padding: 8px 24px;
     border: none;
     border-radius: 10px;
-    background: #3b82f6;
+    background: #07c160;
     color: #fff;
     cursor: pointer;
 }
