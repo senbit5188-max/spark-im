@@ -1252,11 +1252,11 @@ export default {
 
 .conversation-container header {
     width: 100%;
-    height: 60px;
+    height: 56px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--border-subtle);
+    background-color: var(--background-primary);
     border-bottom: 1px solid var(--border-primary);
 }
 

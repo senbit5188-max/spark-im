@@ -2,38 +2,38 @@
     /* --- Default Light Theme Variables --- */
     --background-primary: #ffffff;
     --background-secondary: #fafafa;
-    --background-tertiary: #f8fafc;
-    --background-sidebar: #f1f5f9;
-    --background-input: #eeeeee;
-    --background-item-normal: #f8f8f8;
-    --background-item-hover: #e2e8f0;
-    --background-item-active: #cbd5e1;
-    --background-item-selected: #dbeafe;
-    --background-item-top: #ebebeb;
+    --background-tertiary: #ededed;            /* WeChat chat-content gray */
+    --background-sidebar: #2e2e2e;             /* WeChat dark left rail */
+    --background-input: #f5f5f5;
+    --background-item-normal: #e7e6e5;         /* WeChat conv-list base */
+    --background-item-hover: #d8d7d7;
+    --background-item-active: #c5c4c4;
+    --background-item-selected: #c9c9c9;
+    --background-item-top: #dcdcdc;            /* pinned conversation */
     --background-item-placeholder: #d6d6d6;
     --background-tooltip: #fcfcfc;
     --background-overlay: rgba(0, 0, 0, 0.5);
     --background-mask: rgba(0, 0, 0, 0.2);
     --background-modal: #ffffff;
-    --background-badge: #ff0000;
+    --background-badge: #fa5151;               /* WeChat red badge */
     --background-message-in: #ffffff;
-    --background-message-out: #dbeafe;
+    --background-message-out: #95ec69;         /* WeChat outgoing-bubble green */
     --background-message-selected: #e7e7e7;
     --background-message-quoted: #e1e1e1;
-    --background-selected-alt: #dbe1f0;
+    --background-selected-alt: #e7f5ec;
 
     --message-in-arrow: #ffffff;
-    --message-out-arrow: #dbeafe;
+    --message-out-arrow: #95ec69;
 
-    --text-primary: #262626;
+    --text-primary: #181818;
     --text-secondary: #868686;
     --text-secondary-strong: #7f7f7f;
-    --text-tertiary: #ACACAC;
+    --text-tertiary: #999999;                  /* WeChat time/preview color */
     --text-placeholder: #b8b8b8;
     --text-hint: #999999;
     --text-time: #b4b4b4;
-    --text-link: #1f64e4;
-    --text-link-hover: #3f64e4;
+    --text-link: #576b95;                      /* WeChat link blue */
+    --text-link-hover: #3a4d6e;
     --text-danger: #ed4c4d;
     --text-on-accent: #ffffff;
     --text-warning: #F0A040;
@@ -43,7 +43,7 @@
     --border-primary: #e5e5e5;
     --border-secondary: #eeeeee;
     --border-tertiary: #ececec;
-    --border-active: #4168e0;
+    --border-active: #07c160;
     --border-subtle: #f5f5f5;
     --border-strong: #d9d9d9;
     --border-dashed: #d6d6d6;
@@ -53,9 +53,9 @@
     --border-light-strong: #ebebeb;
     --contact-arrow-border: #b9b9b9;
 
-    --accent-color: #3b82f6;
-    --accent-color-active: #2563eb;
-    --accent-color-subtle: #daeafe;
+    --accent-color: #07c160;                   /* WeChat brand green */
+    --accent-color-active: #06ad56;
+    --accent-color-subtle: #d5f5e0;
 
     --status-success: #4CAF50;
     --status-warning: #FD802E;
@@ -64,16 +64,16 @@
     --status-warning-alt: #ff8700;
     --status-error-hover: #ff7875;
 
-    --background-accent-subtle: #e1e9ff;
+    --background-accent-subtle: #d5f5e0;
     --background-success-subtle: #e8f5e9;
     --background-warning-subtle: #fee9d3;
     --background-error-subtle: #ffebee;
-    --background-accent-light: #e1e9ff;
-    --background-selected-dim: #dbe1f0;
+    --background-accent-light: #d5f5e0;
+    --background-selected-dim: #e7f5ec;
     --background-voip: #2E2E2E;
     --background-action: #202020;
     --background-voip-sidebar: #2d3033;
-    --background-active-subtle: #dbe1f0;
+    --background-active-subtle: #e7f5ec;
     --background-info-panel: #ffffffe5;
     --background-trans-light: rgba(255, 255, 255, 0.9);
     --background-trans-subtle: rgba(0, 0, 0, 0.05);
@@ -81,13 +81,13 @@
 
     --shadow-main: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     --shadow-tooltip: 0 0 25px rgba(0, 0, 0, 0.125);
-    --shadow-accent: 0 4px 12px rgba(31, 100, 228, 0.3);
-    --shadow-accent-strong: 0 6px 16px rgba(31, 100, 228, 0.4);
-    --shadow-accent-focus: 0 0 0 3px rgba(31, 100, 228, 0.1);
-    --shadow-accent-recording: 0 8px 24px rgba(63, 100, 228, 0.4);
+    --shadow-accent: 0 4px 12px rgba(7, 193, 96, 0.3);
+    --shadow-accent-strong: 0 6px 16px rgba(7, 193, 96, 0.4);
+    --shadow-accent-focus: 0 0 0 3px rgba(7, 193, 96, 0.15);
+    --shadow-accent-recording: 0 8px 24px rgba(7, 193, 96, 0.4);
 
     --gradient-lock: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    --gradient-recording: linear-gradient(135deg, #3F64E4 0%, #764ba2 100%);
+    --gradient-recording: linear-gradient(135deg, #07c160 0%, #06ad56 100%);
 
     --mac-red: #ff5f57;
     --mac-red-active: #bf4943;
@@ -108,7 +108,7 @@
     --ep-color-sbg: #f3f3f3;
     --ep-color-border: #eeeeee;
     --ep-color-text: #262626;
-    --ep-color-active: #1f64e4;
+    --ep-color-active: #07c160;
 
     --text-watermark: rgba(0, 0, 0, 0.1);
 
@@ -126,13 +126,13 @@
     --button-danger-text: var(--text-on-accent);
     --button-danger-hover: #ff4d4f;
 
-    --hero-bg-gradient: linear-gradient(180deg, #e8efff 0%, #f5f8ff 40%, #ffffff 70%, #f0f4ff 100%);
-    --hero-bg-pattern: radial-gradient(circle at 1px 1px, rgba(65, 104, 224, 0.08) 1px, transparent 0);
+    --hero-bg-gradient: linear-gradient(180deg, #e8f7ee 0%, #f3faf6 40%, #ffffff 70%, #ecf8f1 100%);
+    --hero-bg-pattern: radial-gradient(circle at 1px 1px, rgba(7, 193, 96, 0.08) 1px, transparent 0);
     --hero-bg-blob-opacity: 0.35;
     --hero-bg-blob-opacity-dim: 0.2;
-    --hero-bg-blob-1: linear-gradient(135deg, #3f64e4 0%, #764ba2 100%);
-    --hero-bg-blob-2: linear-gradient(135deg, #00c6ff 0%, #3f64e4 100%);
-    --hero-bg-blob-3: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --hero-bg-blob-1: linear-gradient(135deg, #07c160 0%, #1aad19 100%);
+    --hero-bg-blob-2: linear-gradient(135deg, #34c984 0%, #07c160 100%);
+    --hero-bg-blob-3: linear-gradient(135deg, #6ee7b7 0%, #1aad19 100%);
 
     ::-webkit-scrollbar {
     }

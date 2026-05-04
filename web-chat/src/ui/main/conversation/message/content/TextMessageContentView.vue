@@ -72,13 +72,14 @@ export default {
 
 <style lang="css" scoped>
 .text-message-container {
-    margin: 0 10px;
-    padding: 10px;
+    margin: 0 12px;
+    padding: 10px 12px;
     background-color: var(--background-primary);
     position: relative;
-    border-radius: 5px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
 .text-message-container >>> p {
@@ -100,10 +101,9 @@ export default {
 
 .text-message-container .text {
     color: var(--text-primary);
-    font-size: 13px;
-    line-height: 20px;
-    /*max-height: 1000px;*/
-    max-width: 400px;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 420px;
     word-spacing: normal;
     word-break: break-word;
     overflow: hidden;

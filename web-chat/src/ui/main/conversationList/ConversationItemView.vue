@@ -268,6 +268,8 @@ export default {
 .conversation-item-container {
     padding-left: 12px;
     background-color: var(--background-item-normal);
+    cursor: pointer;
+    transition: background-color 0.12s ease;
 }
 
 .conversation-item-container:hover{
@@ -301,9 +303,8 @@ export default {
 
 .conversation-item {
     width: 100%;
-    height: 68px;
+    height: 72px;
     display: flex;
-    /*border-bottom: 1px solid var(--border-secondary);*/
     align-items: center;
     justify-content: center;
 }
@@ -317,32 +318,34 @@ export default {
 
 .header .avatar {
     position: relative;
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     background: var(--background-tertiary);
     top: 50%;
     transform: translateY(-50%);
-    border-radius: 3px;
+    border-radius: 4px;
     object-fit: cover;
 }
 
 .header .badge {
     position: absolute;
     color: var(--text-on-accent);
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: 500;
     background-color: var(--background-badge);
-    border-radius: 8px;
-    min-width: 16px;
-    height: 16px;
+    border-radius: 9px;
+    min-width: 18px;
+    height: 18px;
     padding: 0 5px;
-    line-height: 16px;
+    line-height: 18px;
     font-style: normal;
     text-align: center;
-    right: 8px;
-    top: 8px;
+    right: 4px;
+    top: 6px;
     vertical-align: center;
+    box-shadow: 0 0 0 2px var(--background-item-normal);
 }
 
 .header .badge.silent {
@@ -376,14 +379,18 @@ export default {
     font-size: 14px;
     color: var(--text-primary);
     font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
     flex: 1;
+    line-height: 1.4;
 }
 
 .content-container .title-time-container .time {
     display: inline-block;
-    color: var(--text-secondary);
-    font-size: 10px;
+    color: var(--text-tertiary);
+    font-size: 12px;
+    margin-left: 6px;
+    flex-shrink: 0;
+    line-height: 1.6;
 }
 
 .content-container .content {
@@ -392,7 +399,7 @@ export default {
 }
 
 .content .draft {
-    font-size: 12px;
+    font-size: 13px;
     height: 20px;
     color: var(--text-placeholder);
 }
@@ -411,6 +418,7 @@ export default {
 .content .last-message-desc {
     color: var(--text-tertiary);
     font-size: 12px;
+    line-height: 1.4;
 }
 
 .content .last-message-desc i {

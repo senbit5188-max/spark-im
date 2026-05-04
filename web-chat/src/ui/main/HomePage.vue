@@ -481,27 +481,33 @@ export default {
 }
 
 .menu-container {
-    width: 60px;
-    min-width: 60px;
+    width: 56px;
+    min-width: 56px;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*background: linear-gradient(180deg, #292a2c 0%, #483a3a 100%);*/
     background: var(--background-sidebar);
     border-top-left-radius: var(--main-border-radius);
     border-bottom-left-radius: var(--main-border-radius);
-    padding: var(--home-menu-padding-top) 0 20px 0;
+    padding: var(--home-menu-padding-top) 0 12px 0;
     -webkit-app-region: drag;
 }
 
 .avatar {
-    background-color: var(--text-secondary);
-    width: 35px;
-    height: 35px;
+    background-color: rgba(255, 255, 255, 0.12);
+    width: 36px;
+    height: 36px;
     display: block;
-    margin: 10px auto;
-    border-radius: 3px;
+    margin: 12px auto 22px;
+    border-radius: 4px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
 }
 
 .menu {
@@ -516,9 +522,10 @@ export default {
 }
 
 .menu ul li {
-    margin: 10px;
-    height: 40px;
-    line-height: 50px;
+    margin: 6px 10px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
 }
 
 .menu ul li:last-of-type {
@@ -547,17 +554,19 @@ export default {
 }
 
 i {
-    font-size: 26px;
-    color: var(--text-secondary);
+    font-size: 22px;
+    color: #979797;
     cursor: pointer;
+    transition: color 0.12s ease;
+    -webkit-app-region: no-drag;
 }
 
 i:hover {
-    color: var(--accent-color);
+    color: #ababab;
 }
 
 i.active {
-    color: var(--accent-color-active);
+    color: var(--accent-color);
 }
 
 .drag-area {
