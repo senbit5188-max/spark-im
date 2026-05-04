@@ -77,6 +77,12 @@
                                @click="go2AI"></i>
                         </li>
                         <li>
+                            <i class="icon-ion-paper-airplane"
+                               v-bind:class="{ active: this.$router.currentRoute.value.path === '/home/telegram' }"
+                               @click="go2Telegram"
+                               title="Telegram"></i>
+                        </li>
+                        <li>
                             <i v-show="this.$router.currentRoute.value.path !== '/home/ai'"
                                class="icon-ion-android-settings"
                                v-bind:class="{ active: this.$router.currentRoute.value.path === '/home/setting' }"
@@ -290,6 +296,13 @@ export default {
             if (this.$router.currentRoute.value.path !== '/home/ai') {
                 this.$router.replace({path: '/home/ai'});
             }
+            this.isSetting = false;
+        },
+        go2Telegram() {
+            if (this.$router.currentRoute.value.path === '/home/telegram') {
+                return;
+            }
+            this.$router.replace({path: '/home/telegram'});
             this.isSetting = false;
         },
         go2Setting() {
