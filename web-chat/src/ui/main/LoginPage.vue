@@ -51,15 +51,34 @@
             <div v-else-if="loginType === 1" class="login-form-container">
                 <!--            密码登录-->
                 <img class="logo" :src="require(`@/assets/images/icon.png`)" alt="">
-                <p class="title">账号密码登录</p>
+                <p class="title">星火IM</p>
+                <p class="subtitle">安全、高效的即时通讯</p>
                 <div class="item">
-                    <input v-model.trim="mobile" class="text-input" type="text" placeholder="请输入账号">
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input v-model.trim="mobile" class="text-input" type="text" placeholder="请输入账号">
+                    </div>
                 </div>
                 <div class="item">
-                    <input v-model.trim="password" class="text-input" @keydown.enter="loginWithPassword" type="password" placeholder="请输入密码">
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input v-model.trim="password" class="text-input" @keydown.enter="loginWithPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入密码">
+                        <svg class="toggle-password" @click="showPassword = !showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path v-if="!showPassword" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle v-if="!showPassword" cx="12" cy="12" r="3"/>
+                            <path v-if="showPassword" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line v-if="showPassword" x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="remember-row">
+                    <label class="remember-label">
+                        <input type="checkbox" v-model="rememberPassword" class="remember-checkbox">
+                        <span>记住密码</span>
+                    </label>
                 </div>
 
-                <button class="login-button" :disabled="mobile === '' || !password || password === ''" ref="loginWithPasswordButton" @click="loginWithPassword">{{ loginStatus === 3 ? '数据同步中，可能需要数分钟...' : '登录' }}</button>
+                <button class="login-button" :disabled="mobile === '' || !password || password === ''" ref="loginWithPasswordButton" @click="loginWithPassword">{{ loginStatus === 3 ? '数据同步中...' : '登 录' }}</button>
                 <ClipLoader v-if="loginStatus === 3" class="syncing" :color="'var(--accent-color)'" :height="'80px'" :width="'80px'"/>
             </div>
             <div v-else class="login-form-container">
@@ -133,6 +152,8 @@ export default {
             enableAutoLogin: Config.ENABLE_AUTO_LOGIN,
             mobile: '',
             password: '',
+            showPassword: false,
+            rememberPassword: false,
             authCode: '',
             firstTimeConnect: false,
             diagnoseResult: '',
@@ -148,6 +169,15 @@ export default {
     },
     created() {
         wfc.eventEmitter.on(EventType.ConnectionStatusChanged, this.onConnectionStatusChange)
+
+        // Restore remembered credentials
+        let savedMobile = getItem('rememberedMobile');
+        let savedPassword = getItem('rememberedPassword');
+        if (savedMobile && savedPassword) {
+            this.mobile = savedMobile;
+            this.password = savedPassword;
+            this.rememberPassword = true;
+        }
 
         let userId = getItem('userId');
         let token = getItem('token');
@@ -260,6 +290,14 @@ export default {
                     setItem('userId', userId);
                     setItem('token', token);
                     setItem("userPortrait", portrait);
+                    // Save or clear remembered credentials
+                    if (this.rememberPassword) {
+                        setItem('rememberedMobile', this.mobile);
+                        setItem('rememberedPassword', this.password);
+                    } else {
+                        setItem('rememberedMobile', '');
+                        setItem('rememberedPassword', '');
+                    }
                 })
                 .catch(err => {
                     console.log('loginWithPassword err', err)
@@ -644,24 +682,25 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 380px;
-    height: 500px;
+    width: 420px;
+    height: auto;
+    min-height: 520px;
+    padding: 40px 30px;
     margin: auto;
-    background: var(--background-primary);
-    border-radius: 12px;
+    background: #ffffff;
+    border-radius: 16px;
 }
 
 .web-login-container {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 
-                0 10px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12),
+                0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .qr-container {
-    border-radius: 3px;
-    width: 250px;
-    height: 250px;
-    background-color: var(--background-tertiary);
+    border-radius: 8px;
+    width: 220px;
+    height: 220px;
+    background-color: #f5f7fa;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -669,9 +708,9 @@ export default {
 }
 
 .qr-container img {
-    width: 250px;
-    height: 250px;
-    border-radius: 3px;
+    width: 220px;
+    height: 220px;
+    border-radius: 8px;
     object-fit: cover;
 }
 
@@ -704,45 +743,38 @@ export default {
     margin-top: 5px;
     padding: 5px;
     font-size: 14px;
-    color: var(--text-secondary);
+    color: #8c8c8c;
 }
 
 .qrcode-login-container button {
     outline: none;
     font-size: 14px;
     border: none;
-    border-radius: 3px;
+    border-radius: 8px;
 }
 
 .button-cancel {
     margin-top: 10px;
     background-color: transparent;
-    color: var(--text-secondary);
+    color: #8c8c8c;
 }
 
-.button-cancel:active {
-    color: var(--border-active);
-}
-
+.button-cancel:active,
 .button-cancel:hover {
-    color: var(--border-active);
+    color: #1a6dff;
 }
 
 .button-confirm {
     width: 200px;
-    height: 40px;
-    color: var(--text-on-accent);
-    background-color: var(--border-active);
+    height: 44px;
+    color: #fff;
+    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 100%);
+    border-radius: 8px;
 }
 
 .button-confirm:hover {
-    background-color: var(--border-active);
+    background: linear-gradient(135deg, #1558cc 0%, #2563eb 100%);
 }
-
-.button-confirm:active {
-    background-color: var(--border-active);
-}
-
 
 .drag-area {
     position: absolute;
@@ -757,11 +789,11 @@ export default {
 .switch-login-type-container {
     padding-top: 10px;
     font-size: 14px;
-    color: var(--border-active);
+    color: #1a6dff;
 }
 
 .login-form-container {
-    width: 260px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -770,26 +802,81 @@ export default {
 }
 
 .login-form-container .title {
-    align-self: flex-start;
-    font-size: 18px;
-    color: var(--text-on-accent);
+    align-self: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+}
+
+.login-form-container .subtitle {
+    align-self: center;
+    font-size: 14px;
+    color: #8c8c8c;
+    margin-bottom: 8px;
 }
 
 .login-form-container .item {
     width: 100%;
-    font-size: 13px;
-    margin-top: 20px;
+    font-size: 14px;
+    margin-top: 16px;
     position: relative;
 }
 
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    background: #f8f9fb;
+    transition: all 0.2s ease;
+    padding: 0 12px;
+}
+
+.input-wrapper:focus-within {
+    border-color: #1a6dff;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(26, 109, 255, 0.1);
+}
+
+.input-icon {
+    width: 18px;
+    height: 18px;
+    color: #b0b0b0;
+    flex-shrink: 0;
+}
+
+.input-wrapper:focus-within .input-icon {
+    color: #1a6dff;
+}
+
+.toggle-password {
+    width: 20px;
+    height: 20px;
+    color: #b0b0b0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #1a6dff;
+}
+
 .login-form-container .text-input {
-    height: 40px;
+    height: 44px;
     width: 100%;
-    border: 1px solid var(--border-primary);
-    border-radius: 3px;
+    border: none;
     outline: none;
-    padding: 0 5px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #1a1a2e;
+    background: transparent;
     -moz-appearance: textfield;
+}
+
+.login-form-container .text-input::placeholder {
+    color: #b0b0b0;
 }
 
 input::-webkit-outer-spin-button,
@@ -798,24 +885,58 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.login-form-container .text-input:active {
-    border: 1px solid var(--border-active);
+.remember-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 12px;
 }
 
-.login-form-container .text-input:focus {
-    border: 1px solid var(--border-active);
+.remember-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #1a6dff;
+    cursor: pointer;
 }
 
 .login-form-container .login-button {
-    height: 40px;
+    height: 46px;
     width: 100%;
     margin-top: 20px;
-    border: 1px solid var(--border-primary);
-    border-radius: 3px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.login-form-container .login-button:active {
-    border: 1px solid var(--border-active);
+.login-form-container .login-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1558cc 0%, #2563eb 100%);
+    box-shadow: 0 4px 16px rgba(26, 109, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.login-form-container .login-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.login-form-container .login-button:disabled {
+    background: #d0d5dd;
+    cursor: not-allowed;
 }
 
 .login-form-container .request-auth-code-button {
@@ -830,19 +951,26 @@ input::-webkit-inner-spin-button {
 .login-form-container .syncing {
     position: absolute;
     bottom: 0;
-    color: var(--border-active);
+    color: #1a6dff;
 }
 
 .tip {
     align-self: flex-start;
     font-size: 12px;
-    color: var(--border-active);
+    color: #1a6dff;
     margin-top: 10px;
+    cursor: pointer;
+}
+
+.tip:hover {
+    text-decoration: underline;
 }
 
 .logo {
-    width: 160px;
-    height: 160px;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 12px;
+    border-radius: 20px;
 }
 
 .diagnose {
@@ -851,7 +979,11 @@ input::-webkit-inner-spin-button {
     bottom: 10px;
     align-self: flex-start;
     font-size: 12px;
-    color: lightcoral;
+    color: #ccc;
+}
+
+.diagnose:hover {
+    color: #999;
 }
 
 .diagnose-overlay {
@@ -860,7 +992,7 @@ input::-webkit-inner-spin-button {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--background-overlay);
+    background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -868,15 +1000,16 @@ input::-webkit-inner-spin-button {
 }
 
 .diagnose-content {
-    background: var(--background-primary);
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 100%;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 90%;
     max-height: 90%;
     overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
 
 .diagnose-content pre {
@@ -886,34 +1019,44 @@ input::-webkit-inner-spin-button {
 
 .diagnose-content button {
     margin-top: 20px;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #1a6dff;
+    color: #fff;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
     .login-container {
-        width: 90vw;
-        max-width: 380px;
+        width: 92vw;
+        max-width: 420px;
         height: auto;
         min-height: 420px;
-        padding: 20px;
+        padding: 24px 20px;
     }
 
     .logo {
-        width: 100px;
-        height: 100px;
-    }
-
-    .qr-container {
-        width: 200px;
-        height: 200px;
-    }
-
-    .qr-container img {
-        width: 200px;
-        height: 200px;
+        width: 64px;
+        height: 64px;
     }
 
     .login-form-container {
         width: 100%;
+    }
+
+    .login-form-container .title {
+        font-size: 20px;
+    }
+
+    .qr-container {
+        width: 180px;
+        height: 180px;
+    }
+
+    .qr-container img {
+        width: 180px;
+        height: 180px;
     }
 }
 </style>
