@@ -187,6 +187,10 @@ export default function createConfig(
         '@teact$': path.resolve(__dirname, './src/lib/teact/teact.ts'),
         '@teact': path.resolve(__dirname, './src/lib/teact'),
         '@gili': path.resolve(__dirname, './src/components/gili'),
+        // WildFireChat JS SDK (vendored). Phase 1+ adapter imports go through
+        // this alias so methods/auth.ts can do `import wfc from '@wfc-sdk'`.
+        '@wfc-sdk': path.resolve(__dirname, '../wfc-sdk/sdk/client/wfc.js'),
+        '@wfc-sdk/': path.resolve(__dirname, '../wfc-sdk/'),
       },
       fallback: {
         path: require.resolve('path-browserify'),
