@@ -1,1 +1,114 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><defs><linearGradient id="a" x1=".667" x2=".417" y1=".167" y2=".75"><stop offset="0" stop-color="#37aee2"/><stop offset="1" stop-color="#1e96c8"/></linearGradient><linearGradient id="b" x1=".66" x2=".851" y1=".437" y2=".802"><stop offset="0" stop-color="#eff7fc"/><stop offset="1" stop-color="#fff"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#a)"/><path fill="#c8daea" d="M98 175c-3.888 0-3.227-1.468-4.568-5.17L82 132.207 170 80"/><path fill="#a9c9dd" d="M98 175c3 0 4.325-1.372 6-3l16-15.558-19.958-12.035"/><path fill="url(#b)" d="M100.04 144.41l48.36 35.729c5.519 3.045 9.501 1.468 10.876-5.123l19.685-92.763c2.015-8.08-3.08-11.746-8.36-9.349l-115.59 44.571c-7.89 3.165-7.843 7.567-1.438 9.528l29.663 9.259 68.673-43.325c3.242-1.966 6.218-.91 3.776 1.258"/></svg>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Night sky gradient: deep navy → mid blue → bright sky -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1e4a"/>
+      <stop offset="55%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+
+    <!-- Glow halo behind flame -->
+    <radialGradient id="haloGrad" cx="50%" cy="58%" r="48%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#3b82f6" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1e40af" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Outer flame: bright white tip → soft blue base -->
+    <linearGradient id="flameOuter" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+
+    <!-- Inner flame: saturated blue core -->
+    <linearGradient id="flameInner" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <!-- Star sparkle gradient (white center → faint cyan) -->
+    <radialGradient id="sparkGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </radialGradient>
+
+    <!-- Tiny star drop shadow filter -->
+    <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rounded square night-sky background -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#bgGrad)"/>
+
+  <!-- Star field (back layer, dim) -->
+  <g fill="#ffffff" opacity="0.55">
+    <circle cx="68"  cy="92"  r="2.2"/>
+    <circle cx="430" cy="76"  r="1.6"/>
+    <circle cx="392" cy="148" r="2.0"/>
+    <circle cx="92"  cy="186" r="1.4"/>
+    <circle cx="450" cy="206" r="2.4"/>
+    <circle cx="58"  cy="296" r="1.8"/>
+    <circle cx="436" cy="332" r="2.0"/>
+    <circle cx="86"  cy="412" r="2.2"/>
+    <circle cx="448" cy="436" r="1.6"/>
+    <circle cx="120" cy="448" r="1.8"/>
+    <circle cx="368" cy="404" r="1.5"/>
+    <circle cx="172" cy="64"  r="1.4"/>
+  </g>
+
+  <!-- Star field (front layer, brighter, with subtle glow) -->
+  <g fill="#ffffff" filter="url(#starGlow)">
+    <circle cx="116" cy="124" r="2.6"/>
+    <circle cx="402" cy="100" r="2.4"/>
+    <circle cx="86"  cy="350" r="2.5"/>
+    <circle cx="412" cy="260" r="2.3"/>
+  </g>
+
+  <!-- 4-point sparkle star (top-right corner, decorative) -->
+  <g transform="translate(384 122)" fill="#ffffff" opacity="0.95">
+    <path d="M0 -10 L2 -2 L10 0 L2 2 L0 10 L-2 2 L-10 0 L-2 -2 Z"/>
+  </g>
+  <g transform="translate(140 420)" fill="#bae6fd" opacity="0.85">
+    <path d="M0 -7 L1.5 -1.5 L7 0 L1.5 1.5 L0 7 L-1.5 1.5 L-7 0 L-1.5 -1.5 Z"/>
+  </g>
+
+  <!-- Glow halo behind flame -->
+  <circle cx="256" cy="298" r="180" fill="url(#haloGrad)"/>
+
+  <!-- Outer flame body: classic teardrop tip up, asymmetric flicker -->
+  <path d="M256 96
+           C 244 134, 198 178, 184 232
+           C 168 290, 184 348, 220 380
+           C 240 396, 256 404, 256 404
+           C 256 404, 272 396, 292 380
+           C 328 348, 344 290, 328 232
+           C 314 178, 268 134, 256 96 Z"
+        fill="url(#flameOuter)"/>
+
+  <!-- Inner flame: brighter core, slightly smaller -->
+  <path d="M256 168
+           C 248 196, 220 226, 214 268
+           C 206 310, 222 350, 244 368
+           C 252 374, 256 376, 256 376
+           C 256 376, 260 374, 268 368
+           C 290 350, 306 310, 298 268
+           C 292 226, 264 196, 256 168 Z"
+        fill="url(#flameInner)"
+        opacity="0.92"/>
+
+  <!-- Center 4-point star (the "spark" — 星火 in icon form) -->
+  <g transform="translate(256 290)">
+    <path d="M0 -42 L8 -8 L42 0 L8 8 L0 42 L-8 8 L-42 0 L-8 -8 Z"
+          fill="url(#sparkGrad)"/>
+    <!-- Bright center dot -->
+    <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+  </g>
+</svg>

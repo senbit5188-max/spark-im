@@ -8,7 +8,6 @@ import { pick } from '../../util/iteratees';
 import useLang from '../../hooks/useLang';
 
 import PasswordForm from '../common/PasswordForm';
-import MonkeyPassword from '../common/PasswordMonkey';
 
 type StateProps = {
   auth: GlobalState['auth'];
@@ -23,7 +22,7 @@ const AuthPassword = ({
   const lang = useLang();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChangePasswordVisibility = useCallback((isVisible) => {
+  const handleChangePasswordVisibility = useCallback((isVisible: boolean) => {
     setShowPassword(isVisible);
   }, []);
 
@@ -34,15 +33,17 @@ const AuthPassword = ({
   return (
     <div id="auth-password-form" className="custom-scroll">
       <div className="auth-form">
-        <MonkeyPassword isPasswordVisible={showPassword} />
-        <h1>{lang('LoginHeaderPassword')}</h1>
-        <p className="note">{lang('LoginEnterPasswordDescription')}</p>
+        <div id="logo" />
+        <h1>请输入密码</h1>
+        <p className="note">使用你的星火 IM 账号密码继续登录</p>
         <PasswordForm
           onClearError={clearAuthErrorKey}
           error={errorKey && lang.withRegular(errorKey)}
           hint={hint}
           isLoading={isLoading}
           isPasswordVisible={showPassword}
+          placeholder="密码"
+          submitLabel="登录"
           onChangePasswordVisibility={handleChangePasswordVisibility}
           onSubmit={handleSubmit}
         />

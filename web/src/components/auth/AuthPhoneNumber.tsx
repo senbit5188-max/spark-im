@@ -254,19 +254,13 @@ const AuthPhoneNumber = ({
       )}
       <div className="auth-form">
         <div id="logo" />
-        <h1>{lang('AuthTitle')}</h1>
-        <p className="note">{lang('StartText')}</p>
+        <h1>星火 IM</h1>
+        <p className="note">请输入你的账号登录</p>
         <form className="form" action="" onSubmit={handleSubmit}>
-          <CountryCodeInput
-            id="sign-in-phone-code"
-            value={country}
-            isLoading={!nearestCountry && !country}
-            onChange={handleCountryChange}
-          />
           <InputText
             ref={inputRef}
             id="sign-in-phone-number"
-            label={lang('LoginPhonePlaceholder')}
+            label="账号 (例如 13800000001)"
             value={fullNumber}
             error={errorKey && lang.withRegular(errorKey)}
             inputMode="tel"
@@ -275,7 +269,7 @@ const AuthPhoneNumber = ({
           />
           <Checkbox
             id="sign-in-keep-session"
-            label={lang('AuthKeepSignedIn')}
+            label="保持登录"
             checked={Boolean(rememberMe)}
             onChange={handleKeepSessionChange}
           />
@@ -287,37 +281,11 @@ const AuthPhoneNumber = ({
                 ripple
                 isLoading={authIsLoading}
               >
-                {lang('LoginNext')}
+                下一步
               </Button>
             ) : (
               <Loading />
             )
-          )}
-          {isAuthReady && (
-            <Button
-              className="auth-button"
-              isText
-              ripple
-              isLoading={isLoadingQrCode}
-              onClick={handleGoToAuthQrCode}
-            >
-              {lang('LoginQRLogin')}
-            </Button>
-          )}
-          {passkeyOption && (
-            <Button className="auth-button" isText onClick={handleLoginWithPasskey}>
-              {lang('LoginPasskey')}
-            </Button>
-          )}
-          {suggestedLanguage && suggestedLanguage !== language && continueText && (
-            <Button
-              className="auth-button"
-              isText
-              isLoading={isLoading}
-              onClick={handleLangChange}
-            >
-              {continueText}
-            </Button>
           )}
         </form>
       </div>
