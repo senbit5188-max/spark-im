@@ -70,13 +70,37 @@ export default {
 .streaming-text-message-container {
     margin: 0 10px;
     padding: 10px;
-    background-color: var(--background-primary);
+    background-color: var(--background-message-in);
     position: relative;
-    border-radius: 5px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+}
+
+.streaming-text-message-container:not(.out)::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 8px 6px 0;
+    border-color: transparent var(--message-in-arrow) transparent transparent;
+}
+
+.streaming-text-message-container.out::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 0 6px 8px;
+    border-color: transparent transparent transparent var(--message-out-arrow);
 }
 
 .streaming-text-message-container >>> p {

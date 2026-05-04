@@ -215,9 +215,6 @@ export default {
     display: flex;
     max-width: calc(100% - 60px);
     align-items: flex-start;
-    overflow: hidden;
-    /*max-height: 800px;*/
-    text-overflow: ellipsis;
 }
 
 .avatar-container .avatar {
