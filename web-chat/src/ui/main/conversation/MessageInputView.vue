@@ -1351,6 +1351,8 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
+    background-color: var(--background-primary);
+    border-top: 1px solid var(--border-primary);
 }
 
 .message-input-section {
@@ -1375,12 +1377,13 @@ export default {
 }
 
 .input-action-container {
-    height: 50px;
-    min-height: 50px;
+    height: 44px;
+    min-height: 44px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
+    padding: 0 4px;
 }
 
 .input {
@@ -1424,13 +1427,17 @@ export default {
 }
 
 i {
-    font-size: 24px;
-    color: var(--text-primary);
+    font-size: 22px;
+    color: var(--text-tertiary);
     cursor: pointer;
+    transition: color 0.12s ease;
+    padding: 4px;
+    border-radius: 6px;
 }
 
 i:hover {
     color: var(--accent-color);
+    background-color: var(--background-item-hover);
 }
 
 .input-action-container ul li .screen-shot-button {

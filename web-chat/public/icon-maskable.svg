@@ -1,0 +1,83 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1e4a"/>
+      <stop offset="55%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <radialGradient id="haloGrad" cx="50%" cy="58%" r="48%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#3b82f6" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1e40af" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flameOuter" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="flameInner" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <radialGradient id="sparkGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Full bleed bg (no rounded corners — Android masks it itself) -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+  <!-- Star field (sparser since the corners might be cropped) -->
+  <g fill="#ffffff" opacity="0.55">
+    <circle cx="160" cy="140" r="2.0"/>
+    <circle cx="350" cy="130" r="1.6"/>
+    <circle cx="380" cy="200" r="2.0"/>
+    <circle cx="140" cy="220" r="1.4"/>
+    <circle cx="160" cy="350" r="2.2"/>
+    <circle cx="370" cy="370" r="1.8"/>
+    <circle cx="200" cy="400" r="1.5"/>
+    <circle cx="320" cy="170" r="1.4"/>
+  </g>
+
+  <g fill="#ffffff">
+    <circle cx="180" cy="180" r="2.4"/>
+    <circle cx="340" cy="350" r="2.2"/>
+  </g>
+
+  <!-- Center group scaled to 80% so it fits the maskable safe zone -->
+  <g transform="translate(256 256) scale(0.82) translate(-256 -256)">
+    <!-- Glow halo -->
+    <circle cx="256" cy="298" r="180" fill="url(#haloGrad)"/>
+
+    <!-- Outer flame -->
+    <path d="M256 96
+             C 244 134, 198 178, 184 232
+             C 168 290, 184 348, 220 380
+             C 240 396, 256 404, 256 404
+             C 256 404, 272 396, 292 380
+             C 328 348, 344 290, 328 232
+             C 314 178, 268 134, 256 96 Z"
+          fill="url(#flameOuter)"/>
+
+    <!-- Inner flame -->
+    <path d="M256 168
+             C 248 196, 220 226, 214 268
+             C 206 310, 222 350, 244 368
+             C 252 374, 256 376, 256 376
+             C 256 376, 260 374, 268 368
+             C 290 350, 306 310, 298 268
+             C 292 226, 264 196, 256 168 Z"
+          fill="url(#flameInner)"
+          opacity="0.92"/>
+
+    <!-- Center sparkle star -->
+    <g transform="translate(256 290)">
+      <path d="M0 -42 L8 -8 L42 0 L8 8 L0 42 L-8 8 L-42 0 L-8 -8 Z"
+            fill="url(#sparkGrad)"/>
+      <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+    </g>
+  </g>
+</svg>

@@ -36,13 +36,14 @@ export default {
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--border-primary);
+    background-color: var(--background-item-normal);
 }
 
 .panel {
     height: calc(100% - 60px);
     max-height: calc(100% - 60px);
     position: relative;
-    background-color: var(--background-tertiary);
+    background-color: var(--background-item-normal);
     overflow-y: auto;
     flex: 1;
 }

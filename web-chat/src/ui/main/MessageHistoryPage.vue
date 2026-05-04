@@ -11,7 +11,7 @@
                 <i class="icon-ion-ios-search"></i>
             </div>
             <div v-if="!query" class="portal">
-                <p>^~^</p>
+                <p>输入关键词搜索历史聊天记录</p>
             </div>
             <div v-else-if="conversationSearchResults.length > 0" class="search-result-container">
                 <div class="conversation-list">
