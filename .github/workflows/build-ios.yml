@@ -16,19 +16,19 @@ on:
 jobs:
   build:
     name: Build iOS App
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode 16
+      - name: Select Xcode 26
         run: |
-          # Swift 6.0 requires Xcode 16+
-          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          # iOS 26 SDK required for App Store Connect submission
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
           if [ -z "$XCODE_PATH" ]; then
-            echo "No Xcode 16 found, using default"
+            echo "No Xcode 26 found, using default"
             XCODE_PATH=$(xcode-select -p | sed 's|/Contents/Developer||')
           fi
           echo "Using Xcode at: $XCODE_PATH"
