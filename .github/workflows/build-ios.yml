@@ -37,6 +37,12 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Install iOS platform
+        run: |
+          # Xcode 26+ requires downloading iOS platform separately
+          xcodebuild -downloadPlatform iOS
+          xcodebuild -showsdks | grep -i ios
+
       - name: List schemes
         working-directory: ios-chat
         run: xcodebuild -workspace ios-chat.xcworkspace -list
