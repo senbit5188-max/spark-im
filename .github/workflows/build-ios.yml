@@ -1,0 +1,93 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [ main, temp-main, 'devin/**' ]
+    paths:
+      - 'ios-chat/**'
+      - '.github/workflows/build-ios.yml'
+  pull_request:
+    branches: [ main, temp-main ]
+    paths:
+      - 'ios-chat/**'
+      - '.github/workflows/build-ios.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS App
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        run: |
+          # iOS 26 SDK required for App Store Connect submission
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE_PATH" ]; then
+            echo "No Xcode 26 found, using default"
+            XCODE_PATH=$(xcode-select -p | sed 's|/Contents/Developer||')
+          fi
+          echo "Using Xcode at: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Install iOS platform
+        run: |
+          # Xcode 26+ requires downloading iOS platform separately
+          xcodebuild -downloadPlatform iOS
+          xcodebuild -showsdks | grep -i ios
+
+      - name: List schemes
+        working-directory: ios-chat
+        run: xcodebuild -workspace ios-chat.xcworkspace -list
+
+      - name: Archive iOS App (No Code Sign)
+        working-directory: ios-chat
+        run: |
+          xcodebuild archive \
+            -workspace ios-chat.xcworkspace \
+            -scheme WildFireChat \
+            -destination 'generic/platform=iOS' \
+            -archivePath ${{ github.workspace }}/build/SparkIM.xcarchive \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            2>&1 | tee /tmp/xcodebuild.log | tail -100
+
+      - name: Create unsigned IPA
+        run: |
+          ARCHIVE_PATH="${{ github.workspace }}/build/SparkIM.xcarchive"
+          IPA_DIR="${{ github.workspace }}/build/ipa"
+          mkdir -p "$IPA_DIR/Payload"
+
+          # Find the .app inside the archive
+          APP_PATH=$(find "$ARCHIVE_PATH/Products/Applications" -name "*.app" -maxdepth 1 | head -1)
+          if [ -z "$APP_PATH" ]; then
+            echo "ERROR: No .app found in archive"
+            find "$ARCHIVE_PATH" -name "*.app" | head -10
+            exit 1
+          fi
+
+          echo "Found app: $APP_PATH"
+          cp -R "$APP_PATH" "$IPA_DIR/Payload/"
+
+          # Create IPA (zip with .ipa extension)
+          cd "$IPA_DIR"
+          zip -r "${{ github.workspace }}/build/SparkIM-unsigned.ipa" Payload
+          echo "IPA created successfully:"
+          ls -lh "${{ github.workspace }}/build/SparkIM-unsigned.ipa"
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: SparkIM-unsigned-ipa
+          path: build/SparkIM-unsigned.ipa
+          retention-days: 30

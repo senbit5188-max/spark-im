@@ -1,0 +1,416 @@
+/* 
+  InfoPlist.strings
+  WildFireChat
+
+  Created by Heavyrain.lee on 2019/9/16.
+  Copyright © 2019 WildFireChat. All rights reserved.
+*/
+CFBundleName="星火";
+CFBundleDisplayName="星火";
+Message="消息";
+Contact="联系人";
+Work="工作台";
+Discover="发现";
+Settings="设置";
+Chatroom="聊天室";
+DevDocs="开发手册";
+Conference="会议";
+AccountSafety="账户与安全";
+MessageNotification="新消息通知";
+ChangePassword="修改密码";
+PrivacySettings="隐私设置";
+Theme="主题";
+CurrentVersion="当前版本";
+HelpFeedback="帮助与反馈";
+AboutWFChat="关于星火";
+UserAgreement="用户协议";
+PrivacyPolicy="隐私政策";
+Complain="举报";
+Blacklist="黑名单";
+Quit="退出";
+Logout="退出登录";
+DestroyAccount="销毁账号";
+Moments="朋友圈";
+Me="我的";
+Robot="机器人";
+Channel="频道";
+Mesh="外部单位";
+Favorite="收藏";
+File="文件";
+Diagnose="诊断";
+MsgReceipt="消息回执";
+Cancel="取消";
+MyFarovrites="我的收藏";
+
+// Login
+PhoneLogin="账号登录";
+PhoneNumber="账  号";
+PhoneNumberPlaceholder="请输入账号";
+AccountLabel="账  号";
+AccountPlaceholder="请输入账号";
+VerificationCode="验证码";
+VerificationCodePlaceholder="请输入验证码";
+GetVerificationCode="获取验证码";
+GetVerificationCodeFailed="获取验证码失败";
+UsePasswordLogin="使用用户密码登录";
+Register="注册";
+Login="登录";
+LoginAgreement="登录即代表你已同意《星火用户协议》和《星火隐私政策》";
+PasswordLogin="账号密码登录";
+Password="密  码";
+PasswordPlaceholder="请输入密码";
+UseSMSCodeLogin="使用短信验证码登录";
+SMSCodeLogin="短信验证码登录";
+AccountLoggedInElsewhere="您的账号已在其他设备登录";
+GotIt="知道了";
+Tips="提示";
+SMSCodeLoginTip="使用短信验证码登录将会为您创建账户，请使用短信验证码登录。";
+Confirm="确定";
+SMSSending="短信发送中";
+SendSuccess="发送成功";
+SendFailed="发送失败";
+Logining="登录中...";
+LoginFailed="登录失败";
+PleaseInputAccountAndPassword="请输入账号和密码";
+
+// Reset Password
+SetNewPassword="设置新密码";
+SMSVerificationCode="请输入短信验证码";
+NewPassword="新密码";
+NewPasswordPlaceholder="请输入新密码";
+ConfirmPassword="确认密码";
+ConfirmPasswordPlaceholder="请输入确认密码";
+Done="完成";
+Saving="保存中...";
+SaveFailed="保存失败";
+
+// App Service
+UploadSuccess="上传成功";
+ServerResponseError="服务器响应错误";
+UploadFailed="上传失败：%@";
+UsernameExists="用户名已经存在";
+NetworkError="网络错误";
+
+// Call
+WildFire="星火";
+IncomingCall="来电话了";
+MissedCall="来电未接听";
+CallCancelled="来电已取消";
+NetworkCall="网络通话";
+
+// Meeting
+MeetingLoading="会议加载中";
+MeetingEnded="会议已结束！";
+MeetingNotSupported="不支持会议";
+
+// Notifications
+ReceivedFriendInvitation="收到好友邀请";
+ReceivedFriendRequests="您收到 %ld 条好友请求";
+ReceivedNewMessage="您收到了新消息";
+ReceivedSecretMessage="您收到了新的密聊消息";
+MentionedInGroup="%@在群里@了你";
+SomeoneMentionedYou="有人在群里@了你";
+
+// PC Login
+ConfirmWindowsLogin="确认 Windows 登录";
+ConfirmMacLogin="确认 Mac 登录";
+ConfirmBrowserLogin="确认浏览器登录";
+ConfirmLinuxLogin="确认 Linux 登录";
+ConfirmIPadLogin="确认 iPad 登录";
+ConfirmAndroidTabletLogin="确认 Android 平板登录";
+ConfirmPCLogin="确认电脑登录";
+PCLogin="登录";
+CancelLogin="取消登录";
+Close="关闭";
+Success="成功";
+
+// PC Session
+PCLoggedIn="电脑已登录";
+WindowsLoggedIn="Windows 已登录";
+MacLoggedIn="Mac 已登录";
+LinuxLoggedIn="Linux 已登录";
+WebLoggedIn="Web 已登录";
+MiniProgramLoggedIn="小程序已登录";
+IPadLoggedIn="iPad 已登录";
+AndroidTabletLoggedIn="Android 平板已登录";
+MutePhone="手机静音";
+LockPC="锁定电脑";
+TransferFile="传输文件";
+LogoutPC="退出电脑登录";
+LogoutWindows="退出 Windows 登录";
+LogoutMac="退出 Mac 登录";
+LogoutLinux="退出 Linux 登录";
+LogoutWeb="退出 Web 登录";
+LogoutMiniProgram="退出小程序登录";
+LogoutIPad="退出 iPad 登录";
+LogoutAndroidTablet="退出 Android 平板登录";
+
+// PTT Channel
+ChannelName="频道名称";
+ChannelOfUser="%@的频道";
+CreateChannel="创建频道";
+OopsError="糟糕，出错了";
+TryAgainLater="等会再试试吧！";
+Create="创建";
+JoinChannel="加入频道";
+Channel="频道";
+Delete="删除";
+QuitChannel="退出";
+
+// Theme
+ThemeChangeSuccess="修改成功！请退回到应用主页面查看效果。";
+Blue="蓝色";
+White="白色";
+
+// Favorite
+DownloadFailed="下载失败!";
+Forward="转发";
+Copy="拷贝";
+Copied="已拷贝";
+
+// Privacy
+FindMeBy="找到我的方式";
+SecretChat="密聊";
+AddFriendNeedVerify="加我为好友时需要验证";
+Account="账号";
+PhoneNumberTitle="电话号码";
+UserId="用户ID";
+FindMeDescription="可以通过以下方法找到我";
+
+// Diagnose
+DiagnoseHint="点击\"测试网络\"开始测试";
+TestNetwork="测试网络";
+UploadLogs="上传日志";
+SpeedTestSuccess="测速成功，延时为%dms";
+SpeedTestFailedUnrecognized="测速失败，无法识别服务器返回的数据：%@";
+SpeedTestFailed="测速失败，错误原因:%@";
+UploadSuccess="上传成功";
+UploadFailed="上传失败：%@";
+
+// Security
+ModifyPassword="修改密码";
+SMSCodeVerification="短信验证码验证";
+UsePasswordVerification="使用密码验证";
+
+// Report
+ReportTitle="举报";
+ReportDescription="如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！";
+
+// Destroy Account
+DestroyAccountTitle="亲，真的要狠心离开我们吗😭😭😭！";
+DestroyAccountButton="销毁账户";
+OldPassword="原密码";
+OldPasswordPlaceholder="请输入原密码";
+
+// Org Service
+OrgServiceNotConfigured="没有配置组织通讯录服务!";
+OrgServiceNotAvailable="组织通讯录服务不可用，请确保先登录再使用组织通讯录";
+NotLoggedIn="未登录";
+
+// Common
+Seconds="%d 秒";
+
+// Share Extension
+ConfirmSendTo="确认发送给";
+Sending="正在发送中...";
+NotSupportMultiImages="不支持发送多张图片";
+NotSupportMultiImagesMessage="每次只能发送一张。如果您需要一次发送多张，请打开星火选择图片发送。";
+Sent="已发送";
+ViewInWildFire="您可以在星火中查看";
+NetworkErrorTitle="网络错误";
+NetworkErrorMessage="糟糕！网络出问题了！";
+ForgetIt="算了吧";
+SendToFriend="发给朋友";
+SendToSelf="发给自己";
+ShareToMoments="分享到朋友圈";
+Self="自己";
+Image="[图片]";
+
+// Things
+DeviceName="设备名称：%@";
+DeviceIdLabel="设备ID：%@";
+DeviceToken="设备令牌：%@";
+ModifyDeviceName="修改名称";
+DeleteDevice="删除设备";
+SendToMe="发送给我";
+ModifyDeviceNameTitle="修改设备名";
+Deleting="删除中...";
+Deleted="已删除";
+DeleteFailed="删除失败";
+SendingTo="发送中...";
+SendToDeviceSuccess="发送成功";
+SendToDeviceFailed="发送失败";
+CreateDevice="创建设备";
+DeviceNamePlaceholder="请输入设备名称";
+DeviceIdPlaceholder="请输入设备ID，如果为空，系统会自动生成";
+Creating="创建中...";
+CreateFailed="创建失败";
+OpenLED="打开LED";
+CloseLED="关闭LED";
+ManualUpdateData="手动更新数据";
+HumidityTemperature="湿度:%d.%d%% 温度:%d.%dC";
+
+// Error Messages
+IMServerError="IM_SERVER_HOST只能填写IP或者域名，不能带HTTP头或者端口！！！";
+ProfessionalVersionUnauthorized="专业版IM服务没有授权或者授权过期！！！";
+TimeDifferenceTooLarge="服务器和客户端时间相差太大！！！";
+GetuiMessage="个推消息";
+APNsMessage="APNs消息";
+Online="在线";
+Offline="离线";
+On="开启";
+Off="关闭";
+
+// Additional strings
+PleaseLoginWildFireIM="请先登录星火";
+MyDevices="我的设备";
+
+// Language
+Language="语言";
+FollowSystem="跟随系统";
+LanguageChangeRestart="语言修改后需要重启应用才能生效";
+LanguageChangeSuccess="语言设置已保存，请重启应用";
+ReportMessage="如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！";
+
+// Backup & Restore
+"BackupAndRestore"="备份与恢复";
+"CreateBackup"="创建备份";
+"CreateBackupDescription"="备份您的聊天消息";
+"RestoreBackup"="恢复备份";
+"RestoreBackupDescription"="从备份文件恢复消息";
+"BackupOptions"="备份选项";
+"NextStep"="下一步";
+"BackupSettings"="备份设置";
+"SelectedConversationsCount"="已选择 %ld 个会话";
+"IncludeMediaFiles"="包含媒体文件";
+"Conversations"="个会话";
+"MessagesCount"="条消息";
+"SelectBackupLocation"="选择备份位置";
+"BackupToLocal"="备份到本地";
+"BackupToLocalDescription"="将备份保存到iPhone本地存储";
+"BackupToPC"="备份到电脑端";
+"BackupToPCDescription"="将备份保存到已登录的电脑端";
+"PleaseSelectBackupLocation"="请选择备份保存位置";
+"SelectBackup"="选择备份";
+"RestoreOptions"="恢复选项";
+"StartRestore"="开始恢复";
+"ConfirmRestore"="确认恢复";
+"RestoreWarningMessage"="恢复操作将会添加备份中的消息到当前设备。是否继续？";
+"SelectRestoreLocation"="选择恢复位置";
+"RestoreFromLocal"="从本地恢复";
+"RestoreFromLocalDescription"="从iPhone本地存储恢复备份";
+"RestoreFromPC"="从电脑端恢复";
+"RestoreFromPCDescription"="从已登录的电脑端恢复备份";
+"PleaseSelectRestoreSource"="请选择恢复备份来源";
+"SelectConversation"="选择会话";
+"SelectAll"="全选";
+"DeselectAll"="取消全选";
+"UnknownUser"="未知用户";
+"UnknownGroup"="未知群组";
+"NoMessages"="暂无消息";
+"CreatingBackup"="创建备份";
+"RestoringBackup"="恢复备份";
+"Preparing"="正在准备...";
+"TotalConversations"="共 %ld 个会话";
+"TotalMessages"="共 %ld 条消息";
+"BackupCompleted"="备份完成";
+"BackupFailed"="备份失败";
+"RestoreCompleted"="恢复完成";
+"RestoreFailed"="恢复失败";
+"BackupSuccessDetail"="成功备份 %d 条消息";
+"MediaFilesDetail"="\n%d 个媒体文件 (%@)";
+"RestoreSuccessDetail"="成功恢复 %d 条消息";
+"MediaFilesOnly"="\n%d 个媒体文件";
+"BackingUpMessage"="正在备份消息...";
+"RestoringMessage"="正在恢复消息...";
+"ConfirmCancel"="确认取消";
+"ConfirmCancelMessage"="确定要取消当前操作吗？";
+"CancelOperation"="取消操作";
+"ContinueOperation"="继续操作";
+"Cancelled"="已取消";
+"ConversationsUnit"="%ld个会话";
+"MessagesUnit"="%ld条消息";
+"MediaUnit"="%ld个媒体(%@)";
+"RestoreFromPC_Title"="从PC端恢复";
+"DownloadingBackupInfo"="正在下载备份信息...";
+"ConnectingToPC"="正在连接到电脑端...";
+"DownloadBackupInfoFailed"="下载备份信息失败: %@";
+"DownloadFailedStatusCode"="下载失败，状态码: %ld";
+"ParseBackupInfoFailed"="解析备份信息失败";
+"ReadyToRestore"="准备开始恢复";
+"BackupInfoDetail"="%ld个会话，%ld条消息，%ld个媒体文件";
+"StartRestore_Action"="开始恢复";
+"SyncingFiles"="正在同步文件...";
+"SyncingFileProgress"="正在同步文件 %ld/%ld";
+"ImportingData"="正在导入数据...";
+"PleaseWait"="请稍候...";
+"ImportingProgress"="正在导入... %.0f%%";
+"TotalRestored"="共恢复 %d 条消息";
+"RestoreFailedWithError"="恢复失败，错误码: %d";
+"BackupError_FileNotFound"="找不到备份文件";
+"BackupError_InvalidFormat"="备份文件格式不正确";
+"BackupError_IOError"="文件读写错误";
+"BackupError_OutOfSpace"="存储空间不足";
+"BackupError_Cancelled"="操作已取消";
+"BackupError_EncryptionFailed"="加密失败";
+"BackupError_DecryptionFailed"="解密失败";
+"BackupError_WrongPassword"="密码错误";
+"BackupError_RestoreFailed"="恢复失败";
+"BackupError_Unknown"="未知错误 (错误码: %d)";
+"SecurityVerification"="安全验证";
+"VerificationFailed"="验证失败，请重试";
+"SlideToVerify"="向右滑动完成验证";
+"LoadingVerification"="加载中...";
+"VerificationPassed"="验证通过";
+"PleaseInputPhone"="请输入手机号";
+"PleaseInputPhoneAndCode"="请输入手机号和密码/验证码";
+"VersionNotSupported"="当前版本不支持，请升级察看";
+"Loading_Generic"="获取中...";
+"LoadFailed_Generic"="获取失败";
+"LoadVerificationCodeFailed"="加载验证码失败";
+"PCBackupTitle"="电脑端备份";
+"WaitingForPCConfirm"="正在等待电脑端确认...";
+"SendRestoreRequestFailed"="发送恢复请求失败，错误码: %d";
+"PCRejectedRestoreRequest"="电脑端拒绝了恢复请求";
+"FetchingBackupList"="正在获取备份列表...";
+"FetchBackupListFailed"="获取备份列表失败: %@";
+"FetchBackupListFailedWithCode"="获取备份列表失败，状态码: %ld";
+"NoBackupAvailableOnPC"="电脑端没有可用的备份";
+"PCNotRespondInTime"="电脑端未在30秒内响应";
+"UnknownBackup"="未知备份";
+"DeviceLabel"="设备: %@";
+"FileUnit"="%ld个文件";
+"MediaFilesUnit"="%ld个媒体文件";
+"BackupRequestTitle"="备份请求";
+"WaitingForPCResponse"="正在等待电脑端响应...";
+"PleaseConfirmBackupOnPC"="请在电脑端确认备份请求";
+"SendBackupRequestFailed"="发送备份请求失败，错误码: %d";
+"PCApprovedBackup"="电脑端已同意备份";
+"CreatingBackupData"="正在创建备份数据...\n服务器: %@:%ld";
+"CreateBackupFailed"="创建备份失败，错误码: %d";
+"BackingUpProgress"="正在备份... %ld%%";
+"CompletedCount"="已完成: %lld/%lld";
+"UploadingBackupToPC"="正在上传备份到电脑端...";
+"PreparingFileList"="正在准备文件列表...";
+"BackupFileNotFound"="没有找到备份文件";
+"TotalFilesWaitingUpload"="共 %ld 个文件等待上传";
+"UploadingProgress"="正在上传... %ld%%";
+"FileProgress"="文件 %ld/%ld";
+"UploadFileFailed"="上传文件失败";
+"NotifyingPC"="正在通知电脑端...";
+"BackupRequestRejected"="备份请求被拒绝";
+"PCRejectedBackupRequest"="电脑端拒绝了备份请求";
+"RequestTimeout"="请求超时";
+"OperationFailed"="操作失败";
+"BackupInformation"="备份信息";
+"BackupTime"="备份时间";
+"BackupDevice"="备份设备";
+"UnknownDevice"="未知设备";
+"ConversationsCount"="%ld 个";
+"MessagesCountUnit"="%ld 条";
+"MediaFiles"="媒体文件";
+"MediaFilesCountWithSize"="%ld 个 (%@)";
+"ConversationsCountLabel"="会话数量";
+"MessagesCountLabel"="消息数量";
+"MessageBracket"="[消息]";
+"Pan"="网盘";

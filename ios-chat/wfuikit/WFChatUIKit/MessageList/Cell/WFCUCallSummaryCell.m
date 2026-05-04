@@ -1,0 +1,186 @@
+//
+//  InformationCell.m
+//  WFChat UIKit
+//
+//  Created by WF Chat on 2017/9/1.
+//  Copyright © 2017年 WildFireChat. All rights reserved.
+//
+
+#import "WFCUCallSummaryCell.h"
+#import <WFChatClient/WFCChatClient.h>
+#import "WFCUUtilities.h"
+#import "WFCUImage.h"
+
+#define TEXT_TOP_PADDING 6
+#define TEXT_BUTTOM_PADDING 6
+#define TEXT_LEFT_PADDING 8
+#define TEXT_RIGHT_PADDING 8
+
+
+#define TEXT_LABEL_TOP_PADDING TEXT_TOP_PADDING + 4
+#define TEXT_LABEL_BUTTOM_PADDING TEXT_BUTTOM_PADDING + 4
+#define TEXT_LABEL_LEFT_PADDING 30
+#define TEXT_LABEL_RIGHT_PADDING 30
+
+#if WFCU_SUPPORT_VOIP
+#import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
+@implementation WFCUCallSummaryCell
+
++ (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+    NSString *text = [WFCUCallSummaryCell getCallText:msgModel.message.content];
+    CGSize textSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
+    return CGSizeMake(textSize.width + 25, 30);
+}
+
++ (NSString *)getCallText:(WFCCCallStartMessageContent *)startContent {
+    NSString *text;
+    if (startContent.isAudioOnly) {
+        text = WFCString(@"VoiceCall");
+    } else {
+        text = WFCString(@"VideoCall");
+    }
+    
+#if WFCU_SUPPORT_VOIP
+    if(startContent.status == kWFAVCallEndReasonInterrupted) {
+        text = WFCString(@"CallInterrupted");
+    } else if(startContent.status == kWFAVCallEndReasonRemoteInterrupted) {
+        text = WFCString(@"PeerCallInterrupted");
+    }
+    
+    if (startContent.connectTime > 0 && startContent.endTime > 0) {
+        long long duration = startContent.endTime - startContent.connectTime;
+        if (duration <= 0) {
+            return text;
+        }
+        duration = duration/1000; //转化成s
+        if (duration == 0) {
+            return text;
+        }
+        
+        long long hour = duration/3600; //小时数
+        duration = duration - hour * 3600; //去除小时
+        long long mins = duration/60;  //分钟数
+        duration = duration - mins*60;
+        long long second = duration;
+        
+        if (hour) {
+            text = [text stringByAppendingFormat:@"%lld:", hour];
+        }
+        
+        text = [text stringByAppendingFormat:@"%02lld:", mins];
+        text = [text stringByAppendingFormat:@"%02lld", second];
+    } else {
+        switch (startContent.status) {
+            case kWFAVCallEndReasonBusy:
+                text = WFCString(@"CallLineBusy");
+                break;
+            case kWFAVCallEndReasonSignalError:
+                text = WFCString(@"NetworkError");
+                break;
+            case kWFAVCallEndReasonHangup:
+                text = WFCString(@"CallCancelled");
+                break;
+            case kWFAVCallEndReasonMediaError:
+                text = WFCString(@"NetworkError");
+                break;
+            case kWFAVCallEndReasonRemoteHangup:
+                text = WFCString(@"CallRemoteCancelled");
+                break;
+            case kWFAVCallEndReasonOpenCameraFailure:
+                text = WFCString(@"NetworkError");
+                break;
+            case kWFAVCallEndReasonTimeout:
+                text = WFCString(@"CallEndTimeout");
+                break;
+            case kWFAVCallEndReasonAcceptByOtherClient:
+                text = WFCString(@"CallAnsweredElsewhere");
+                break;
+            case kWFAVCallEndReasonAllLeft:
+                text = WFCString(@"CallEnded");
+                break;
+            case kWFAVCallEndReasonRemoteBusy:
+                text = WFCString(@"CallRemoteLineBusy");
+                break;
+            case kWFAVCallEndReasonRemoteTimeout:
+                text = WFCString(@"CallRemoteTimeout");
+                break;
+            case kWFAVCallEndReasonRemoteNetworkError:
+                text = WFCString(@"CallRemoteNetworkError");
+                break;
+            case kWFAVCallEndReasonRoomDestroyed:
+                text = WFCString(@"CallEnded");
+                break;
+            case kWFAVCallEndReasonRoomNotExist:
+                text = WFCString(@"CallEnded");
+                break;
+            case kWFAVCallEndReasonRoomParticipantsFull:
+                text = WFCString(@"CallParticipantsFull");
+                break;
+            case kWFAVCallEndReasonInterrupted:
+                text = WFCString(@"CallInterrupted");
+                break;
+            case kWFAVCallEndReasonRemoteInterrupted:
+                text = WFCString(@"PeerCallInterrupted");
+                break;
+            default:
+                break;
+        }
+    }
+#endif
+    
+    return text;
+}
+
+- (void)setModel:(WFCUMessageModel *)model {
+    [super setModel:model];
+    
+    CGFloat width = self.contentArea.bounds.size.width;
+    
+    self.infoLabel.text = [WFCUCallSummaryCell getCallText:model.message.content];
+    self.infoLabel.layoutMargins = UIEdgeInsetsMake(TEXT_TOP_PADDING, TEXT_LEFT_PADDING, TEXT_BUTTOM_PADDING, TEXT_RIGHT_PADDING);
+    
+    if (model.message.direction == MessageDirection_Send) {
+        self.infoLabel.frame = CGRectMake(0, 0, width - 25, 30);
+        self.modeImageView.frame = CGRectMake(width - 25, 3, 25, 25);
+    } else {
+        self.infoLabel.frame = CGRectMake(0, 0, width-25, 30);
+        self.modeImageView.frame = CGRectMake(width-25, 3, 25, 25);
+    }
+    if ([self.model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+        WFCCCallStartMessageContent *startContent = (WFCCCallStartMessageContent *)self.model.message.content;
+        if (startContent.isAudioOnly) {
+            self.modeImageView.image = [WFCUImage imageNamed:@"msg_audio_call"];
+        } else {
+            self.modeImageView.image = [WFCUImage imageNamed:@"msg_video_call"];
+        }
+    }
+}
+
+- (UILabel *)infoLabel {
+    if (!_infoLabel) {
+        _infoLabel = [[UILabel alloc] init];
+        _infoLabel.numberOfLines = 0;
+        _infoLabel.font = [UIFont systemFontOfSize:14];
+        
+        _infoLabel.numberOfLines = 0;
+        _infoLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _infoLabel.textAlignment = NSTextAlignmentCenter;
+        _infoLabel.font = [UIFont systemFontOfSize:14.f];
+        _infoLabel.layer.masksToBounds = YES;
+        _infoLabel.layer.cornerRadius = 5.f;
+        _infoLabel.textAlignment = NSTextAlignmentCenter;
+        _infoLabel.userInteractionEnabled = YES;
+        
+        [self.contentArea addSubview:_infoLabel];
+    }
+    return _infoLabel; 
+}
+- (UIImageView *)modeImageView {
+    if (!_modeImageView) {
+        _modeImageView = [[UIImageView alloc] init];
+        [self.contentArea addSubview:_modeImageView];
+    }
+    return _modeImageView;
+}
+@end

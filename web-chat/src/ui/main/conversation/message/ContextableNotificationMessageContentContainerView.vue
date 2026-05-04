@@ -1,0 +1,126 @@
+<template>
+    <section>
+        <div class="message-time-container" v-bind:class="{checked:sharedPickState.messages.indexOf(message) >= 0}">
+            <p v-if="this.message._showTime" class="time">{{ message._timeStr }}</p>
+            <div class="message-content-container"
+                 v-bind:class="{checked:sharedPickState.messages.indexOf(message) >= 0, highlight:highLight}">
+                <input id="checkbox" v-if="sharedConversationState.enableMessageMultiSelection" type="checkbox"
+                       class="checkbox"
+                       :value="message" placeholder="" v-model="sharedPickState.messages">
+                <RichNotificationMessageContentView :message="message"
+                                                    v-if="message.messageContent.type === 12"
+                                                    @contextmenu.prevent.native="openMessageContextMenu($event, message)"
+                />
+                <ArticlesMessageContentView :message="message"
+                                            v-else-if="message.messageContent.type === 13"
+                                            @contextmenu.prevent.native="openMessageContextMenu($event, message)"
+                />
+            </div>
+        </div>
+    </section>
+</template>
+
+<script>
+import RichNotificationMessageContentView from "./RichNotificationMessageContentView";
+import ArticlesMessageContentView from "./ArticlesMessageContentView";
+import Message from "../../../../wfc/messages/message";
+import store from "../../../../store";
+
+export default {
+    name: "ContextableNotificationMessageContentContainerView",
+    components: {ArticlesMessageContentView, RichNotificationMessageContentView},
+    props: {
+        message: {
+            type: Message,
+            required: true,
+        }
+    },
+    inject: {
+        conversationEventBus: {
+            default: null,
+        },
+        conversationActiveStore: {
+            default: null,
+        },
+    },
+    data() {
+        const activeStore = this.conversationActiveStore || store;
+        return {
+            activeStore: activeStore,
+            sharedConversationState: activeStore.state.conversation,
+            sharedPickState: activeStore.state.pick,
+            highLight: false,
+        }
+    },
+    methods: {
+        getConversationEventBus() {
+            return this.conversationEventBus || this.$eventBus;
+        },
+
+        openMessageContextMenu(event, message) {
+            this.$emit('openMessageContextMenu', event, message)
+            this.highLight = true;
+        },
+        onContextMenuClosed() {
+            this.highLight = false;
+        },
+    },
+    mounted() {
+        this.getConversationEventBus().$on('contextMenuClosed', this.onContextMenuClosed);
+    },
+    beforeUnmount() {
+        this.getConversationEventBus().$off('contextMenuClosed', this.onContextMenuClosed);
+    },
+}
+</script>
+
+<style scoped>
+
+.message-time-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.message-time-container.checked {
+    background-color: var(--background-item-placeholder);
+}
+
+.message-time-container .time {
+    width: 100%;
+    text-align: center;
+    color: var(--text-time);
+    font-size: 10px;
+    background-color: var(--background-tertiary);
+}
+
+.message-time-container .receipt {
+    margin-right: 70px;
+    font-size: 12px;
+    color: var(--text-time);
+}
+
+.message-content-container {
+    width: 100%;
+    display: flex;
+    padding: 10px 20px 4px 20px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.message-content-container input {
+    position: absolute;
+    left: 0;
+    margin-left: 20px;
+}
+
+.message-content-container.highlight {
+    filter: brightness(0.9);
+    z-index: 100;
+}
+
+</style>

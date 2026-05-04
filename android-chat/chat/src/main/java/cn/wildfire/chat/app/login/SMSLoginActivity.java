@@ -1,0 +1,389 @@
+/*
+ * Copyright (c) 2020 WildFireChat. All rights reserved.
+ */
+
+package cn.wildfire.chat.app.login;
+
+import android.content.Intent;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import cn.wildfire.chat.app.AppService;
+import cn.wildfire.chat.app.login.model.LoginResult;
+import cn.wildfire.chat.app.main.MainActivity;
+import cn.wildfire.chat.app.misc.KeyStoreUtil;
+import cn.wildfire.chat.app.setting.ResetPasswordActivity;
+import cn.wildfire.chat.app.widget.SlideVerifyDialog;
+import cn.wildfire.chat.kit.ChatManagerHolder;
+import cn.wildfire.chat.kit.Config;
+import cn.wildfire.chat.kit.WfcBaseNoToolbarActivity;
+import cn.wildfire.chat.kit.WfcWebViewActivity;
+import cn.wildfire.chat.kit.utils.ViewUtil;
+import cn.wildfire.chat.kit.widget.SimpleTextWatcher;
+import cn.wildfirechat.chat.R;
+
+public class SMSLoginActivity extends WfcBaseNoToolbarActivity {
+
+    private static final String TAG = "SMSLoginActivity";
+
+    Button loginButton;
+    EditText phoneNumberEditText;
+    EditText authCodeEditText;
+    TextView requestAuthCodeButton;
+    CheckBox checkBox;
+
+    // 标记是否已通过滑动验证（用于验证码登录）
+    private boolean hasSlideVerifiedForCode = false;
+    private String cachedSlideVerifyToken = null;
+
+    private void bindEvents() {
+        findViewById(R.id.passwordLoginTextView).setOnClickListener(v -> authCodeLogin());
+        findViewById(R.id.loginButton).setOnClickListener(v -> {
+            if (checkBox.isChecked()) {
+                login();
+            } else {
+                ViewUtil.hideKeyboard(this, authCodeEditText);
+                Toast.makeText(this, R.string.check_agreement_tip, Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.requestAuthCodeButton).setOnClickListener(v -> requestAuthCode());
+        phoneNumberEditText.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                inputPhoneNumber(s);
+            }
+        });
+
+        authCodeEditText.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                inputAuthCode(s);
+            }
+        });
+
+//        findViewById(R.id.privacyAgreementTextView).setOnClickListener(v -> {
+//            if (TextUtils.isEmpty(Config.PRIVACY_AGREEMENT_URL) || Config.PRIVACY_AGREEMENT_URL.indexOf("https://example.com") >= 0) {
+//                Toast.makeText(this, R.string.no_privacy_agreement_url_tip, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            WfcWebViewActivity.loadUrl(this, getString(R.string.privacy_agreement), Config.PRIVACY_AGREEMENT_URL);
+//
+//        });
+//        findViewById(R.id.userAgreementTextView).setOnClickListener(v -> {
+//            if (TextUtils.isEmpty(Config.USER_AGREEMENT_URL) || Config.USER_AGREEMENT_URL.indexOf("https://example.com") >= 0) {
+//                Toast.makeText(this, R.string.no_user_agreement_url_tip, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            WfcWebViewActivity.loadUrl(this, getString(R.string.user_agreement), Config.USER_AGREEMENT_URL);
+//        });
+    }
+
+    private void bindViews() {
+        loginButton = findViewById(R.id.loginButton);
+        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        authCodeEditText = findViewById(R.id.authCodeEditText);
+        requestAuthCodeButton = findViewById(R.id.requestAuthCodeButton);
+        checkBox = findViewById(R.id.agreementCheckBox);
+
+        TextView agreementTextView = findViewById(R.id.agreementTextView);
+        CharSequence text = Html.fromHtml(getString(R.string.privacy_agreement_tip_and_links));
+        SpannableString spannableString = new SpannableString(text);
+
+        // 获取所有的 URLSpan
+        URLSpan[] urlSpans = spannableString.getSpans(0, spannableString.length(), URLSpan.class);
+
+        // 替换每个 URLSpan 为我们自定义的 ClickableSpan
+        for (URLSpan urlSpan : urlSpans) {
+            int start = spannableString.getSpanStart(urlSpan);
+            int end = spannableString.getSpanEnd(urlSpan);
+            final String url = urlSpan.getURL();
+
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    handleAgreementClick(url);
+                }
+            };
+
+            spannableString.removeSpan(urlSpan);
+            spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        agreementTextView.setText(spannableString);
+        agreementTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void handleAgreementClick(String url) {
+        if (url.contains("privacy://")) {
+            if (TextUtils.isEmpty(Config.PRIVACY_AGREEMENT_URL) || Config.PRIVACY_AGREEMENT_URL.indexOf("https://example.com") >= 0) {
+                Toast.makeText(this, R.string.no_privacy_agreement_url_tip, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            WfcWebViewActivity.loadUrl(this, getString(R.string.privacy_agreement), Config.PRIVACY_AGREEMENT_URL);
+        } else if (url.contains("user://")) {
+            if (TextUtils.isEmpty(Config.USER_AGREEMENT_URL) || Config.USER_AGREEMENT_URL.indexOf("https://example.com") >= 0) {
+                Toast.makeText(this, R.string.no_user_agreement_url_tip, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            WfcWebViewActivity.loadUrl(this, getString(R.string.user_agreement), Config.USER_AGREEMENT_URL);
+        }
+    }
+
+    @Override
+    protected int contentLayout() {
+        return R.layout.login_activity_sms;
+    }
+
+    @Override
+    protected void afterViews() {
+        bindViews();
+        bindEvents();
+        setStatusBarTheme(this, false);
+        setStatusBarColor(R.color.gray14);
+    }
+
+    void inputPhoneNumber(Editable editable) {
+        String phone = editable.toString().trim();
+        if (phone.length() == 11 && countdownRunnable == null) {
+            requestAuthCodeButton.setEnabled(true);
+        } else {
+            requestAuthCodeButton.setEnabled(false);
+            loginButton.setEnabled(false);
+        }
+    }
+
+    void inputAuthCode(Editable editable) {
+        if (editable.toString().length() > 2) {
+            loginButton.setEnabled(true);
+        }
+    }
+
+    void authCodeLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    void login() {
+        String phoneNumber = phoneNumberEditText.getText().toString().trim();
+        String authCode = authCodeEditText.getText().toString().trim();
+
+        loginButton.setEnabled(false);
+
+        if (!Config.ENABLE_SLIDE_VERIFY) {
+            performSMSLogin(phoneNumber, authCode, null);
+            return;
+        }
+
+        // 如果已经通过滑动验证（发送验证码时已验证），直接登录
+        if (hasSlideVerifiedForCode && cachedSlideVerifyToken != null) {
+            performSMSLogin(phoneNumber, authCode, null); // 不传递 slideVerifyToken
+            return;
+        }
+
+        // 显示滑动验证对话框
+        SlideVerifyDialog verifyDialog = new SlideVerifyDialog(this, new SlideVerifyDialog.OnVerifySuccessListener() {
+            @Override
+            public void onVerifySuccess(String token) {
+                performSMSLogin(phoneNumber, authCode, token);
+            }
+
+            @Override
+            public void onVerifyFailed() {
+                // 验证失败（滑动位置不对），不关闭窗口
+                // 这个方法现在不需要做任何事，因为 SlideVerifyDialog 已经处理了提示和重置
+            }
+
+            @Override
+            public void onLoadFailed() {
+                // 加载验证码失败，对话框已经关闭，只需要启用按钮
+                loginButton.setEnabled(true);
+            }
+        });
+        verifyDialog.show();
+    }
+
+    private void performSMSLogin(String phoneNumber, String authCode, String slideVerifyToken) {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+            .content(R.string.login_progress)
+            .progress(true, 100)
+            .cancelable(false)
+            .build();
+        dialog.show();
+
+        AppService.Instance().smsLogin(phoneNumber, authCode, slideVerifyToken, new AppService.LoginCallback() {
+            @Override
+            public void onUiSuccess(LoginResult loginResult) {
+                if (isFinishing()) {
+                    return;
+                }
+                dialog.dismiss();
+                //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
+                ChatManagerHolder.gChatManager.connect(loginResult.getUserId(), loginResult.getToken());
+                try {
+                    KeyStoreUtil.saveData(SMSLoginActivity.this, "wf_userId", loginResult.getUserId());
+                    KeyStoreUtil.saveData(SMSLoginActivity.this, "wf_token", loginResult.getToken());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(SMSLoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+                Intent resetPasswordIntent = new Intent(SMSLoginActivity.this, ResetPasswordActivity.class);
+                resetPasswordIntent.putExtra("resetCode", loginResult.getResetCode());
+                startActivity(resetPasswordIntent);
+
+                finish();
+            }
+
+            @Override
+            public void onUiFailure(int code, String msg) {
+                if (isFinishing()) {
+                    return;
+                }
+                Toast.makeText(SMSLoginActivity.this, getString(R.string.sms_login_failure, code, msg), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                loginButton.setEnabled(true);
+                // 登录失败，重置验证标志
+                hasSlideVerifiedForCode = false;
+                cachedSlideVerifyToken = null;
+            }
+        });
+    }
+
+    private Handler handler = new Handler();
+    private int countdownSeconds = 60;
+    private Runnable countdownRunnable;
+
+    void requestAuthCode() {
+        String phoneNumber = phoneNumberEditText.getText().toString().trim();
+
+        if (!Config.ENABLE_SLIDE_VERIFY) {
+            performRequestAuthCode(phoneNumber, null);
+            return;
+        }
+
+        // Show slide verify dialog before sending auth code
+        SlideVerifyDialog verifyDialog = new SlideVerifyDialog(this, new SlideVerifyDialog.OnVerifySuccessListener() {
+            @Override
+            public void onVerifySuccess(String token) {
+                performRequestAuthCode(phoneNumber, token);
+            }
+
+            @Override
+            public void onVerifyFailed() {
+                // 验证失败（滑动位置不对），不关闭窗口
+                // 这个方法现在不需要做任何事，因为 SlideVerifyDialog 已经处理了提示和重置
+            }
+
+            @Override
+            public void onLoadFailed() {
+                // 加载验证码失败，对话框已经关闭，只需要启用按钮
+                requestAuthCodeButton.setEnabled(true);
+            }
+        });
+        verifyDialog.show();
+    }
+
+    private void performRequestAuthCode(String phoneNumber, String slideVerifyToken) {
+        // Disable button immediately
+        requestAuthCodeButton.setEnabled(false);
+
+        // Start countdown
+        countdownSeconds = 60;
+        updateCountdownText();
+
+        // Create countdown runnable if not exists
+        if (countdownRunnable == null) {
+            countdownRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (isFinishing()) return;
+
+                    countdownSeconds--;
+                    updateCountdownText();
+
+                    if (countdownSeconds > 0) {
+                        // Continue countdown
+                        handler.postDelayed(this, 1000);
+                    } else {
+                        // Reset button text and enable it
+                        requestAuthCodeButton.setText(getString(R.string.requesting_auth_code));
+                        requestAuthCodeButton.setEnabled(true);
+                    }
+                }
+            };
+        }
+
+        // Start the countdown timer
+        handler.postDelayed(countdownRunnable, 1000);
+
+        // Request the auth code
+        Toast.makeText(this, getString(R.string.requesting_auth_code), Toast.LENGTH_SHORT).show();
+
+        AppService.Instance().requestAuthCode(phoneNumber, slideVerifyToken, new AppService.SendCodeCallback() {
+            @Override
+            public void onUiSuccess() {
+                Toast.makeText(SMSLoginActivity.this, R.string.auth_code_request_success, Toast.LENGTH_SHORT).show();
+                // 标记已通过滑动验证
+                hasSlideVerifiedForCode = true;
+                cachedSlideVerifyToken = slideVerifyToken;
+            }
+
+            @Override
+            public void onUiFailure(int code, String msg) {
+                Toast.makeText(SMSLoginActivity.this, getString(R.string.auth_code_request_failure, code, msg), Toast.LENGTH_SHORT).show();
+                // 发送失败，重置验证标志
+                hasSlideVerifiedForCode = false;
+                cachedSlideVerifyToken = null;
+                // Reset countdown on failure
+                resetCountdown();
+            }
+        });
+    }
+
+    private void updateCountdownText() {
+        if (countdownSeconds > 0) {
+            requestAuthCodeButton.setText(getString(R.string.retry_after_seconds, countdownSeconds));
+        }
+    }
+
+    private void resetCountdown() {
+        // Remove callbacks
+        if (countdownRunnable != null) {
+            handler.removeCallbacks(countdownRunnable);
+        }
+        // Reset button
+        requestAuthCodeButton.setText(R.string.requesting_auth_code);
+        requestAuthCodeButton.setEnabled(true);
+        countdownSeconds = 60;
+        countdownRunnable = null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null && countdownRunnable != null) {
+            handler.removeCallbacks(countdownRunnable);
+        }
+    }
+}

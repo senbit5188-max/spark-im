@@ -1,0 +1,81 @@
+<template>
+    <section>
+        <ul>
+            <li v-for="(organization, index) in rootOrganizations" :key="index" @click="showOrganization(organization)">
+                <div class="organization-item"
+                     v-bind:class="{active: sharedContactState.currentOrganization && sharedContactState.currentOrganization.id === organization.id}">
+                    <img class="avatar" :src="organization.portrait ? organization.portrait : defaultPortraitUrl">
+                    <div style="padding-left: 10px">
+                        <p class="single-line">{{ organization.name }}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+</template>
+
+<script>
+import store from "../../../store";
+import organizationServerApi from "../../../api/organizationServerApi";
+import Config from "../../../config";
+
+export default {
+    name: "OrganizationListView",
+    props: {},
+    data() {
+        return {
+            sharedContactState: store.state.contact,
+            rootOrganizations: [],
+            defaultPortraitUrl: Config.DEFAULT_ORGANIZATION_PORTRAIT_URL,
+        }
+    },
+    mounted() {
+        organizationServerApi.getRootOrganization()
+            .then(orgs => {
+                this.rootOrganizations = orgs;
+            })
+            .catch(error => {
+                this.$notify({
+                    text: '组织结构服务异常',
+                    type: 'error'
+                })
+            })
+
+    },
+    methods: {
+        showOrganization(organization) {
+            store.setCurrentOrganization(organization)
+        },
+    },
+}
+</script>
+
+<style scoped>
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.organization-item {
+    padding: 10px 5px 10px 30px;
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+}
+
+.organization-item:hover {
+    background-color: var(--background-item-hover);
+}
+
+.organization-item.active {
+    background-color: var(--background-item-placeholder);
+}
+
+.organization-item span {
+    /*margin-left: 10px;*/
+}
+
+</style>
