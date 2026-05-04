@@ -1,5 +1,10 @@
 <template>
-    <div>
+    <div class="login-page-wrapper">
+        <div class="login-bg-decoration">
+            <div class="bg-orb bg-orb-1"></div>
+            <div class="bg-orb bg-orb-2"></div>
+            <div class="bg-orb bg-orb-3"></div>
+        </div>
         <div class="login-container" :class="{'web-login-container': !sharedMiscState.isElectron}">
             <ElectronWindowsControlButtonView style="position: absolute; top: 0; right: 0"
                                               :maximizable="false"
@@ -50,35 +55,46 @@
             </div>
             <div v-else-if="loginType === 1" class="login-form-container">
                 <!--            密码登录-->
-                <img class="logo" :src="require(`@/assets/images/icon.png`)" alt="">
-                <p class="title">星火IM</p>
-                <p class="subtitle">安全、高效的即时通讯</p>
-                <div class="item">
-                    <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        <input v-model.trim="mobile" class="text-input" type="text" placeholder="请输入账号">
+                <div class="login-brand">
+                    <img class="logo" :src="require(`@/assets/images/icon.png`)" alt="">
+                    <h1 class="title">星火 IM</h1>
+                    <p class="subtitle">安全 · 高效 · 即时通讯</p>
+                </div>
+                <div class="login-fields">
+                    <div class="field-group">
+                        <label class="field-label">账号</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <input v-model.trim="mobile" class="text-input" type="text" placeholder="请输入您的账号">
+                        </div>
                     </div>
-                </div>
-                <div class="item">
-                    <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        <input v-model.trim="password" class="text-input" @keydown.enter="loginWithPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入密码">
-                        <svg class="toggle-password" @click="showPassword = !showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path v-if="!showPassword" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle v-if="!showPassword" cx="12" cy="12" r="3"/>
-                            <path v-if="showPassword" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                            <line v-if="showPassword" x1="1" y1="1" x2="23" y2="23"/>
-                        </svg>
+                    <div class="field-group">
+                        <label class="field-label">密码</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            <input v-model.trim="password" class="text-input" @keydown.enter="loginWithPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入您的密码">
+                            <svg class="toggle-password" @click="showPassword = !showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path v-if="!showPassword" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle v-if="!showPassword" cx="12" cy="12" r="3"/>
+                                <path v-if="showPassword" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                <line v-if="showPassword" x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </div>
                     </div>
+                    <div class="remember-row">
+                        <label class="remember-label">
+                            <input type="checkbox" v-model="rememberPassword" class="remember-checkbox">
+                            <span>记住密码</span>
+                        </label>
+                    </div>
+                    <button class="login-button" :disabled="mobile === '' || !password || password === ''" ref="loginWithPasswordButton" @click="loginWithPassword">
+                        <span v-if="loginStatus !== 3">登 录</span>
+                        <span v-else class="login-loading">
+                            <svg class="spin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                            数据同步中...
+                        </span>
+                    </button>
                 </div>
-                <div class="remember-row">
-                    <label class="remember-label">
-                        <input type="checkbox" v-model="rememberPassword" class="remember-checkbox">
-                        <span>记住密码</span>
-                    </label>
-                </div>
-
-                <button class="login-button" :disabled="mobile === '' || !password || password === ''" ref="loginWithPasswordButton" @click="loginWithPassword">{{ loginStatus === 3 ? '数据同步中...' : '登 录' }}</button>
                 <ClipLoader v-if="loginStatus === 3" class="syncing" :color="'var(--accent-color)'" :height="'80px'" :width="'80px'"/>
             </div>
             <div v-else class="login-form-container">
@@ -671,27 +687,92 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.login-page-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #f8faff 0%, #eef2ff 30%, #f0f7ff 60%, #f8fafc 100%);
+    overflow: hidden;
+}
+
+.login-bg-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+.bg-orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+    top: -150px;
+    right: -100px;
+    animation: float-orb 20s ease-in-out infinite;
+}
+
+.bg-orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    bottom: -100px;
+    left: -100px;
+    animation: float-orb 25s ease-in-out infinite reverse;
+}
+
+.bg-orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.06) 0%, transparent 70%);
+    top: 40%;
+    left: 60%;
+    animation: float-orb 18s ease-in-out infinite;
+    animation-delay: -5s;
+}
+
+@keyframes float-orb {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(20px, -30px) scale(1.05); }
+    66% { transform: translate(-15px, 20px) scale(0.95); }
+}
+
 .login-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 420px;
+    width: 440px;
     height: auto;
-    min-height: 520px;
-    padding: 40px 30px;
+    min-height: 540px;
+    padding: 48px 40px;
     margin: auto;
-    background: #ffffff;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .web-login-container {
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12),
-                0 2px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08),
+                0 8px 24px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 .qr-container {
-    border-radius: 8px;
+    border-radius: 12px;
     width: 220px;
     height: 220px;
     background-color: #f5f7fa;
@@ -704,7 +785,7 @@ export default {
 .qr-container img {
     width: 220px;
     height: 220px;
-    border-radius: 8px;
+    border-radius: 12px;
     object-fit: cover;
 }
 
@@ -744,7 +825,7 @@ export default {
     outline: none;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .button-cancel {
@@ -760,10 +841,10 @@ export default {
 
 .button-confirm {
     width: 200px;
-    height: 44px;
+    height: 46px;
     color: #fff;
     background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 100%);
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 .button-confirm:hover {
@@ -787,7 +868,7 @@ export default {
 }
 
 .login-form-container {
-    width: 300px;
+    width: 340px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -795,82 +876,100 @@ export default {
     position: relative;
 }
 
-.login-form-container .title {
-    align-self: center;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1a1a2e;
-    margin-bottom: 4px;
+.login-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
 }
 
-.login-form-container .subtitle {
-    align-self: center;
-    font-size: 14px;
-    color: #8c8c8c;
-    margin-bottom: 8px;
+.login-brand .title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: 2px;
 }
 
-.login-form-container .item {
+.login-brand .subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 6px;
+    letter-spacing: 4px;
+    font-weight: 400;
+}
+
+.login-fields {
     width: 100%;
-    font-size: 14px;
-    margin-top: 16px;
-    position: relative;
+}
+
+.field-group {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 8px;
 }
 
 .input-wrapper {
     display: flex;
     align-items: center;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
-    background: #f8f9fb;
-    transition: all 0.2s ease;
-    padding: 0 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: rgba(248, 250, 252, 0.8);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 14px;
 }
 
 .input-wrapper:focus-within {
-    border-color: #1a6dff;
+    border-color: #3b82f6;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(26, 109, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
 .input-icon {
     width: 18px;
     height: 18px;
-    color: #b0b0b0;
+    color: #94a3b8;
     flex-shrink: 0;
+    transition: color 0.25s;
 }
 
 .input-wrapper:focus-within .input-icon {
-    color: #1a6dff;
+    color: #3b82f6;
 }
 
 .toggle-password {
     width: 20px;
     height: 20px;
-    color: #b0b0b0;
+    color: #94a3b8;
     cursor: pointer;
     flex-shrink: 0;
-    transition: color 0.2s;
+    transition: color 0.25s;
 }
 
 .toggle-password:hover {
-    color: #1a6dff;
+    color: #3b82f6;
 }
 
 .login-form-container .text-input {
-    height: 44px;
+    height: 48px;
     width: 100%;
     border: none;
     outline: none;
-    padding: 0 10px;
-    font-size: 14px;
-    color: #1a1a2e;
+    padding: 0 12px;
+    font-size: 15px;
+    color: #0f172a;
     background: transparent;
     -moz-appearance: textfield;
 }
 
 .login-form-container .text-input::placeholder {
-    color: #b0b0b0;
+    color: #cbd5e1;
 }
 
 input::-webkit-outer-spin-button,
@@ -883,15 +982,15 @@ input::-webkit-inner-spin-button {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    margin-top: 12px;
+    margin-bottom: 4px;
 }
 
 .remember-label {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 13px;
-    color: #666;
+    color: #64748b;
     cursor: pointer;
     user-select: none;
 }
@@ -899,38 +998,76 @@ input::-webkit-inner-spin-button {
 .remember-checkbox {
     width: 16px;
     height: 16px;
-    accent-color: #1a6dff;
+    accent-color: #3b82f6;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .login-form-container .login-button {
-    height: 46px;
+    height: 50px;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 16px;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 100%);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1a6dff 0%, #3b82f6 50%, #60a5fa 100%);
     color: #fff;
     font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 4px;
+    font-weight: 600;
+    letter-spacing: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-form-container .login-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s;
+}
+
+.login-form-container .login-button:hover:not(:disabled)::before {
+    left: 100%;
 }
 
 .login-form-container .login-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #1558cc 0%, #2563eb 100%);
-    box-shadow: 0 4px 16px rgba(26, 109, 255, 0.35);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(26, 109, 255, 0.3),
+                0 4px 8px rgba(26, 109, 255, 0.15);
+    transform: translateY(-2px);
 }
 
 .login-form-container .login-button:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(26, 109, 255, 0.2);
 }
 
 .login-form-container .login-button:disabled {
-    background: #d0d5dd;
+    background: linear-gradient(135deg, #cbd5e1 0%, #e2e8f0 100%);
     cursor: not-allowed;
+}
+
+.login-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 2px;
+}
+
+.spin-icon {
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .login-form-container .request-auth-code-button {
@@ -945,13 +1082,13 @@ input::-webkit-inner-spin-button {
 .login-form-container .syncing {
     position: absolute;
     bottom: 0;
-    color: #1a6dff;
+    color: #3b82f6;
 }
 
 .tip {
     align-self: flex-start;
     font-size: 12px;
-    color: #1a6dff;
+    color: #3b82f6;
     margin-top: 10px;
     cursor: pointer;
 }
@@ -961,10 +1098,11 @@ input::-webkit-inner-spin-button {
 }
 
 .logo {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 12px;
-    border-radius: 20px;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    filter: drop-shadow(0 4px 12px rgba(26, 109, 255, 0.2));
 }
 
 .diagnose {
@@ -996,14 +1134,14 @@ input::-webkit-inner-spin-button {
 .diagnose-content {
     background: #fff;
     padding: 24px;
-    border-radius: 12px;
+    border-radius: 16px;
     max-width: 90%;
     max-height: 90%;
     overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.15);
 }
 
 .diagnose-content pre {
@@ -1015,32 +1153,41 @@ input::-webkit-inner-spin-button {
     margin-top: 20px;
     padding: 8px 24px;
     border: none;
-    border-radius: 8px;
-    background: #1a6dff;
+    border-radius: 10px;
+    background: #3b82f6;
     color: #fff;
     cursor: pointer;
 }
 
 @media (max-width: 768px) {
+    .login-page-wrapper {
+        padding: 16px;
+    }
+
     .login-container {
-        width: 92vw;
-        max-width: 420px;
+        width: 100%;
+        max-width: 440px;
         height: auto;
-        min-height: 420px;
-        padding: 24px 20px;
+        min-height: 440px;
+        padding: 32px 24px;
+        border-radius: 20px;
     }
 
     .logo {
-        width: 64px;
-        height: 64px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .login-brand {
+        margin-bottom: 24px;
+    }
+
+    .login-brand .title {
+        font-size: 22px;
     }
 
     .login-form-container {
         width: 100%;
-    }
-
-    .login-form-container .title {
-        font-size: 20px;
     }
 
     .qr-container {
@@ -1051,6 +1198,10 @@ input::-webkit-inner-spin-button {
     .qr-container img {
         width: 180px;
         height: 180px;
+    }
+
+    .bg-orb {
+        display: none;
     }
 }
 </style>

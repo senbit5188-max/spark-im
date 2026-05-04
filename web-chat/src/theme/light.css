@@ -2,13 +2,13 @@
     /* --- Default Light Theme Variables --- */
     --background-primary: #ffffff;
     --background-secondary: #fafafa;
-    --background-tertiary: #f3f3f3;
-    --background-sidebar: #EAEAEA;
+    --background-tertiary: #f8fafc;
+    --background-sidebar: #f1f5f9;
     --background-input: #eeeeee;
     --background-item-normal: #f8f8f8;
-    --background-item-hover: #eaeaea;
-    --background-item-active: #dedede;
-    --background-item-selected: #e3f2fd;
+    --background-item-hover: #e2e8f0;
+    --background-item-active: #cbd5e1;
+    --background-item-selected: #dbeafe;
     --background-item-top: #ebebeb;
     --background-item-placeholder: #d6d6d6;
     --background-tooltip: #fcfcfc;
@@ -17,13 +17,13 @@
     --background-modal: #ffffff;
     --background-badge: #ff0000;
     --background-message-in: #ffffff;
-    --background-message-out: #a8bdff;
+    --background-message-out: #dbeafe;
     --background-message-selected: #e7e7e7;
     --background-message-quoted: #e1e1e1;
     --background-selected-alt: #dbe1f0;
 
     --message-in-arrow: #ffffff;
-    --message-out-arrow: #a8bdff;
+    --message-out-arrow: #dbeafe;
 
     --text-primary: #262626;
     --text-secondary: #868686;
@@ -53,8 +53,8 @@
     --border-light-strong: #ebebeb;
     --contact-arrow-border: #b9b9b9;
 
-    --accent-color: #1f64e4;
-    --accent-color-active: #3f64e4;
+    --accent-color: #3b82f6;
+    --accent-color-active: #2563eb;
     --accent-color-subtle: #daeafe;
 
     --status-success: #4CAF50;
