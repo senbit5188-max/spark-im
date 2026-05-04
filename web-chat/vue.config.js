@@ -1,10 +1,12 @@
 const path = require('path');
 const webpack = require('webpack')
-const PreloadPlugin = require('@vue/preload-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 function resolve(dir) {
     return path.join(__dirname, dir);
 }
+
+const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
     devServer: {
@@ -42,55 +44,91 @@ module.exports = {
             new webpack.ProvidePlugin({
                 process: 'process/browser',
                 Buffer: ['buffer', 'Buffer']
-            })],
+            }),
+            ...(isProd ? [
+                // gzip pre-compress static assets so nginx can serve .gz with gzip_static on
+                new CompressionPlugin({
+                    filename: '[path][base].gz',
+                    algorithm: 'gzip',
+                    test: /\.(js|css|html|svg|json)$/,
+                    threshold: 10240,
+                    minRatio: 0.8,
+                    deleteOriginalAssets: false
+                })
+            ] : [])
+        ],
     },
     chainWebpack(config) {
-        // config.plugin('preload').use(PreloadPlugin).tap(() => [
-        //     {
-        //         rel: 'preload',
-        //         // to ignore runtime.js
-        //         // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
-        //         fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        //         include: 'initial'
-        //     }
-        // ]);
         config.plugins.delete('prefetch');
         config.when(process.env.NODE_ENV !== 'development', config => {
             config.optimization.splitChunks({
                 chunks: 'all',
+                maxInitialRequests: 6,
                 cacheGroups: {
+                    // Heavyweight wildfirechat SDK (proto + av/ptt) — defer to async chunks
+                    wfcSdk: {
+                        name: 'chunk-wfc-sdk',
+                        test: /[\\/]src[\\/]wfc[\\/](proto|av|ptt|util)[\\/]/,
+                        priority: 30,
+                        chunks: 'all',
+                        reuseExistingChunk: true
+                    },
+                    // Pinyin dictionaries (>3MB) — load lazily when contact sort is needed
+                    pinyin: {
+                        name: 'chunk-pinyin',
+                        test: /[\\/]src[\\/]vendor[\\/]pinyin[\\/]/,
+                        priority: 25,
+                        chunks: 'async',
+                        reuseExistingChunk: true
+                    },
+                    // Other vendored libs (lightbox, modal, visibility-change)
+                    vendorAssets: {
+                        name: 'chunk-vendor-assets',
+                        test: /[\\/]src[\\/]vendor[\\/]/,
+                        priority: 20,
+                        chunks: 'all',
+                        reuseExistingChunk: true
+                    },
+                    // 3rd party node_modules
                     libs: {
                         name: 'chunk-libs',
                         test: /[\\/]node_modules[\\/]/,
                         priority: 10,
-                        chunks: 'initial' // only package third parties that are initially dependent
+                        chunks: 'initial'
                     },
                     commons: {
                         name: 'chunk-commons',
-                        test: resolve('src/components'), // can customize your rules
-                        minChunks: 3, //  minimum common number
+                        test: resolve('src/components'),
+                        minChunks: 3,
                         priority: 5,
                         reuseExistingChunk: true
                     }
                 }
             });
-            // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
             config.optimization.runtimeChunk('single');
         });
         config.optimization.runtimeChunk('single');
-        // // 注入全局sacc变量
-        // const oneOfsMap = config.module.rule('scss').oneOfs.store;
-        // oneOfsMap.forEach(item => {
-        //     item
-        //         .use('sass-resources-loader')
-        //         .loader('sass-resources-loader')
-        //         .options({
-        //             resources: './src/stylesheet/variables.scss'
-        //         })
-        //         .end();
-        // });
 
-        // config.resolve.alias.set('vue', '@vue/compat')
+        // Strip console & debugger in production via terser
+        if (isProd) {
+            config.optimization.minimizer('terser').tap((args) => {
+                const opts = args[0] || {}
+                opts.terserOptions = opts.terserOptions || {}
+                opts.terserOptions.compress = {
+                    ...(opts.terserOptions.compress || {}),
+                    drop_console: true,
+                    drop_debugger: true,
+                    pure_funcs: ['console.log', 'console.info', 'console.debug']
+                }
+                opts.terserOptions.format = {
+                    ...(opts.terserOptions.format || {}),
+                    comments: false
+                }
+                opts.extractComments = false
+                return args
+            })
+        }
+
         config.module
             .rule("vue")
             .use("vue-loader")

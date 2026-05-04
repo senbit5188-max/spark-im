@@ -1,0 +1,144 @@
+name: Deploy to telvoro.top
+
+# Auto-deploy spark-im static frontends (web-chat, landing-page, admin-panel) to the production
+# server whenever there is a push to the configured deploy branches, or via manual trigger.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST          IP or hostname of the production server (e.g. 109.123.239.207)
+#   DEPLOY_USER          SSH user (e.g. root or a dedicated `deploy` user)
+#   DEPLOY_SSH_KEY       Private SSH key with access to DEPLOY_HOST (PEM, full key)
+#   DEPLOY_SSH_KNOWN_HOSTS  (optional) Output of `ssh-keyscan -H <host>` for the production host
+#
+# Tip: create a dedicated `deploy` user on the server with rsync + nginx reload privileges,
+# instead of using root. Example on the server:
+#   adduser --disabled-password deploy
+#   usermod -aG www-data deploy
+#   echo 'deploy ALL=(root) NOPASSWD: /usr/bin/systemctl reload nginx, /usr/sbin/nginx -t' \
+#       > /etc/sudoers.d/deploy
+#   mkdir -p /home/deploy/.ssh && cat your_pubkey.pub >> /home/deploy/.ssh/authorized_keys
+#   chown -R deploy:deploy /home/deploy/.ssh /opt/spark-im
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - temp-main
+    paths:
+      - 'web-chat/**'
+      - 'landing-page/**'
+      - 'admin-panel/**'
+      - 'scripts/deploy.sh'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Which target(s) to deploy'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - web-chat
+          - landing-page
+          - admin-panel
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy frontends
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web-chat/package-lock.json
+
+      - name: Install web-chat dependencies
+        if: ${{ github.event.inputs.target == '' || github.event.inputs.target == 'all' || github.event.inputs.target == 'web-chat' }}
+        working-directory: web-chat
+        run: npm ci --no-audit --no-fund
+
+      - name: Build web-chat (production)
+        if: ${{ github.event.inputs.target == '' || github.event.inputs.target == 'all' || github.event.inputs.target == 'web-chat' }}
+        working-directory: web-chat
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${DEPLOY_SSH_KEY}" || -z "${DEPLOY_HOST}" ]]; then
+            echo "::error::DEPLOY_SSH_KEY and DEPLOY_HOST repository secrets must be set"
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${DEPLOY_SSH_KEY}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [[ -n "${DEPLOY_SSH_KNOWN_HOSTS}" ]]; then
+            printf '%s\n' "${DEPLOY_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
+          fi
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy web-chat
+        if: ${{ github.event.inputs.target == '' || github.event.inputs.target == 'all' || github.event.inputs.target == 'web-chat' }}
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
+            web-chat/dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/spark-im/web-chat/"
+
+      - name: Deploy landing-page
+        if: ${{ github.event.inputs.target == '' || github.event.inputs.target == 'all' || github.event.inputs.target == 'landing-page' }}
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
+            --exclude='*.md' \
+            landing-page/ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/spark-im/landing-page/"
+
+      - name: Deploy admin-panel
+        if: ${{ github.event.inputs.target == '' || github.event.inputs.target == 'all' || github.event.inputs.target == 'admin-panel' }}
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
+            --exclude='*.md' \
+            admin-panel/ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/spark-im/admin-panel/"
+
+      - name: Reload nginx on remote
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
+            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "nginx -t && (systemctl reload nginx || sudo systemctl reload nginx)"
+
+      - name: Smoke-test endpoints
+        run: |
+          set +e
+          for url in https://chat.telvoro.top https://telvoro.top https://admin.telvoro.top; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url")
+            echo "$url -> HTTP $code"
+          done
