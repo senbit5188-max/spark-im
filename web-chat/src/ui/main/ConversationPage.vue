@@ -51,6 +51,12 @@ export default {
 }
 
 @media (max-width: 768px) {
+    .conversation-page {
+        width: 100%;
+        max-width: 100vw;
+        overflow: hidden;
+    }
+
     .conversation-list-panel {
         width: 100%;
     }
