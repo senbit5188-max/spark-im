@@ -29,7 +29,7 @@ export default class Config {
     static ROUTE_PORT = 443;
 
     // 是否关闭日志，web和小程序有效
-    static DISABLE_LOG = false;
+    static DISABLE_LOG = true;
 
     // 是否开启自动登录，开启之后，登录成功之后，会记录登录状态；刷新页面时，会自动登录
     static ENABLE_AUTO_LOGIN = true;
@@ -39,20 +39,20 @@ export default class Config {
     static APP_SERVER = 'https://chat.telvoro.top';
 
     // 接龙服务地址
-    static COLLECTION_SERVER = 'https://jielong.wildfirechat.net';
+    static COLLECTION_SERVER = null;
 
     // 投票服务地址
-    static POLL_SERVER = 'https://poll.wildfirechat.net';
+    static POLL_SERVER = null;
 
 
     // 语音转文字服务地址，如果没有部署语音转文字服务，或者不需要语音转文字的话，可置为 null
-    static ASR_SERVER = 'https://app.wildfirechat.net/asr/api/recognize';
+    static ASR_SERVER = null;
 
     // 组织结构服务地址，如果没有部署组织结构服务，或者不需要组织结构的话，可置为 null
     // 组织结构项目：https://github.com/wildfirechat/organization-platform 或 https://gitee.com/wfchat/organization-platform
-    static ORGANIZATION_SERVER = 'https://org.wildfirechat.net';
+    static ORGANIZATION_SERVER = null;
     // 野火二维码 scheme，不要修改，如果需要修改的话，所有端都需要一起修改
-    static QR_CODE_PREFIX_PC_SESSION = "wildfirechat://pcsession/";
+    static QR_CODE_PREFIX_PC_SESSION = "sparkim://pcsession/";
 
     // turn server 配置，可以添加多个<br>
     // 格式: [uri, 用户名, 密码]，可以添加多个<br>
@@ -60,7 +60,7 @@ export default class Config {
     // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。<br>
     // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。<br>
     // 如果所有客户端都是在局域网内使用，可以不配置turn服务，置为null
-    static ICE_SERVERS = [['turn:turn.wildfirechat.net:3478', 'wfchat', 'wfchatpwd']];
+    static ICE_SERVERS = null;
     static LANGUAGE = 'zh_CN';
 
     static MESSAGE_ROAMING = 1;
@@ -70,7 +70,7 @@ export default class Config {
     static AI_PORTAL_URL = null;
 
     // 开放平台工作台地址，如果不需要工作台功能，置为 null 即可
-    static OPEN_PLATFORM_WORK_SPACE_URL = 'https://open.wildfirechat.cn/work.html';
+    static OPEN_PLATFORM_WORK_SPACE_URL = null;
 
     /**
      * web/wx 端有效
@@ -171,17 +171,17 @@ export default class Config {
     static ENABLE_MIX_MEDIA_MESSAGE = false;
 
     // 发送日志命令，当发送此文本消息时，会把协议栈日志发送到当前会话中，为空时关闭此功能。
-    static SEND_LOG_COMMAND = '*#marslog#';
+    static SEND_LOG_COMMAND = '';
 
     // 是否支持水印
-    static ENABLE_WATER_MARK = true
+    static ENABLE_WATER_MARK = false
 
     // 单人音视频通话页面是否显示音视频 SDK 相关提示
-    static SHOW_VOIP_TIP = true
+    static SHOW_VOIP_TIP = false
     // 是否启用登录页滑动验证码
     static ENABLE_LOGIN_SLIDE_VERIFY = false
     // AI机器人ID
-    static AI_ROBOT = "FireRobot";
+    static AI_ROBOT = null;
     static getWFCPlatform() {
         if (isElectron()) {
             if (window.process && window.process.platform === 'darwin') {
@@ -270,31 +270,11 @@ export default class Config {
     }
 
     static validate() {
-        if (Config.APP_SERVER === 'https://app.wildfirechat.net') {
-            console.warn("APP SERVER 配置为野火官方，如果需要连接自行部署的IM Server，请修改为说部署的app server")
-        }
-
-        console.log(`当前配置信息:
-                    app server: ${Config.APP_SERVER}
-                    use wss: ${Config.USE_WSS}
-                    route port: ${Config.ROUTE_PORT}`)
-
         if (!Config.APP_SERVER.startsWith("http")) {
             throw new Error('配置错误, Config.APP_SERVER 必须是完整的http地址');
         }
-
-        if (Config.USE_WSS) {
-            console.warn('已启用WSS，请确认服务端已配置支持https，配置方法请参考：https://docs.wildfirechat.cn/faq/web/https.html');
-        }
         if (Config.APP_SERVER.startsWith('https:') && !Config.USE_WSS) {
-            throw new Error('https 站点，不能使用 ws，请配置wss, 配置方法请参考：https://docs.wildfirechat.cn/faq/web/https.html');
-        }
-        if (Config.USE_WSS && Config.ROUTE_PORT !== 443) {
-            console.warn(`配置使用WSS连接时，默认端口是443，但目前配置是${Config.ROUTE_PORT}，请确认!!`);
-        }
-
-        if (!Config.USE_WSS && Config.ROUTE_PORT !== 80) {
-            console.warn(`配置使用WS连接时，默认端口是80，但目前配置是${Config.ROUTE_PORT}，请确认!!`);
+            throw new Error('https 站点，不能使用 ws，请配置wss');
         }
     }
 }

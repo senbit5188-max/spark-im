@@ -467,7 +467,7 @@ export default {
                 for (const ice of Config.ICE_SERVERS) {
                     if (ice[0].indexOf('turn.wildfirechat.net') >= 0) {
                         // 显示自行部署 turn 提示
-                        this.voipTip = '当前音视频 SDK 为多人版。多人版\n 上线前，请部署 turn 服务，野火官方 turn 服务只能开发测试使用!!!';
+                        this.voipTip = '上线前，请部署 turn 服务以支持音视频通话';
                         break
                     }
                 }

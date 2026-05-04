@@ -10,7 +10,7 @@
         <h1 style="display: none">Voip-Multi 运行在新的window，和主窗口数据是隔离的！！</h1>
 
         <p class="webrtc-tip" v-if="showWebrtcTip">
-            上线前，请部署 turn 服务，野火官方 turn 服务只能开发测试使用!!!
+            上线前，请部署 turn 服务以支持音视频通话
         </p>
         <div v-if="session" class="container">
             <section>

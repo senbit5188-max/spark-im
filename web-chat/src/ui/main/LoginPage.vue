@@ -18,7 +18,7 @@
                     <p style="font-size: 20px; color: var(--text-primary); padding-bottom: 10px">{{ $t('login.desc') }}</p>
                     <p style="font-size: 15px; color: var(--text-secondary)">{{ $t('login.tip_web') }}</p>
                     <p style="font-size: 15px; color: var(--text-secondary); padding-bottom: 5px">{{ $t('login.warning') }}</p>
-                    <a style="font-size: 15px; color: var(--accent-color)" target="_blank" href="https://static.wildfirechat.net/download_qrcode.png">点击下载星火移动端</a>
+                    <a style="font-size: 15px; color: var(--accent-color)" target="_blank" href="https://telvoro.top">点击下载星火移动端</a>
                 </div>
                 <!--    已经扫码-->
                 <div v-else-if="loginStatus === 1" class="scanned">
@@ -97,7 +97,7 @@
                 <ClipLoader v-if="loginStatus === 3" style="margin-top: 10px" class="syncing" :color="'4168e0'" :height="'80px'" :width="'80px'"/>
             </div>
 
-            <p class="diagnose" @click="diagnose">诊断</p>
+            <p class="diagnose" style="display:none" @click="diagnose">诊断</p>
         </div>
 
         <div v-if="showDiagnoseOverlay" class="diagnose-overlay">
@@ -560,13 +560,7 @@ export default {
             }
             configInfo += `Turn-Server: ${ices}\n`
 
-            if (Config.APP_SERVER.indexOf('wildfirechat') >= 0 && routeHost.indexOf('wildfirechat') === -1) {
-                configInfo += '错误：已替换 web sdk，但未修改 Config.APP_SERVER，请修改 Config.APP_SERVER\n'
-            }
 
-            if (Config.APP_SERVER.indexOf('wildfirechat') === -1 && routeHost.indexOf('wildfirechat') >= 0) {
-                configInfo += '错误：已修改 Config.APP_SERVER，但未替换 web sdk，请替换web sdk\n'
-            }
 
             if (Config.APP_SERVER.startsWith('https:') && !Config.USE_WSS) {
                 configInfo += 'USE_WSS 配置错误：APP-Server 使用 https，但没有启用 wss，请修改 Config.USE_WSS = true\n'

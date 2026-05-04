@@ -8,12 +8,7 @@
          v-visibility-change="visibilityChange">
         <!-- 锁定界面 -->
         <LockScreenView v-if="sharedMiscState.isLocked" />
-        <div v-if="!sharedMiscState.isElectron" id="blur-container" class="blur-container">
-            <div class="hero-bg-gradient"></div>
-            <div class="hero-bg-pattern"></div>
-            <div class="hero-bg-blob blob-1"></div>
-            <div class="hero-bg-blob blob-2"></div>
-            <div class="hero-bg-blob blob-3"></div>
+        <div v-if="false" id="blur-container" class="blur-container">
         </div>
         <!--用来实现视频缩略图-->
         <div id="styled_video_container" class="styled_video_container">
@@ -94,19 +89,15 @@ export default {
                 store.applyTheme();
             }
         });
-        if (isElectron() || window.location.href.indexOf('voip') >= 0) {
-            root.style.setProperty('--main-margin-left', '0px');
-            root.style.setProperty('--main-margin-right', '0px');
-            root.style.setProperty('--main-margin-top', '0px');
-            root.style.setProperty('--main-margin-bottom', '0px');
-            root.style.setProperty('--composite-message-page-width', '100vw');
-            root.style.setProperty('--composite-message-page-height', '100vh');
-        }
-
-        if (this.sharedMiscState.isElectronWindowsOrLinux) {
-            root.style.setProperty('--main-border-radius', '0px')
-            root.style.setProperty('--home-menu-padding-top', '0px')
-        }
+        // Always fill entire browser window
+        root.style.setProperty('--main-margin-left', '0px');
+        root.style.setProperty('--main-margin-right', '0px');
+        root.style.setProperty('--main-margin-top', '0px');
+        root.style.setProperty('--main-margin-bottom', '0px');
+        root.style.setProperty('--main-border-radius', '0px');
+        root.style.setProperty('--composite-message-page-width', '100vw');
+        root.style.setProperty('--composite-message-page-height', '100vh');
+        root.style.setProperty('--home-menu-padding-top', '0px');
         window.addEventListener('blur', this.onblur);
         window.addEventListener('focus', this.onfocus);
         window.addEventListener('beforeunload', this.onBeforeUnload);

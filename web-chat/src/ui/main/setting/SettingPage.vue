@@ -61,7 +61,7 @@
             <p class="proto-version-info">{{ protoRevision() }}</p>
             <a
                 class="button"
-                href="https://github.com/wildfirechat/vue-chat/issues"
+                href="https://telvoro.top"
                 target="_blank">
                 问题反馈
             </a>
@@ -88,15 +88,7 @@
 
             <a
                 class="button"
-                href="https://github.com/wildfirechat/vue-pc-chat"
-                target="_blank">
-                Star on Github
-                <i class="icon-ion-social-github"/>
-            </a>
-
-            <a
-                class="button"
-                href="https://wildfirechat.cn"
+                href="https://telvoro.top"
                 target="_blank">
                 关于星火
                 <i class="icon-ion-home"/>
@@ -239,7 +231,7 @@ export default {
             // 打开和 小火的会话
             let url = 'wfc://conversation?target=FireRobot&line=0&type=0';
             // 未安装 pc  版时，跳转到 pc 版的下载链接
-            let fallback = 'https://github.com/wildfirechat/vue-pc-chat';
+            let fallback = 'https://telvoro.top';
             window.location = url;
             this.openPcChatTimeoutHandler = setTimeout(() => {
                 window.open(fallback, '_blank');
@@ -277,7 +269,7 @@ export default {
                     type: 'info'
                 });
                 setTimeout(() => {
-                    window.open('https://docs.wildfirechat.cn/webrtc/abilitytest/')
+                    window.open('https://test.webrtc.org/')
                 }, 2000)
             }
         }
