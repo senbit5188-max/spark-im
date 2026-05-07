@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>AGX · 升达数字资本集团 — 全球领先的数字资产金融平台</title>
+  <meta name="description" content="升达数字资本集团（Ascenda Digital Capital Group）是全球领先的数字资产金融服务平台，提供现货交易、合约交易、AGX理财、黄金交易等服务，业务覆盖180+国家和地区。">
+  <meta name="keywords" content="AGX,升达,数字资产,黄金交易,区块链,数字资本,Ascenda">
+  <meta name="theme-color" content="#0a0e17">
+  <meta name="robots" content="index,follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AGX · 升达数字资本集团">
+  <meta property="og:description" content="全球领先的数字资产金融服务平台，黄金锚定，安全合规，覆盖180+国家。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agx.npnsz.cn/">
+  <meta property="og:image" content="https://agx.npnsz.cn/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AGX · 升达数字资本集团">
+  <meta name="twitter:description" content="全球领先的数字资产金融服务平台">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="globe.png" as="image">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Background particles -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav class="nav" id="topnav" role="navigation" aria-label="主导航">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-text">ASCENDA</span>
+      <small>AGX DIGITAL CAPITAL GROUP</small>
+    </a>
+    <div class="nav-links">
+      <a href="#about">关于我们</a>
+      <a href="#gib">GIB 机制</a>
+      <a href="#business">核心业务</a>
+      <a href="#team">管理团队</a>
+      <a href="#security">安全保障</a>
+      <a href="#licenses">监管资质</a>
+      <a href="https://jkda2.com" class="nav-cta" target="_blank" rel="noopener">下载APP</a>
+    </div>
+    <button class="ham" id="ham" aria-label="打开菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-bg" id="dbg"></div>
+    <div class="drawer-panel">
+      <a href="#about" class="dl">关于我们</a>
+      <a href="#gib" class="dl">GIB 机制</a>
+      <a href="#business" class="dl">核心业务</a>
+      <a href="#team" class="dl">管理团队</a>
+      <a href="#security" class="dl">安全保障</a>
+      <a href="#licenses" class="dl">监管资质</a>
+      <a href="https://jkda2.com" class="btn-dl" target="_blank" rel="noopener">进入平台</a>
+    </div>
+  </div>
+
+
+  <!-- ═══ HERO: GLOBE NETWORK ═══ -->
+  <section class="globe-sec" aria-label="全球网络概览">
+    <div class="globe-layout">
+      <div class="globe-hero rv">
+        <div class="globe-glow"></div>
+        <div class="globe-img-wrap">
+          <img src="globe.png" alt="AGX 全球网络覆盖" width="560" height="560" loading="eager">
+          <canvas id="globeArcs" width="560" height="560" aria-hidden="true"></canvas>
+        </div>
+        <div class="city-popup" id="cityPopup" aria-live="polite">
+          <div class="cp-dot"></div>
+          <div class="cp-line"></div>
+          <div class="cp-card">
+            <div class="cp-name" id="cpName"></div>
+            <div class="cp-count" id="cpCount"></div>
+          </div>
+        </div>
+        <div class="globe-data" id="globeData">
+          <div class="gd">
+            <div class="gd-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,.7)" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="gd-n" data-count="180">0+</div>
+            <div class="gd-l">覆盖国家</div>
+          </div>
+          <div class="gd">
+            <div class="gd-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,.7)" stroke-width="1.5" aria-hidden="true">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="gd-n" data-count="500" data-suffix="K+">0</div>
+            <div class="gd-l">全球用户</div>
+          </div>
+          <div class="gd">
+            <div class="gd-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,.7)" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M12 8v4M12 16h.01"/>
+              </svg>
+            </div>
+            <div class="gd-n" data-count="10" data-prefix="$" data-suffix="B+">$0</div>
+            <div class="gd-l">日均交易量</div>
+          </div>
+        </div>
+      </div>
+      <div class="globe-text">
+        <div class="globe-tag rv">Global Network</div>
+        <h1 class="globe-title rv">AGX 全球社区正在<em>扩张</em></h1>
+        <p class="globe-sub rv">黄金锚定的全球数字资产，已累计服务超过 50 万用户，覆盖 180+ 个国家与地区。</p>
+        <div class="rv"><a href="https://jkda2.com/" class="globe-cta" target="_blank" rel="noopener">立即领取你的第一枚 AGX →</a></div>
+        <div class="city-msg-wrap rv">
+          <div class="city-msg" id="cityMsg">现在正在锁定您的席位</div>
+        </div>
+        <div class="globe-hint rv">黄金储备支撑 · 持币生金 · 稳健增值</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ HERO SLOGANS ═══ -->
+  <section class="hero" aria-label="品牌标语">
+    <div class="hero-glow"></div>
+    <div class="hero-line-l"></div>
+    <div class="hero-line-r"></div>
+    <div class="hero-inner">
+      <div class="hero-badge rv">
+        <span class="dot"></span>
+        MSB 持牌 · CertiK 审计 · 覆盖 180+ 国家
+      </div>
+      <div class="hero-company rv">Ascenda Digital Capital Group</div>
+      <h2 class="hero-title" id="hero-title-rotate">
+        <span class="hero-title-text title-slogan active">黄金即基建</span>
+        <span class="hero-title-text title-slogan">黄金即信用</span>
+        <span class="hero-title-text title-slogan">黄金即通道</span>
+        <span class="hero-title-text title-slogan">黄金即未来</span>
+      </h2>
+      <div class="hero-slogan rv">Gold Is The New Infrastructure.</div>
+      <div class="hero-divider rv"></div>
+      <p class="hero-desc rv" id="cms-hero-desc">Ascenda 是专注于数字资产金融服务的全球化平台，已取得美国 MSB、加拿大 FINTRAC、澳大利亚 AUSTRAC 等多国金融监管牌照，业务覆盖全球 180 余个国家和地区。</p>
+    </div>
+    <div class="scroll-ind" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══ ABOUT ═══ -->
+  <section class="sec sec-alt" id="about">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">About Ascenda</div>
+        <h2 class="sec-title rv">关于升达</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="rv">升达数字资本集团注册于开曼群岛，是专注于数字资产金融服务的全球化平台，致力于为机构及个人用户提供安全、合规、高效的数字资产配置解决方案。</p>
+          <p class="rv">AGX（Ascenda Gold Index · 升达金指币）是平台发行的核心数字资产，采用 GIB（Gold Index Binding）机制，以美联储黄金储备作为核心价值指数，100% 黄金储备支撑，持币生金，稳健增值。</p>
+          <p class="rv">平台已取得美国 MSB、加拿大 FINTRAC、澳大利亚 AUSTRAC 等多国金融监管牌照，并通过 CertiK 智能合约审计、SlowMist 安全审计、Hacken 渗透测试，业务覆盖全球 180 余个国家和地区。</p>
+        </div>
+        <div class="about-highlights">
+          <div class="feat rv">
+            <div class="feat-n">01</div>
+            <div class="feat-body">
+              <h5>合规运营</h5>
+              <p>多国金融监管牌照，全球合规框架</p>
+            </div>
+          </div>
+          <div class="feat rv">
+            <div class="feat-n">02</div>
+            <div class="feat-body">
+              <h5>安全保障</h5>
+              <p>CertiK、SlowMist、Hacken 三重审计</p>
+            </div>
+          </div>
+          <div class="feat rv">
+            <div class="feat-n">03</div>
+            <div class="feat-body">
+              <h5>透明可验</h5>
+              <p>链上数据公开透明，资产可追溯</p>
+            </div>
+          </div>
+          <div class="feat rv">
+            <div class="feat-n">04</div>
+            <div class="feat-body">
+              <h5>全球服务</h5>
+              <p>180+ 国家覆盖，7×24 全天候支持</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ GIB MECHANISM / FED RESERVE ═══ -->
+  <section class="gib-sec" id="gib">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Gold Index Binding</div>
+        <h2 class="sec-title rv">GIB 黄金锚定机制</h2>
+        <p class="sec-desc rv">以美联储黄金储备为核心价值指数，100% 黄金储备支撑</p>
+      </div>
+
+      <!-- Fed Relationship Visualization -->
+      <div class="gib-visual rv">
+        <div class="gib-flow">
+          <div class="gib-node gib-fed">
+            <div class="gib-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+                <path d="M3 21h18M3 10h18M12 3l9 7H3l9-7z"/>
+                <path d="M5 10v11M9 10v11M15 10v11M19 10v11"/>
+              </svg>
+            </div>
+            <h4>美联储黄金储备</h4>
+            <p>Federal Reserve Gold Reserve</p>
+            <div class="gib-value">8,133.46 吨</div>
+          </div>
+
+          <div class="gib-connector">
+            <div class="gib-line"></div>
+            <div class="gib-pulse"></div>
+            <span class="gib-label">价值锚定</span>
+          </div>
+
+          <div class="gib-node gib-index">
+            <div class="gib-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+            </div>
+            <h4>Gold Index 黄金指数</h4>
+            <p>实时追踪黄金价格指数</p>
+            <div class="gib-value" id="gold-price">$2,350.00/oz</div>
+          </div>
+
+          <div class="gib-connector">
+            <div class="gib-line"></div>
+            <div class="gib-pulse"></div>
+            <span class="gib-label">1:1 绑定</span>
+          </div>
+
+          <div class="gib-node gib-agx">
+            <div class="gib-node-icon gold-glow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v12M8 10h8M8 14h8"/>
+              </svg>
+            </div>
+            <h4>AGX 升达金指币</h4>
+            <p>Ascenda Gold Index Token</p>
+            <div class="gib-value">持币生金 · 稳健增值</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GIB Features -->
+      <div class="gib-features">
+        <div class="gib-feat rv">
+          <div class="gib-feat-num">01</div>
+          <h5>100% 黄金储备</h5>
+          <p>每一枚 AGX 均有等值黄金储备支撑，由第三方独立审计机构定期验证，确保资产安全透明。</p>
+        </div>
+        <div class="gib-feat rv">
+          <div class="gib-feat-num">02</div>
+          <h5>美联储指数锚定</h5>
+          <p>AGX 价值直接挂钩美联储黄金储备指数，追踪全球最权威的黄金定价体系，价值基础坚如磐石。</p>
+        </div>
+        <div class="gib-feat rv">
+          <div class="gib-feat-num">03</div>
+          <h5>智能合约保障</h5>
+          <p>GIB 机制通过区块链智能合约执行，链上透明可验证，任何人可随时审计储备证明。</p>
+        </div>
+        <div class="gib-feat rv">
+          <div class="gib-feat-num">04</div>
+          <h5>持币生金机制</h5>
+          <p>持有 AGX 即可享受黄金增值收益，将传统黄金投资的稳定性与数字资产的便捷性完美融合。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CORPORATE STRUCTURE ═══ -->
+  <section class="sec" id="org">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Corporate Structure</div>
+        <h2 class="sec-title rv">组织架构</h2>
+      </div>
+      <div class="org-tree">
+        <div class="org-hq rv">
+          <h4>Ascenda Digital Capital Group</h4>
+          <p>Cayman Islands · Holding Company · 集团总部</p>
+        </div>
+        <div class="org-branches">
+          <div class="org-card rv">
+            <h4>Ascenda HK</h4>
+            <p>香港运营中心</p>
+          </div>
+          <div class="org-card rv">
+            <h4>Ascenda SG</h4>
+            <p>新加坡技术中心</p>
+          </div>
+          <div class="org-card rv">
+            <h4>Ascenda DMCC</h4>
+            <p>迪拜合规中心</p>
+          </div>
+          <div class="org-card rv">
+            <h4>Ascenda Labs</h4>
+            <p>区块链研究院</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CORE BUSINESS ═══ -->
+  <section class="sec sec-alt" id="business">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Core Business</div>
+        <h2 class="sec-title rv">核心业务</h2>
+        <p class="sec-desc rv">多元化数字资产金融服务，一站式投资解决方案</p>
+      </div>
+      <div class="prod-grid" id="cms-business">
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <h4>现货交易</h4>
+          <p>主流币种一站式交易，深度流动性，极低手续费，支持 100+ 交易对，机构级撮合引擎。</p>
+        </div>
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M3 3v18h18"/>
+              <path d="M7 16l4-8 4 4 6-10"/>
+            </svg>
+          </div>
+          <h4>合约交易</h4>
+          <p>专业合约产品，多空双向交易，灵活杠杆选择，完善的风控机制与智能止损系统。</p>
+        </div>
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h4>AGX 理财</h4>
+          <p>100% 黄金储备支撑，GIB 机制锚定价值，持币生金，稳健增值，让财富持续增长。</p>
+        </div>
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h4>黄金交易</h4>
+          <p>国际现货黄金 XAU/USD，实时报价，7×24 小时不间断交易，紧跟全球市场脉搏。</p>
+        </div>
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 3h-8l-2 4h12z"/>
+            </svg>
+          </div>
+          <h4>矿机质押</h4>
+          <p>一键质押挖矿，灵活期限选择，稳定收益输出，随时可提，低门槛高回报。</p>
+        </div>
+        <div class="p-card rv">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 2a4 4 0 0 1 4 4c0 1.95-2 5-4 5s-4-3.05-4-5a4 4 0 0 1 4-4z"/>
+              <path d="M20 21c0-4-3.58-7-8-7s-8 3-8 7"/>
+            </svg>
+          </div>
+          <h4>AI 智能助手</h4>
+          <p>AI 驱动的智能投资建议，实时行情分析，个性化策略推荐，让投资更聪明。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ NODE FRAMEWORK ═══ -->
+  <section class="node-sec" id="nodes">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Asset Growth</div>
+        <h2 class="sec-title rv">节点化资产增长体系</h2>
+        <div class="node-intro-en rv">Node-Based Asset Growth Framework</div>
+      </div>
+      <div class="node-intro">
+        <p class="node-lead rv">在数字经济高速发展的今天，价值创造的方式正在发生根本性变革。决定你上限的，不再只是<strong>"你能做多少"</strong>，而是你在网络中的位置、网络规模，以及资产的协同效率。</p>
+        <div class="node-flow rv">
+          <span>"加入网络"</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>"影响网络"</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>"拥有网络"</span>
+        </div>
+      </div>
+
+      <div class="node-grid">
+        <div class="n-card l1 rv">
+          <div class="n-head">
+            <div class="n-level">Level 1</div>
+            <div class="n-name">Genesis Node<span class="n-name-cn">启源节点</span></div>
+          </div>
+          <div class="n-data">
+            <div class="n-stat"><div class="n-stat-v">10 人</div><div class="n-stat-l">引介持仓</div></div>
+            <div class="n-stat"><div class="n-stat-v">60,000U</div><div class="n-stat-l">网络市值</div></div>
+            <div class="n-stat"><div class="n-stat-v">500U</div><div class="n-stat-l">节点薪资</div></div>
+            <div class="n-stat"><div class="n-stat-v">200U</div><div class="n-stat-l">事业津贴</div></div>
+          </div>
+        </div>
+        <div class="n-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <div class="n-card l2 rv">
+          <div class="n-head">
+            <div class="n-level">Level 2</div>
+            <div class="n-name">Catalyst Node<span class="n-name-cn">催化节点</span></div>
+          </div>
+          <div class="n-data">
+            <div class="n-stat"><div class="n-stat-v">15 人</div><div class="n-stat-l">引介持仓</div></div>
+            <div class="n-stat"><div class="n-stat-v">90,000U</div><div class="n-stat-l">网络市值</div></div>
+            <div class="n-stat"><div class="n-stat-v">800U</div><div class="n-stat-l">节点薪资</div></div>
+            <div class="n-stat"><div class="n-stat-v">500U</div><div class="n-stat-l">事业津贴</div></div>
+          </div>
+        </div>
+        <div class="n-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <div class="n-card l3 rv">
+          <div class="n-head">
+            <div class="n-level">Level 3</div>
+            <div class="n-name">Momentum Node<span class="n-name-cn">动能节点</span></div>
+          </div>
+          <div class="n-data">
+            <div class="n-stat"><div class="n-stat-v">20 人</div><div class="n-stat-l">引介持仓</div></div>
+            <div class="n-stat"><div class="n-stat-v">180,000U</div><div class="n-stat-l">网络市值</div></div>
+            <div class="n-stat"><div class="n-stat-v">1,200U</div><div class="n-stat-l">节点薪资</div></div>
+            <div class="n-stat"><div class="n-stat-v">600U</div><div class="n-stat-l">事业津贴</div></div>
+          </div>
+        </div>
+        <div class="n-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <div class="n-card l4 rv">
+          <div class="n-head">
+            <div class="n-level">Level 4</div>
+            <div class="n-name">Apex Node<span class="n-name-cn">顶点节点</span></div>
+          </div>
+          <div class="n-data">
+            <div class="n-stat"><div class="n-stat-v">25 人</div><div class="n-stat-l">引介持仓</div></div>
+            <div class="n-stat"><div class="n-stat-v">360,000U</div><div class="n-stat-l">网络市值</div></div>
+            <div class="n-stat"><div class="n-stat-v">1,800U</div><div class="n-stat-l">节点薪资</div></div>
+            <div class="n-stat"><div class="n-stat-v">900U</div><div class="n-stat-l">事业津贴</div></div>
+          </div>
+        </div>
+        <div class="n-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <div class="n-card l5 rv">
+          <div class="n-head">
+            <div class="n-level">Level 5</div>
+            <div class="n-name">Sovereign Node<span class="n-name-cn">主权节点</span></div>
+          </div>
+          <div class="n-data">
+            <div class="n-stat"><div class="n-stat-v">30 人</div><div class="n-stat-l">引介持仓</div></div>
+            <div class="n-stat"><div class="n-stat-v">800,000U</div><div class="n-stat-l">网络市值</div></div>
+            <div class="n-stat"><div class="n-stat-v">3,000U</div><div class="n-stat-l">节点薪资</div></div>
+            <div class="n-stat"><div class="n-stat-v">1,500U</div><div class="n-stat-l">事业津贴</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ TEAM ═══ -->
+  <section class="sec sec-alt" id="team">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Leadership</div>
+        <h2 class="sec-title rv">管理团队</h2>
+        <p class="sec-desc rv">来自全球顶尖金融机构的专业团队</p>
+      </div>
+      <div class="team-grid" id="cms-team">
+        <div class="t-card rv">
+          <div class="t-av"><img src="team-ceo.jpg" alt="David Chen - CEO" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">CEO</div>
+          <h4>David Chen</h4>
+          <div class="t-role">首席执行官</div>
+          <div class="t-bio">升达数字资产集团创始人，沙马洛夫核心副手，指定事业继任者</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="team-coo.jpg" alt="陈启明 - COO" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">COO</div>
+          <h4>陈启明</h4>
+          <div class="t-role">首席运营官</div>
+          <div class="t-bio">升达数字资产集团大中华区及亚太区总裁</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="team-cba.jpg" alt="林鑫 - CBA" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">CBA</div>
+          <h4>林鑫</h4>
+          <div class="t-role">区块链架构师</div>
+          <div class="t-bio">区块链与通证经济专家（15年+），专注 DeFi / RWA / Web3 模型设计</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="team-legal.jpg" alt="周刚 - Legal" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">Legal</div>
+          <h4>周刚</h4>
+          <div class="t-role">法务负责人</div>
+          <div class="t-bio">10 年法律从业经验，专注于金融合规与数字资产法律事务</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="/uploads/website/73e79a0e-033f-414f-b359-d798cd5d011b.jpg" alt="顾凌云 - SMM" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">SMM</div>
+          <h4>顾凌云</h4>
+          <div class="t-role">社交媒体经理</div>
+          <div class="t-bio">新媒体运营专家，擅长社交媒体内容策划与社群运营</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="/uploads/website/344d52d2-9b8e-423d-889f-95c149277784.jpg" alt="郭昭宴 - CMO" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">CMO</div>
+          <h4>郭昭宴</h4>
+          <div class="t-role">产品营销负责人</div>
+          <div class="t-bio">深耕产品领域 30 年，数字资产"价值翻译官"</div>
+        </div>
+        <div class="t-card rv">
+          <div class="t-av"><img src="/uploads/website/4514d756-1762-4d8d-a8b3-0f871559bf6c.jpg" alt="李鹏 - CFA" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E'"></div>
+          <div class="t-tag">CFA</div>
+          <h4>李鹏</h4>
+          <div class="t-role">分析师</div>
+          <div class="t-bio">华尔街投行背景，深耕金融与数据分析领域，跨境资本市场复合型专业人才</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ SECURITY ═══ -->
+  <section class="sec" id="security">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Security Architecture</div>
+        <h2 class="sec-title rv">安全保障</h2>
+        <p class="sec-desc rv">银行级安全标准，多重防护体系</p>
+      </div>
+      <div class="security-grid">
+        <div class="s-card rv">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <h4>资产安全机制</h4>
+            <p>96% 冷钱包存储，多重签名机制，HSM 硬件加密模块保护核心资产</p>
+          </div>
+        </div>
+        <div class="s-card rv">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <h4>账户安全</h4>
+            <p>双因素认证（2FA），生物识别验证，异常登录实时预警与风控拦截</p>
+          </div>
+        </div>
+        <div class="s-card rv">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+          </div>
+          <div>
+            <h4>系统安全</h4>
+            <p>分布式微服务架构，DDoS 防护体系，定期渗透测试与安全巡检</p>
+          </div>
+        </div>
+      </div>
+      <div class="audit-row rv">
+        <div class="audit">
+          <strong>CertiK</strong>
+          <span>智能合约审计 Smart Contract</span>
+        </div>
+        <div class="audit">
+          <strong>SlowMist 慢雾</strong>
+          <span>系统安全审计 System Security</span>
+        </div>
+        <div class="audit">
+          <strong>Hacken</strong>
+          <span>渗透测试 Penetration Test</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ TECH STACK ═══ -->
+  <section class="sec sec-alt" id="tech">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Architecture</div>
+        <h2 class="sec-title rv">技术架构</h2>
+      </div>
+      <div class="tech-layout">
+        <div class="tech-stack rv">
+          <h4>技术栈</h4>
+          <div class="sk"><span class="sk-label">应用层</span><span class="sk-value">Web · Mobile · API</span></div>
+          <div class="sk"><span class="sk-label">服务层</span><span class="sk-value">Trading · Risk · Settlement</span></div>
+          <div class="sk"><span class="sk-label">数据层</span><span class="sk-value">PostgreSQL · Redis · Kafka</span></div>
+          <div class="sk"><span class="sk-label">区块链</span><span class="sk-value">Ethereum · BSC · Solana</span></div>
+        </div>
+        <div class="perf-grid">
+          <div class="perf rv">
+            <div class="perf-v">99.99%</div>
+            <div class="perf-l">系统可用性</div>
+          </div>
+          <div class="perf rv">
+            <div class="perf-v">&lt;10ms</div>
+            <div class="perf-l">撮合延迟</div>
+          </div>
+          <div class="perf rv">
+            <div class="perf-v">1M+</div>
+            <div class="perf-l">TPS 吞吐量</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ LICENSES ═══ -->
+  <section class="sec" id="licenses">
+    <div class="container">
+      <div class="sec-header">
+        <div class="sec-tag rv">Regulatory Licenses</div>
+        <h2 class="sec-title rv">监管资质</h2>
+        <p class="sec-desc rv">多国金融监管牌照，合规透明运营</p>
+      </div>
+      <div class="lic-grid" id="cms-licenses">
+        <div class="lic rv">
+          <img src="fincen.png" alt="FinCEN MSB 牌照" loading="lazy">
+          <h5>FinCEN MSB</h5>
+          <p>美国金融犯罪执法网络</p>
+        </div>
+        <div class="lic rv">
+          <img src="nfa.jpg" alt="NFA 牌照" loading="lazy">
+          <h5>NFA</h5>
+          <p>美国国家期货协会</p>
+        </div>
+        <div class="lic rv">
+          <img src="mas.png" alt="MAS 牌照" loading="lazy">
+          <h5>MAS</h5>
+          <p>新加坡金融管理局</p>
+        </div>
+        <div class="lic rv">
+          <img src="fca.png" alt="FCA 牌照" loading="lazy">
+          <h5>FCA</h5>
+          <p>英国金融行为监管局</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <div class="ft-main">
+        <div class="ft-brand">
+          <div class="ft-logo">AGX.</div>
+          <p class="ft-desc">升达数字资本集团是全球领先的数字资产金融服务平台，为用户提供安全、专业、高效的数字资产管理服务。</p>
+        </div>
+        <div class="ft-links">
+          <div class="ft-col">
+            <h6>产品服务</h6>
+            <ul>
+              <li><a href="#business">现货交易</a></li>
+              <li><a href="#business">合约交易</a></li>
+              <li><a href="#business">AGX 理财</a></li>
+              <li><a href="#business">黄金交易</a></li>
+            </ul>
+          </div>
+          <div class="ft-col">
+            <h6>关于我们</h6>
+            <ul>
+              <li><a href="#about">公司简介</a></li>
+              <li><a href="#team">管理团队</a></li>
+              <li><a href="#licenses">监管资质</a></li>
+              <li><a href="#security">安全审计</a></li>
+            </ul>
+          </div>
+          <div class="ft-col">
+            <h6>法律合规</h6>
+            <ul>
+              <li><a href="agreement.html">用户协议</a></li>
+              <li><a href="privacy.html">隐私政策</a></li>
+              <li><a href="disclaimer.html">免责声明</a></li>
+              <li><a href="risk.html">风险提示</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <p>© 2026 Ascenda Digital Capital Group. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="btt" class="btt" aria-label="回到顶部">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+  <script src="js/main.js" defer></script>
+</body>
+</html>
