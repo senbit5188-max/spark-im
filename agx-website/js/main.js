@@ -673,7 +673,7 @@
       if (d.website_team && d.website_team.length) {
         var te = $id('cms-team');
         if (te) te.innerHTML = d.website_team.map(function (m) {
-          return '<div class="t-card rv"><div class="t-av"><img src="' + ea(m.avatar || '') + '" alt="' + esc(m.name) + '" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E\'"></div><div class="t-tag">' + esc(m.roleTag || '') + '</div><h4>' + esc(m.name) + '</h4><div class="t-role">' + esc(m.title || '') + '</div><div class="t-bio">' + esc(m.bio || '') + '</div></div>';
+          return '<div class="t-card rv"><div class="t-av"><img src="' + ea(m.avatar || '') + '" alt="' + ea(m.name || '') + '" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23161a22%27/%3E%3Ccircle cx=%2750%27 cy=%2736%27 r=%2716%27 fill=%27rgba(201,168,76,0.3)%27/%3E%3Cellipse cx=%2750%27 cy=%2778%27 rx=%2726%27 ry=%2718%27 fill=%27rgba(201,168,76,0.2)%27/%3E%3C/svg%3E\'"></div><div class="t-tag">' + esc(m.roleTag || '') + '</div><h4>' + esc(m.name) + '</h4><div class="t-role">' + esc(m.title || '') + '</div><div class="t-bio">' + esc(m.bio || '') + '</div></div>';
         }).join('');
       }
 
@@ -704,7 +704,7 @@
       if (d.website_licenses && d.website_licenses.length) {
         var le = $id('cms-licenses');
         if (le) le.innerHTML = d.website_licenses.map(function (l) {
-          return '<div class="lic rv"><img src="' + ea(l.image || '') + '" alt="' + esc(l.name) + '" loading="lazy"><h5>' + esc(l.name) + '</h5><p>' + esc(l.description || '') + '</p></div>';
+          return '<div class="lic rv"><img src="' + ea(l.image || '') + '" alt="' + ea(l.name || '') + '" loading="lazy"><h5>' + esc(l.name) + '</h5><p>' + esc(l.description || '') + '</p></div>';
         }).join('');
       }
 
