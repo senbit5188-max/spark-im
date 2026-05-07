@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星火IM - 安全高效的即时通讯</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17;
+            color: #e0e6ed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            padding: 18px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,14,23,0.85);
+        }
+        .header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header .logo-area img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+        .header .logo-area span {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .header nav a {
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            margin-left: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .header nav a:hover { color: #fff; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 24px 60px;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(59,130,246,0.3);
+            background: rgba(59,130,246,0.08);
+            color: #60a5fa;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .hero h1 .accent {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 17px;
+            color: rgba(255,255,255,0.5);
+            max-width: 520px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        /* Download Section */
+        .download-section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+        .section-label {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #3b82f6;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 48px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .download-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 32px; }
+            .header { padding: 14px 20px; }
+            .header nav a { margin-left: 16px; font-size: 13px; }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 36px 28px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .card:hover {
+            border-color: rgba(59,130,246,0.25);
+            background: rgba(59,130,246,0.04);
+            transform: translateY(-2px);
+        }
+
+        .card .icon-wrap {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card .icon-wrap svg {
+            width: 28px;
+            height: 28px;
+        }
+        .card.ios .icon-wrap { background: rgba(147,51,234,0.12); }
+        .card.ios .icon-wrap svg { color: #a78bfa; }
+        .card.android .icon-wrap { background: rgba(34,197,94,0.12); }
+        .card.android .icon-wrap svg { color: #4ade80; }
+        .card.web .icon-wrap { background: rgba(59,130,246,0.12); }
+        .card.web .icon-wrap svg { color: #60a5fa; }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .card .subtitle {
+            color: rgba(255,255,255,0.35);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        .card .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .card.ios .btn {
+            background: rgba(147,51,234,0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(147,51,234,0.25);
+        }
+        .card.ios .btn:hover { background: rgba(147,51,234,0.25); }
+        .card.android .btn {
+            background: rgba(34,197,94,0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34,197,94,0.25);
+        }
+        .card.android .btn:hover { background: rgba(34,197,94,0.25); }
+        .card.web .btn {
+            background: rgba(59,130,246,0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59,130,246,0.25);
+        }
+        .card.web .btn:hover { background: rgba(59,130,246,0.25); }
+        .card .btn svg { width: 16px; height: 16px; }
+
+        .card .meta {
+            margin-top: 14px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* Features */
+        .features {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+        .feature-item {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.02);
+        }
+        .feature-item .fi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            background: rgba(59,130,246,0.08);
+        }
+        .feature-item .fi-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #60a5fa;
+        }
+        .feature-item h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .feature-item p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 28px 24px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.2);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-area">
+        <img src="../branding/app_icon.png" alt="星火" onerror="this.style.display='none'">
+        <span>星火 IM</span>
+    </div>
+    <nav>
+        <a href="#download">下载</a>
+        <a href="#features">功能</a>
+        <a href="https://github.com/senbit5188-max/spark-im" target="_blank">GitHub</a>
+    </nav>
+</div>
+
+<div class="hero">
+    <div class="badge">私有部署 · 端到端加密 · 开源可控</div>
+    <h1>安全高效的<br><span class="accent">企业级即时通讯</span></h1>
+    <p>星火IM 提供多平台即时通讯解决方案，支持私有化部署，数据完全自主可控，适用于企业内部沟通与协作</p>
+</div>
+
+<div class="download-section" id="download">
+    <div class="section-label">客户端下载</div>
+    <div class="section-title">选择适合的平台</div>
+    <div class="download-grid">
+
+        <div class="card ios">
+            <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/>
+                    <path d="M15.5 8.5c.3-1.2-.4-2.5-1.5-3-.8-.4-1.7-.2-2.3.3"/>
+                    <path d="M9 12c-1 1.5-.5 3.5 1 4.5s3.5.5 4.5-1"/>
+                </svg>
+            </div>
+            <h3>iOS 客户端</h3>
+            <p class="subtitle">iPhone · iPad · iOS 13+</p>
+            <a class="btn" href="https://app.devin.ai/attachments/c085f3c6-1652-4fe1-8025-00a1dac0796e/SparkIM-unsigned.ipa" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                下载 IPA
+            </a>
+            <div class="meta">未签名 · 38MB · 需自行签名安装</div>
+        </div>
+
+        <div class="card android">
+            <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="11" width="14" height="10" rx="2"/>
+                    <path d="M8 7l-1-4M16 7l1-4"/>
+                    <path d="M9 11V7h6v4"/>
+                    <circle cx="9" cy="15" r="1" fill="currentColor"/>
+                    <circle cx="15" cy="15" r="1" fill="currentColor"/>
+                </svg>
+            </div>
+            <h3>Android 客户端</h3>
+            <p class="subtitle">Android 7.0+ · ARM/x86</p>
+            <a class="btn" href="#" id="android-download" onclick="alert('Android APK 正在修复构建中，请稍后从 GitHub Actions 下载')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                下载 APK
+            </a>
+            <div class="meta">Debug签名 · 可直接安装</div>
+        </div>
+
+        <div class="card web">
+            <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10 15 15 0 014-10z"/>
+                </svg>
+            </div>
+            <h3>Web 网页版</h3>
+            <p class="subtitle">Chrome · Edge · Firefox · Safari</p>
+            <a class="btn" href="https://dist-aauywpis.devinapps.com" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                打开网页版
+            </a>
+            <div class="meta">基于 Vue 3 · 需连接服务端</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="features" id="features">
+    <div class="section-label">核心能力</div>
+    <div class="section-title">企业级通讯功能</div>
+    <div class="features-grid">
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <h4>即时通讯</h4>
+            <p>单聊、群聊、聊天室，支持文字、语音、图片、视频、文件等富媒体消息</p>
+        </div>
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.05 5A5 5 0 0119 8.95M15.05 1A9 9 0 0123 8.94M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <h4>音视频通话</h4>
+            <p>一对一及多人音视频通话，低延迟高清画质，支持屏幕共享</p>
+        </div>
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <h4>私有部署</h4>
+            <p>数据完全自主可控，支持企业内网部署，满足安全合规要求</p>
+        </div>
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h4>多端同步</h4>
+            <p>iOS、Android、Web、PC 多平台无缝切换，消息实时同步</p>
+        </div>
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <h4>朋友圈</h4>
+            <p>类微信朋友圈功能，分享生活动态，点赞评论互动</p>
+        </div>
+        <div class="feature-item">
+            <div class="fi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h4>高性能架构</h4>
+            <p>MQTT + Protobuf 协议组合，最低 128MB 内存即可运行服务端</p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 星火 IM &middot; 基于野火IM开源项目二次开发</p>
+</div>
+
+</body>
+</html>
