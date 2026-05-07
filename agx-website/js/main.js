@@ -160,8 +160,8 @@
   });
 
   dbg.addEventListener('click', closeDr);
-  dr.querySelectorAll('.dl').forEach(function (a) {
-    a.addEventListener('click', closeDr);
+  dr.addEventListener('click', function (e) {
+    if (e.target.closest('.dl')) closeDr();
   });
 
 
@@ -221,14 +221,16 @@
       }
     });
 
-    // GIB section parallax glow
-    ScrollTrigger.create({
-      trigger: '.gib-sec', start: 'top bottom', end: 'bottom top',
-      onUpdate: function (self) {
-        var glow = document.querySelector('.gib-sec::before');
-        if (glow) glow.style.opacity = 0.5 + self.progress * 0.5;
-      }
-    });
+    // GIB section parallax glow via CSS custom property
+    var gibSec = document.querySelector('.gib-sec');
+    if (gibSec) {
+      ScrollTrigger.create({
+        trigger: '.gib-sec', start: 'top bottom', end: 'bottom top',
+        onUpdate: function (self) {
+          gibSec.style.setProperty('--glow-opacity', 0.5 + self.progress * 0.5);
+        }
+      });
+    }
 
     // GIB connector animation
     ScrollTrigger.create({
@@ -575,6 +577,18 @@
   function $qa(sel) { return document.querySelectorAll(sel); }
   function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
   function ea(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function sanitizeSVG(html) {
+    if (!html) return '';
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    tmp.querySelectorAll('script,iframe,object,embed,link,style').forEach(function (el) { el.remove(); });
+    tmp.querySelectorAll('*').forEach(function (el) {
+      Array.from(el.attributes).forEach(function (attr) {
+        if (/^on/i.test(attr.name) || (attr.name === 'href' && /^\s*javascript:/i.test(attr.value))) el.removeAttribute(attr.name);
+      });
+    });
+    return tmp.innerHTML;
+  }
 
   fetch(location.origin + '/api/admin/public/website/content')
     .then(function (r) { return r.json(); })
@@ -649,7 +663,7 @@
           if (b.items && b.items.length) {
             var pg = bSec.querySelector('.prod-grid');
             if (pg) pg.innerHTML = b.items.map(function (i) {
-              return '<div class="p-card rv"><div class="p-icon">' + (i.icon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg>') + '</div><h4>' + esc(i.title) + '</h4><p>' + esc(i.desc || '') + '</p></div>';
+              return '<div class="p-card rv"><div class="p-icon">' + sanitizeSVG(i.icon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg>') + '</div><h4>' + esc(i.title) + '</h4><p>' + esc(i.desc || '') + '</p></div>';
             }).join('');
           }
         }
